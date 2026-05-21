@@ -815,9 +815,6 @@
       .hero-orb-1 { animation: fadeIn 1s ease 0.1s both, orbFloat1 14s ease-in-out 1.2s infinite !important; }
       .hero-orb-2 { animation: fadeIn 1.2s ease 0.2s both, orbFloat2 18s ease-in-out 1.4s infinite !important; }
 
-      /* No particles on mobile */
-      .hero-particles { display: none !important; }
-
       /* No backdrop-filter on navbar — use solid bg instead */
       #navbar.scrolled {
         backdrop-filter: none !important;
@@ -825,19 +822,33 @@
         background: rgba(9,9,11,0.97) !important;
       }
 
-      /* Scroll reveals: opacity only — no transform (compositor-safe) */
-      .reveal,
-      .reveal-left,
-      .reveal-scale {
-        transform: none !important;
-        transition: opacity 0.35s ease !important;
-        will-change: opacity !important;
+      /* Scroll reveals: small translate + opacity, short duration = smooth on mobile */
+      .reveal {
+        transform: translateY(8px) !important;
+        transition: opacity 0.38s ease-out, transform 0.38s ease-out !important;
+        will-change: transform, opacity;
       }
-      .reveal.visible,
-      .reveal-left.visible,
+      .reveal.visible {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+      .reveal-left {
+        transform: translateX(-8px) !important;
+        transition: opacity 0.38s ease-out, transform 0.38s ease-out !important;
+        will-change: transform, opacity;
+      }
+      .reveal-left.visible {
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+      }
+      .reveal-scale {
+        transform: scale(0.98) !important;
+        transition: opacity 0.38s ease-out, transform 0.38s ease-out !important;
+        will-change: transform, opacity;
+      }
       .reveal-scale.visible {
         opacity: 1 !important;
-        transform: none !important;
+        transform: scale(1) !important;
       }
       .delay-1, .delay-2, .delay-3, .delay-4 { transition-delay: 0s !important; }
 
@@ -1199,16 +1210,19 @@
     // Dynamic year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ── Floating particles in hero (desktop only) ──
+    // ── Floating particles in hero ──
     (function() {
       const container = document.getElementById('heroParticles');
-      if (!container || window.innerWidth < 768) return;
-      const count = 20;
+      if (!container) return;
+      const isMob = window.innerWidth < 768;
+      const count = isMob ? 7 : 20;
       for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'hero-particle';
-        const size = Math.random() * 2.2 + 0.8;
+        const size = isMob ? Math.random() * 1.5 + 0.8 : Math.random() * 2.2 + 0.8;
         const isIndigo = Math.random() > 0.45;
+        const dur = isMob ? (18 + Math.random() * 14) : (10 + Math.random() * 14);
+        const delay = Math.random() * (isMob ? 18 : 14);
         p.style.cssText = [
           'width:' + size + 'px',
           'height:' + size + 'px',
@@ -1216,8 +1230,8 @@
           'bottom:-4px',
           'background:' + (isIndigo ? 'rgba(99,102,241,0.75)' : 'rgba(255,255,255,0.3)'),
           'box-shadow:' + (isIndigo ? '0 0 ' + (size*2) + 'px rgba(99,102,241,0.5)' : 'none'),
-          'animation-duration:' + (10 + Math.random() * 14) + 's',
-          'animation-delay:' + (Math.random() * 14) + 's',
+          'animation-duration:' + dur + 's',
+          'animation-delay:' + delay + 's',
           '--pdrift:' + ((Math.random() - 0.5) * 70) + 'px',
           'opacity:0'
         ].join(';');
