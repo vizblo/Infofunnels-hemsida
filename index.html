@@ -640,18 +640,52 @@
       from { opacity: 0; }
       to   { opacity: 1; }
     }
+    /* Floating orb animations */
+    @keyframes orbFloat1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      25%     { transform: translate(35px,-28px) scale(1.05); }
+      50%     { transform: translate(-18px, 14px) scale(0.96); }
+      75%     { transform: translate(22px, 26px) scale(1.03); }
+    }
+    @keyframes orbFloat2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%     { transform: translate(-30px, 20px) scale(1.07); }
+      66%     { transform: translate(22px,-22px) scale(0.95); }
+    }
+    /* Floating particles */
+    @keyframes particleRise {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 0.5; }
+      100% { transform: translateY(-110vh) translateX(var(--pdrift,0px)); opacity: 0; }
+    }
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 2;
+    }
+    .hero-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: particleRise linear infinite;
+    }
+
     .hero-badge    { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
     .hero-h1       { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.3s  both; }
     .hero-sub      { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
     .hero-cta      { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.6s  both; }
-    .hero-orb-1    { animation: fadeIn 1.2s ease 0.1s both; }
-    .hero-orb-2    { animation: fadeIn 1.4s ease 0.2s both; }
+    .hero-orb-1    { animation: fadeIn 1.2s ease 0.1s both, orbFloat1 14s ease-in-out 1.2s infinite; }
+    .hero-orb-2    { animation: fadeIn 1.4s ease 0.2s both, orbFloat2 18s ease-in-out 1.4s infinite; }
 
     /* ─── SCROLL ANIMATIONS ─── */
     .reveal {
       opacity: 0;
       transform: translateY(32px);
       transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform, opacity;
     }
     .reveal.visible {
       opacity: 1;
@@ -661,12 +695,14 @@
       opacity: 0;
       transform: translateX(-32px);
       transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform, opacity;
     }
     .reveal-left.visible { opacity: 1; transform: translateX(0); }
     .reveal-scale {
       opacity: 0;
       transform: scale(0.93);
       transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform, opacity;
     }
     .reveal-scale.visible { opacity: 1; transform: scale(1); }
     /* Staggered delay helpers */
@@ -702,20 +738,20 @@
       .btn-primary-lg { font-size: 0.95rem; padding: 0.75rem 1.6rem; }
 
       /* ── Sections – tighter padding ── */
-      #specialty { padding: 3.5rem 0; }
-      #process   { padding: 3.5rem 0; }
-      #clients   { padding: 3.5rem 0; }
-      #about     { padding: 3rem 0; }
-      #book      { padding: 3.5rem 0; }
+      #specialty { padding: 2.5rem 0; }
+      #process   { padding: 2.5rem 0; }
+      #clients   { padding: 2.5rem 0; }
+      #about     { padding: 2rem 0; }
+      #book      { padding: 2.5rem 0; }
 
       /* ── Section headings ── */
       .section-h2 { font-size: clamp(1.65rem, 7vw, 2.1rem); }
-      .section-sub { font-size: 0.93rem; }
-      .specialty-header { margin-bottom: 2rem; }
-      .section-label { margin-bottom: 0.6rem; }
+      .section-sub { font-size: 0.91rem; }
+      .specialty-header { margin-bottom: 1.5rem; }
+      .section-label { margin-bottom: 0.5rem; }
 
       /* ── Process: fix nowrap overflow ── */
-      .process-header { margin-bottom: 2.5rem; }
+      .process-header { margin-bottom: 2rem; }
       .process-header .section-h2 {
         white-space: normal !important;
         font-size: clamp(1.65rem, 7.5vw, 2.2rem) !important;
@@ -723,40 +759,56 @@
       .process-header .section-sub { white-space: normal !important; }
 
       /* ── Steps ── */
-      .step { gap: 1rem; padding-bottom: 1.75rem; }
+      .step { gap: 1rem; padding-bottom: 1.5rem; }
       .step-icon-wrap { width: 44px; height: 44px; }
       .step:not(:last-child)::before { left: 21px; top: 44px; }
-      .step-body { padding-top: 0.6rem; }
-      .step-h3 { font-size: 1.15rem; }
-      .step-p  { font-size: 0.91rem; }
+      .step-body { padding-top: 0.5rem; }
+      .step-h3 { font-size: 1.1rem; }
+      .step-p  { font-size: 0.89rem; }
 
       /* ── Feature cards ── */
-      .feature-card-inner { padding: 1.35rem; }
-      .card-icon { width: 46px; height: 46px; margin-bottom: 1.25rem; }
-      .card-h3 { font-size: 1.15rem; }
-      .card-p  { font-size: 0.88rem; margin-bottom: 1.25rem; }
+      .feature-card-inner { padding: 1.25rem; }
+      .card-icon { width: 44px; height: 44px; margin-bottom: 1rem; }
+      .card-h3 { font-size: 1.1rem; }
+      .card-p  { font-size: 0.87rem; margin-bottom: 1rem; }
+      .cards-grid { gap: 1rem; }
 
       /* ── Clients ── */
-      .clients-header-row { margin-bottom: 1.75rem; gap: 0.75rem; }
+      .clients-header-row { margin-bottom: 1.25rem; gap: 0.75rem; }
       .clients-header-row .section-sub { white-space: normal !important; }
-      .clients-grid { gap: 0.9rem; }
-      .client-card { padding: 1.1rem; border-radius: 1.1rem; }
-      .client-photo-wrap { margin-bottom: 0.9rem; }
-      .client-name { font-size: 1rem; }
-      .client-role { font-size: 0.8rem; margin-bottom: 0.75rem; }
+      .clients-grid { gap: 0.85rem; }
+      .client-card { padding: 1rem; border-radius: 1rem; }
+      .client-photo-wrap { margin-bottom: 0.75rem; }
+      .client-name { font-size: 0.97rem; }
+      .client-role { font-size: 0.78rem; margin-bottom: 0.65rem; }
 
       /* ── About ── */
-      .about-h2 { font-size: clamp(1.25rem, 5vw, 1.55rem); margin-bottom: 0.75rem; }
-      .about-p  { font-size: 0.93rem; }
+      .about-h2 { font-size: clamp(1.2rem, 5vw, 1.5rem); margin-bottom: 0.65rem; }
+      .about-p  { font-size: 0.91rem; }
 
       /* ── Book / Calendly ── */
-      .book-header { margin-bottom: 1.5rem; }
+      .book-header { margin-bottom: 1.25rem; }
       .calendly-wrap { padding: 0; border-radius: 0.85rem; }
 
       /* ── Footer ── */
-      .footer-brand img { height: 24px; }
-      .footer-inner { gap: 0.75rem; }
-      .footer-tagline, .footer-copy { font-size: 0.78rem; }
+      .footer-brand img { height: 22px; }
+      .footer-inner { gap: 0.65rem; }
+      .footer-tagline, .footer-copy { font-size: 0.76rem; }
+
+      /* ── Smoother scroll animations on mobile ── */
+      .reveal {
+        transform: translateY(14px);
+        transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      }
+      .reveal-left {
+        transform: translateX(-14px);
+        transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      }
+      .reveal-scale {
+        transform: scale(0.97);
+        transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      }
+      .delay-1, .delay-2, .delay-3, .delay-4 { transition-delay: 0.04s; }
     }
 
     /* Very small screens (≤ 374px) */
@@ -791,6 +843,7 @@
   <section id="hero" aria-labelledby="hero-heading">
     <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
     <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+    <div class="hero-particles" id="heroParticles" aria-hidden="true"></div>
 
     <div class="container hero-content">
       <div class="hero-badge" role="status">
@@ -1110,7 +1163,34 @@
     // Dynamic year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Scroll reveal animation
+    // ── Floating particles in hero ──
+    (function() {
+      const container = document.getElementById('heroParticles');
+      if (!container) return;
+      const count = window.innerWidth < 768 ? 14 : 20;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'hero-particle';
+        const size = Math.random() * 2.2 + 0.8;
+        const isIndigo = Math.random() > 0.45;
+        p.style.cssText = [
+          'width:' + size + 'px',
+          'height:' + size + 'px',
+          'left:' + (Math.random() * 100) + '%',
+          'bottom:-4px',
+          'background:' + (isIndigo ? 'rgba(99,102,241,0.75)' : 'rgba(255,255,255,0.3)'),
+          'box-shadow:' + (isIndigo ? '0 0 ' + (size*2) + 'px rgba(99,102,241,0.5)' : 'none'),
+          'animation-duration:' + (10 + Math.random() * 14) + 's',
+          'animation-delay:' + (Math.random() * 14) + 's',
+          '--pdrift:' + ((Math.random() - 0.5) * 70) + 'px',
+          'opacity:0'
+        ].join(';');
+        container.appendChild(p);
+      }
+    })();
+
+    // ── Scroll reveal animation ──
+    const isMobile = window.innerWidth < 768;
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -1118,7 +1198,10 @@
           revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    }, {
+      threshold: isMobile ? 0.05 : 0.12,
+      rootMargin: isMobile ? '0px 0px -8px 0px' : '0px 0px -40px 0px'
+    });
 
     document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => {
       revealObserver.observe(el);
