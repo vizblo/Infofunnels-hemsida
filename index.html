@@ -677,83 +677,97 @@
 
     /* ─── MOBILE OPTIMIZATIONS ─── */
     @media (max-width: 767px) {
-      .container { padding: 0 1.25rem; }
+      .container { padding: 0 1.1rem; }
 
-      /* Navbar */
-      #navbar { padding: 1.1rem 0; }
-      #navbar.scrolled { padding: 0.85rem 0; }
+      /* ── Navbar ── */
+      #navbar { padding: 0.85rem 0; }
+      #navbar.scrolled { padding: 0.7rem 0; }
+      #navbar .inner { gap: 0.5rem; }
+      #navbar .logo img { height: 22px; }
       #navbar .btn-primary {
-        font-size: 0.78rem;
-        padding: 0.5rem 1rem;
+        font-size: 0.72rem;
+        padding: 0.42rem 0.85rem;
         white-space: nowrap;
+        flex-shrink: 0;
       }
 
-      /* Hero */
-      #hero { padding-top: 4.5rem; min-height: 100svh; }
-      .hero-orb-1, .hero-orb-2 { width: 260px; height: 260px; }
-      .hero-badge { font-size: 0.78rem; padding: 0.3rem 0.85rem; margin-bottom: 1.4rem; }
-      .hero-h1 { font-size: clamp(1.9rem, 9vw, 2.6rem); margin-bottom: 1.1rem; }
+      /* ── Hero ── */
+      #hero { padding-top: 4rem; }
+      .hero-orb-1, .hero-orb-2 { width: 220px; height: 220px; }
+      .hero-badge { font-size: 0.76rem; padding: 0.28rem 0.8rem; margin-bottom: 1.2rem; }
+      .hero-h1 { font-size: clamp(1.85rem, 8.5vw, 2.5rem); margin-bottom: 1rem; }
       .hero-h1 br { display: none; }
-      .hero-sub { font-size: 0.97rem; margin-bottom: 2rem; }
+      .hero-sub { font-size: 0.93rem; margin-bottom: 1.75rem; }
       .hero-sub br { display: none; }
-      .btn-primary-lg { font-size: 0.97rem; padding: 0.8rem 1.75rem; }
+      .btn-primary-lg { font-size: 0.95rem; padding: 0.75rem 1.6rem; }
 
-      /* Sections – reduce padding */
-      #specialty { padding: 4.5rem 0; }
-      #process   { padding: 4.5rem 0; }
-      #clients   { padding: 4.5rem 0; }
-      #about     { padding: 3.5rem 0; }
-      #book      { padding: 4.5rem 0; }
+      /* ── Sections – tighter padding ── */
+      #specialty { padding: 3.5rem 0; }
+      #process   { padding: 3.5rem 0; }
+      #clients   { padding: 3.5rem 0; }
+      #about     { padding: 3rem 0; }
+      #book      { padding: 3.5rem 0; }
 
-      /* Section headings */
-      .section-h2 { font-size: clamp(1.7rem, 7.5vw, 2.2rem); }
-      .specialty-header { margin-bottom: 2.5rem; }
+      /* ── Section headings ── */
+      .section-h2 { font-size: clamp(1.65rem, 7vw, 2.1rem); }
+      .section-sub { font-size: 0.93rem; }
+      .specialty-header { margin-bottom: 2rem; }
+      .section-label { margin-bottom: 0.6rem; }
 
-      /* Process: fix nowrap overflow */
-      .process-header { margin-bottom: 3rem; }
+      /* ── Process: fix nowrap overflow ── */
+      .process-header { margin-bottom: 2.5rem; }
       .process-header .section-h2 {
         white-space: normal !important;
-        font-size: clamp(1.7rem, 8vw, 2.4rem) !important;
+        font-size: clamp(1.65rem, 7.5vw, 2.2rem) !important;
       }
       .process-header .section-sub { white-space: normal !important; }
 
-      /* Steps */
-      .step { gap: 1.1rem; padding-bottom: 2rem; }
-      .step-icon-wrap { width: 46px; height: 46px; }
-      .step:not(:last-child)::before { left: 22px; top: 46px; }
-      .step-h3 { font-size: 1.2rem; }
-      .step-p  { font-size: 0.93rem; }
+      /* ── Steps ── */
+      .step { gap: 1rem; padding-bottom: 1.75rem; }
+      .step-icon-wrap { width: 44px; height: 44px; }
+      .step:not(:last-child)::before { left: 21px; top: 44px; }
+      .step-body { padding-top: 0.6rem; }
+      .step-h3 { font-size: 1.15rem; }
+      .step-p  { font-size: 0.91rem; }
 
-      /* Feature cards */
-      .feature-card-inner { padding: 1.5rem; }
-      .card-h3 { font-size: 1.2rem; }
+      /* ── Feature cards ── */
+      .feature-card-inner { padding: 1.35rem; }
+      .card-icon { width: 46px; height: 46px; margin-bottom: 1.25rem; }
+      .card-h3 { font-size: 1.15rem; }
+      .card-p  { font-size: 0.88rem; margin-bottom: 1.25rem; }
 
-      /* Clients */
-      .clients-header-row { margin-bottom: 2rem; }
+      /* ── Clients ── */
+      .clients-header-row { margin-bottom: 1.75rem; gap: 0.75rem; }
       .clients-header-row .section-sub { white-space: normal !important; }
-      .clients-grid { gap: 1rem; }
-      .client-card { padding: 1.25rem; }
+      .clients-grid { gap: 0.9rem; }
+      .client-card { padding: 1.1rem; border-radius: 1.1rem; }
+      .client-photo-wrap { margin-bottom: 0.9rem; }
+      .client-name { font-size: 1rem; }
+      .client-role { font-size: 0.8rem; margin-bottom: 0.75rem; }
 
-      /* About */
-      .about-h2 { font-size: clamp(1.3rem, 5.5vw, 1.6rem); }
-      .about-p  { font-size: 0.97rem; }
+      /* ── About ── */
+      .about-h2 { font-size: clamp(1.25rem, 5vw, 1.55rem); margin-bottom: 0.75rem; }
+      .about-p  { font-size: 0.93rem; }
 
-      /* Book / Calendly */
-      .book-header { margin-bottom: 1.75rem; }
-      .book-header .section-h2 { font-size: clamp(1.7rem, 7.5vw, 2.2rem); }
-      .calendly-wrap { padding: 0; border-radius: 1rem; }
+      /* ── Book / Calendly ── */
+      .book-header { margin-bottom: 1.5rem; }
+      .calendly-wrap { padding: 0; border-radius: 0.85rem; }
 
-      /* Footer */
-      .footer-brand img { height: 30px; }
-      .footer-inner { gap: 1rem; padding: 0 0.5rem; }
+      /* ── Footer ── */
+      .footer-brand img { height: 24px; }
+      .footer-inner { gap: 0.75rem; }
+      .footer-tagline, .footer-copy { font-size: 0.78rem; }
     }
 
     /* Very small screens (≤ 374px) */
     @media (max-width: 374px) {
-      .hero-h1 { font-size: 1.75rem; }
-      .btn-primary-lg { font-size: 0.9rem; padding: 0.75rem 1.4rem; }
-      .step-icon-wrap { width: 40px; height: 40px; }
-      .step:not(:last-child)::before { left: 19px; top: 40px; }
+      .container { padding: 0 0.9rem; }
+      #navbar .logo img { height: 19px; }
+      #navbar .btn-primary { font-size: 0.68rem; padding: 0.38rem 0.7rem; }
+      .hero-h1 { font-size: 1.7rem; }
+      .btn-primary-lg { font-size: 0.88rem; padding: 0.7rem 1.3rem; }
+      .step-icon-wrap { width: 38px; height: 38px; }
+      .step:not(:last-child)::before { left: 18px; top: 38px; }
     }
 </style>
 </head>
