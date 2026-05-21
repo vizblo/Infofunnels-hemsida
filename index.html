@@ -711,6 +711,11 @@
     .delay-3 { transition-delay: 0.3s; }
     .delay-4 { transition-delay: 0.4s; }
 
+    @keyframes orbPulse {
+      0%, 100% { opacity: 0.18; }
+      50%       { opacity: 0.32; }
+    }
+
     /* ─── MOBILE OPTIMIZATIONS ─── */
     @media (max-width: 767px) {
       .container { padding: 0 1.1rem; }
@@ -789,6 +794,7 @@
       /* ── Book / Calendly ── */
       .book-header { margin-bottom: 1.25rem; }
       .calendly-wrap { padding: 0; border-radius: 0.85rem; }
+      .calendly-inline-widget { height: 680px !important; }
 
       /* ── Footer ── */
       .footer-brand img { height: 22px; }
@@ -800,14 +806,14 @@
       /* No mix-blend-mode or heavy blur on orbs */
       .hero-orb {
         mix-blend-mode: normal !important;
-        opacity: 0.25 !important;
+        opacity: 0.22 !important;
       }
       .hero-orb-1 { filter: blur(50px) !important; }
       .hero-orb-2 { filter: blur(40px) !important; }
 
-      /* Stop orb float animation — just static */
-      .hero-orb-1 { animation: fadeIn 1s ease 0.1s both !important; }
-      .hero-orb-2 { animation: fadeIn 1.2s ease 0.2s both !important; }
+      /* Lightweight pulse animation (opacity only = compositor-safe, no jank) */
+      .hero-orb-1 { animation: fadeIn 1s ease 0.1s both, orbPulse 5s ease-in-out 1s infinite !important; }
+      .hero-orb-2 { animation: fadeIn 1.2s ease 0.2s both, orbPulse 7s ease-in-out 2.5s infinite !important; }
 
       /* No particles on mobile */
       .hero-particles { display: none !important; }
