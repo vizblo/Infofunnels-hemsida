@@ -811,9 +811,9 @@
       .hero-orb-1 { filter: blur(50px) !important; }
       .hero-orb-2 { filter: blur(40px) !important; }
 
-      /* Lightweight pulse animation (opacity only = compositor-safe, no jank) */
-      .hero-orb-1 { animation: fadeIn 1s ease 0.1s both, orbPulse 5s ease-in-out 1s infinite !important; }
-      .hero-orb-2 { animation: fadeIn 1.2s ease 0.2s both, orbPulse 7s ease-in-out 2.5s infinite !important; }
+      /* Restore floating orb animations — transform-only = compositor-safe */
+      .hero-orb-1 { animation: fadeIn 1s ease 0.1s both, orbFloat1 14s ease-in-out 1.2s infinite !important; }
+      .hero-orb-2 { animation: fadeIn 1.2s ease 0.2s both, orbFloat2 18s ease-in-out 1.4s infinite !important; }
 
       /* No particles on mobile */
       .hero-particles { display: none !important; }
