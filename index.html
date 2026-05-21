@@ -625,12 +625,40 @@
     .footer-copy { font-size: 0.85rem; color: var(--muted); text-align: center; }
     @media (min-width: 768px) { .footer-copy { text-align: right; } }
 
+    /* ─── SCROLL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-32px);
+      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.93);
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
+    /* Staggered delay helpers */
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
     /* ─── RESPONSIVE TWEAKS ─── */
     @media (max-width: 600px) {
       .hero-orb-1, .hero-orb-2 { width: 280px; height: 280px; }
       .feature-card-inner { padding: 1.75rem; }
     }
-  </style>
+</style>
 </head>
 <body>
 
@@ -686,14 +714,14 @@
   ═══════════════════════════════════════════ -->
   <section id="specialty" aria-labelledby="specialty-heading">
     <div class="container">
-      <div class="specialty-header">
+      <div class="specialty-header reveal">
         <h2 class="section-h2" id="specialty-heading">Our Specialty</h2>
         <p class="section-sub">We build systemised webinar funnels designed for one thing: getting you more qualified appointments.</p>
       </div>
 
       <div class="cards-grid">
         <!-- Card 1: The Webinar Funnel -->
-        <div class="feature-card">
+        <div class="feature-card reveal delay-1">
           <div class="feature-card-inner">
             <div class="card-icon" aria-hidden="true">
               <!-- Play Circle -->
@@ -723,7 +751,7 @@
         </div>
 
         <!-- Card 2: Is this for you? -->
-        <div class="feature-card">
+        <div class="feature-card reveal delay-2">
           <div class="feature-card-inner">
             <div class="card-icon" aria-hidden="true">
               <!-- Users -->
@@ -761,7 +789,7 @@
   <section id="process" aria-labelledby="process-heading">
     <div class="process-orb" aria-hidden="true"></div>
     <div class="container">
-      <div class="process-header">
+      <div class="process-header reveal">
         <h2 class="section-h2" id="process-heading">Completely Done-For-You</h2>
         <p class="section-sub" style="max-width:none">
           We don't just hand you a blueprint and wish you luck.<br>We are your growth team, handling every technical and creative execution step.
@@ -770,7 +798,7 @@
 
       <div class="steps">
 
-        <div class="step">
+        <div class="step reveal">
           <div class="step-left">
             <div class="step-icon-wrap" aria-hidden="true">
               <!-- CheckCircle2 -->
@@ -784,7 +812,7 @@
           </div>
         </div>
 
-        <div class="step">
+        <div class="step reveal delay-1">
           <div class="step-left">
             <div class="step-icon-wrap" aria-hidden="true">
               <!-- LayoutTemplate -->
@@ -798,7 +826,7 @@
           </div>
         </div>
 
-        <div class="step">
+        <div class="step reveal delay-2">
           <div class="step-left">
             <div class="step-icon-wrap" aria-hidden="true">
               <!-- Zap -->
@@ -812,7 +840,7 @@
           </div>
         </div>
 
-        <div class="step">
+        <div class="step reveal delay-3">
           <div class="step-left">
             <div class="step-icon-wrap" aria-hidden="true">
               <!-- Users (ads/targeting) -->
@@ -826,7 +854,7 @@
           </div>
         </div>
 
-        <div class="step">
+        <div class="step reveal delay-4">
           <div class="step-left">
             <div class="step-icon-wrap" aria-hidden="true">
               <!-- PlayCircle -->
@@ -876,7 +904,7 @@
 
       <div class="clients-grid">
 
-        <div class="client-card">
+        <div class="client-card reveal delay-1">
           <div class="client-photo-wrap">
             <img src="kasey.webp" alt="Kasey Jones" />
           </div>
@@ -888,7 +916,7 @@
           </a>
         </div>
 
-        <div class="client-card">
+        <div class="client-card reveal delay-2">
           <div class="client-photo-wrap">
             <img src="tomas.jpg" alt="Tomas Lydahl" />
           </div>
@@ -900,7 +928,7 @@
           </a>
         </div>
 
-        <div class="client-card">
+        <div class="client-card reveal delay-3">
           <div class="client-photo-wrap">
             <img src="sibbe.jpeg" alt="Sibbe Silvén" />
           </div>
@@ -923,7 +951,7 @@
     <div class="about-orb-left" aria-hidden="true"></div>
     <div class="about-orb-right" aria-hidden="true"></div>
     <div class="container">
-      <div class="about-inner">
+      <div class="about-inner reveal">
         <h2 class="about-h2" id="about-heading">About InfoFunnels</h2>
         <p class="about-p">InfoFunnels is a done-for-you funnel agency built on hands-on experience running funnels for coaches, consultants, and online experts. We work exclusively with high-ticket coaches and info-businesses across the world, scaling their client acquisition through converting webinars and paid traffic.</p>
       </div>
@@ -936,12 +964,12 @@
   <section id="book" aria-labelledby="book-heading">
     <div class="book-orb" aria-hidden="true"></div>
     <div class="container">
-      <div class="book-header">
+      <div class="book-header reveal">
         <h2 class="section-h2" id="book-heading">Ready to scale?</h2>
         <p class="section-sub" style="max-width:none">Find a time below to see if we're a fit. We'll audit your current process and outline exactly what a funnel build-out looks like for your business.</p>
       </div>
 
-      <div class="calendly-wrap">
+      <div class="calendly-wrap reveal delay-1">
         <!-- Calendly inline widget -->
         <div
           class="calendly-inline-widget"
@@ -970,6 +998,20 @@
   <script>
     // Dynamic year
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll reveal animation
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => {
+      revealObserver.observe(el);
+    });
 
     // Clients CTA visible on desktop
     const clientsCta = document.getElementById('clients-cta');
