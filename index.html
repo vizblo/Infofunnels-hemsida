@@ -73,8 +73,10 @@
     #navbar .logo img {
       height: 28px;
       object-fit: contain;
+      filter: brightness(0) invert(1);
     }
     @media (min-width: 768px) { #navbar .logo img { height: 32px; } }
+    .footer-brand img { filter: brightness(0) invert(1); }
 
     /* ─── BUTTONS ─── */
     .btn {
@@ -184,10 +186,10 @@
     }
     .hero-h1 {
       font-family: var(--font-head);
-      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      line-height: 1.08;
+      line-height: 1.1;
       color: #fff;
       margin-bottom: 1.5rem;
     }
@@ -322,8 +324,12 @@
     }
     .process-header {
       text-align: center;
-      max-width: 700px;
+      max-width: none;
       margin: 0 auto 4.5rem;
+    }
+    .process-header .section-h2 {
+      white-space: nowrap;
+      font-size: clamp(2rem, 5.5vw, 4rem);
     }
     .steps {
       max-width: 860px;
