@@ -400,7 +400,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 1.5rem;
-      padding: 1.75rem 1.5rem;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -409,27 +409,40 @@
       position: relative;
       transition: border-color 0.3s, transform 0.3s;
     }
+    .client-card::before {
+      content: '';
+      position: absolute;
+      top: -6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18rem;
+      height: 18rem;
+      background: rgba(99,102,241,0.1);
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+    .client-card:hover::before { opacity: 1; }
     .client-card:hover {
       border-color: rgba(99,102,241,0.28);
       transform: translateY(-3px);
     }
-    .client-avatar {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: rgba(99,102,241,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-head);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 1rem;
-      border: 2px solid rgba(99,102,241,0.2);
+    .client-photo-wrap {
+      width: 100%;
+      border-radius: 1rem;
       overflow: hidden;
+      margin-bottom: 1.25rem;
+      aspect-ratio: 1 / 1;
     }
-    .client-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .client-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .client-card:hover .client-photo-wrap img { transform: scale(1.05); }
     .client-name {
       font-family: var(--font-head);
       font-size: 1.1rem;
@@ -705,7 +718,7 @@
       <div class="process-header">
         <h2 class="section-h2" id="process-heading">Completely Done-For-You</h2>
         <p class="section-sub" style="max-width:none">
-          We handle every step so you can stay in your zone of genius.<br>Here's exactly what we build together.
+          We don't just hand you a blueprint and wish you luck.<br>We are your growth team, handling every technical and creative execution step.
         </p>
       </div>
 
@@ -810,7 +823,7 @@
           <p class="section-sub">A handful of the operators who've trusted us to engineer their growth.</p>
         </div>
         <a href="#book" class="btn btn-outline" style="display:none" id="clients-cta">
-          Work with us
+          Join them
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
       </div>
@@ -818,32 +831,38 @@
       <div class="clients-grid">
 
         <div class="client-card">
-          <div class="client-avatar" aria-label="Kasey Jones">KJ</div>
+          <div class="client-photo-wrap">
+            <img src="kasey.webp" alt="Kasey Jones" />
+          </div>
           <div class="client-name">Kasey Jones</div>
           <div class="client-role">Business coach</div>
           <a href="https://www.linkedin.com/in/abetterjones/" target="_blank" rel="noopener noreferrer" class="btn-linkedin">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            View on LinkedIn
+            LinkedIn
           </a>
         </div>
 
         <div class="client-card">
-          <div class="client-avatar" aria-label="Tomas Lydahl">TL</div>
+          <div class="client-photo-wrap">
+            <img src="tomas.jpg" alt="Tomas Lydahl" />
+          </div>
           <div class="client-name">Tomas Lydahl</div>
           <div class="client-role">Mental coach</div>
           <a href="https://www.linkedin.com/in/tomaslydahl/" target="_blank" rel="noopener noreferrer" class="btn-linkedin">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            View on LinkedIn
+            LinkedIn
           </a>
         </div>
 
         <div class="client-card">
-          <div class="client-avatar" aria-label="Sibbe Silvén">SS</div>
+          <div class="client-photo-wrap">
+            <img src="sibbe.jpeg" alt="Sibbe Silvén" />
+          </div>
           <div class="client-name">Sibbe Silvén</div>
           <div class="client-role">AI coach</div>
           <a href="https://www.linkedin.com/in/sibbe/?locale=en" target="_blank" rel="noopener noreferrer" class="btn-linkedin">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            View on LinkedIn
+            LinkedIn
           </a>
         </div>
 
