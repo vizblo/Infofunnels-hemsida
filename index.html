@@ -670,10 +670,80 @@
     .delay-3 { transition-delay: 0.3s; }
     .delay-4 { transition-delay: 0.4s; }
 
-    /* ─── RESPONSIVE TWEAKS ─── */
-    @media (max-width: 600px) {
-      .hero-orb-1, .hero-orb-2 { width: 280px; height: 280px; }
-      .feature-card-inner { padding: 1.75rem; }
+    /* ─── MOBILE OPTIMIZATIONS ─── */
+    @media (max-width: 767px) {
+      .container { padding: 0 1.25rem; }
+
+      /* Navbar */
+      #navbar { padding: 1.1rem 0; }
+      #navbar.scrolled { padding: 0.85rem 0; }
+
+      /* Hero */
+      #hero { padding-top: 4.5rem; min-height: 100svh; }
+      .hero-orb-1, .hero-orb-2 { width: 260px; height: 260px; }
+      .hero-badge { font-size: 0.78rem; padding: 0.3rem 0.85rem; margin-bottom: 1.4rem; }
+      .hero-h1 { font-size: clamp(1.9rem, 9vw, 2.6rem); margin-bottom: 1.1rem; }
+      .hero-h1 br { display: none; }
+      .hero-sub { font-size: 0.97rem; margin-bottom: 2rem; }
+      .hero-sub br { display: none; }
+      .btn-primary-lg { font-size: 0.97rem; padding: 0.8rem 1.75rem; }
+
+      /* Sections – reduce padding */
+      #specialty { padding: 4.5rem 0; }
+      #process   { padding: 4.5rem 0; }
+      #clients   { padding: 4.5rem 0; }
+      #about     { padding: 3.5rem 0; }
+      #book      { padding: 4.5rem 0; }
+
+      /* Section headings */
+      .section-h2 { font-size: clamp(1.7rem, 7.5vw, 2.2rem); }
+      .specialty-header { margin-bottom: 2.5rem; }
+
+      /* Process: fix nowrap overflow */
+      .process-header { margin-bottom: 3rem; }
+      .process-header .section-h2 {
+        white-space: normal !important;
+        font-size: clamp(1.7rem, 8vw, 2.4rem) !important;
+      }
+      .process-header .section-sub { white-space: normal !important; }
+
+      /* Steps */
+      .step { gap: 1.1rem; padding-bottom: 2rem; }
+      .step-icon-wrap { width: 46px; height: 46px; }
+      .step:not(:last-child)::before { left: 22px; top: 46px; }
+      .step-h3 { font-size: 1.2rem; }
+      .step-p  { font-size: 0.93rem; }
+
+      /* Feature cards */
+      .feature-card-inner { padding: 1.5rem; }
+      .card-h3 { font-size: 1.2rem; }
+
+      /* Clients */
+      .clients-header-row { margin-bottom: 2rem; }
+      .clients-header-row .section-sub { white-space: normal !important; }
+      .clients-grid { gap: 1rem; }
+      .client-card { padding: 1.25rem; }
+
+      /* About */
+      .about-h2 { font-size: clamp(1.3rem, 5.5vw, 1.6rem); }
+      .about-p  { font-size: 0.97rem; }
+
+      /* Book / Calendly */
+      .book-header { margin-bottom: 1.75rem; }
+      .book-header .section-h2 { font-size: clamp(1.7rem, 7.5vw, 2.2rem); }
+      .calendly-wrap { padding: 0; border-radius: 1rem; }
+
+      /* Footer */
+      .footer-brand img { height: 30px; }
+      .footer-inner { gap: 1rem; padding: 0 0.5rem; }
+    }
+
+    /* Very small screens (≤ 374px) */
+    @media (max-width: 374px) {
+      .hero-h1 { font-size: 1.75rem; }
+      .btn-primary-lg { font-size: 0.9rem; padding: 0.75rem 1.4rem; }
+      .step-icon-wrap { width: 40px; height: 40px; }
+      .step:not(:last-child)::before { left: 19px; top: 40px; }
     }
 </style>
 </head>
