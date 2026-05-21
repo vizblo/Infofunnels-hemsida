@@ -795,20 +795,50 @@
       .footer-inner { gap: 0.65rem; }
       .footer-tagline, .footer-copy { font-size: 0.76rem; }
 
-      /* ── Smoother scroll animations on mobile ── */
-      .reveal {
-        transform: translateY(14px);
-        transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      /* ── Kill expensive GPU effects on mobile ── */
+
+      /* No mix-blend-mode or heavy blur on orbs */
+      .hero-orb {
+        mix-blend-mode: normal !important;
+        opacity: 0.25 !important;
       }
-      .reveal-left {
-        transform: translateX(-14px);
-        transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      .hero-orb-1 { filter: blur(50px) !important; }
+      .hero-orb-2 { filter: blur(40px) !important; }
+
+      /* Stop orb float animation — just static */
+      .hero-orb-1 { animation: fadeIn 1s ease 0.1s both !important; }
+      .hero-orb-2 { animation: fadeIn 1.2s ease 0.2s both !important; }
+
+      /* No particles on mobile */
+      .hero-particles { display: none !important; }
+
+      /* No backdrop-filter on navbar — use solid bg instead */
+      #navbar.scrolled {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(9,9,11,0.97) !important;
       }
+
+      /* Scroll reveals: opacity only — no transform (compositor-safe) */
+      .reveal,
+      .reveal-left,
       .reveal-scale {
-        transform: scale(0.97);
-        transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+        transform: none !important;
+        transition: opacity 0.35s ease !important;
+        will-change: opacity !important;
       }
-      .delay-1, .delay-2, .delay-3, .delay-4 { transition-delay: 0.04s; }
+      .reveal.visible,
+      .reveal-left.visible,
+      .reveal-scale.visible {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .delay-1, .delay-2, .delay-3, .delay-4 { transition-delay: 0s !important; }
+
+      /* Disable hover transforms on mobile */
+      .feature-card:hover,
+      .client-card:hover,
+      .step:hover .step-icon-wrap { transform: none !important; }
     }
 
     /* Very small screens (≤ 374px) */
@@ -1163,11 +1193,11 @@
     // Dynamic year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ── Floating particles in hero ──
+    // ── Floating particles in hero (desktop only) ──
     (function() {
       const container = document.getElementById('heroParticles');
-      if (!container) return;
-      const count = window.innerWidth < 768 ? 14 : 20;
+      if (!container || window.innerWidth < 768) return;
+      const count = 20;
       for (let i = 0; i < count; i++) {
         const p = document.createElement('div');
         p.className = 'hero-particle';
