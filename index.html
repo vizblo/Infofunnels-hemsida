@@ -29,7 +29,10 @@
       --font-body: 'Inter', sans-serif;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
 
     body {
       background: var(--bg);
@@ -38,6 +41,7 @@
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     /* ─── Utility ─── */
@@ -561,6 +565,7 @@
     #book {
       padding: 8rem 0;
       background: var(--card);
+      overflow: hidden;
     }
     .book-orb {
       position: absolute;
@@ -677,6 +682,11 @@
       /* Navbar */
       #navbar { padding: 1.1rem 0; }
       #navbar.scrolled { padding: 0.85rem 0; }
+      #navbar .btn-primary {
+        font-size: 0.78rem;
+        padding: 0.5rem 1rem;
+        white-space: nowrap;
+      }
 
       /* Hero */
       #hero { padding-top: 4.5rem; min-height: 100svh; }
