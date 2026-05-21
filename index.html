@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfoFunnels — Funnels That Turn Your Audience Into Clients</title>
+  <meta name="description" content="InfoFunnels is a done-for-you funnel agency that helps coaches and online businesses scale by acquiring more clients through high-converting webinar and VSL funnels." />
+  <meta property="og:title" content="InfoFunnels — Funnels That Turn Your Audience Into Clients" />
+  <meta property="og:description" content="InfoFunnels is a done-for-you funnel agency that helps coaches and online businesses scale by acquiring more clients through high-converting webinar and VSL funnels." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #09090b;
+      --card:      #0f0f15;
+      --primary:   #6366f1;
+      --indigo4:   #818cf8;
+      --white:     #ffffff;
+      --muted:     #71717a;
+      --border:    rgba(255,255,255,0.07);
+      --border2:   rgba(255,255,255,0.12);
+      --font-head: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Utility ─── */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+    /* ─── NAV ─── */
+    #navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.5rem 0;
+      transition: background 0.3s, padding 0.3s, border-bottom 0.3s;
+    }
+    #navbar.scrolled {
+      background: rgba(9,9,11,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    #navbar .inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #navbar .logo img {
+      height: 48px;
+      object-fit: contain;
+    }
+    @media (min-width: 768px) { #navbar .logo img { height: 56px; } }
+
+    /* ─── BUTTONS ─── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-head);
+      font-weight: 600;
+      border-radius: 9999px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      padding: 0.6rem 1.4rem;
+      font-size: 0.9rem;
+    }
+    .btn-primary:hover { background: #5254c8; }
+    .btn-primary-lg {
+      background: var(--primary);
+      color: #fff;
+      padding: 0.9rem 2.2rem;
+      font-size: 1.1rem;
+      box-shadow: 0 0 40px -10px rgba(99,102,241,0.55);
+    }
+    .btn-primary-lg:hover { background: #5254c8; box-shadow: 0 0 50px -8px rgba(99,102,241,0.65); }
+    .btn-outline {
+      background: transparent;
+      color: #e2e2e8;
+      padding: 0.55rem 1.2rem;
+      font-size: 0.85rem;
+      border: 1px solid var(--border2);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.05); }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding-top: 5rem;
+    }
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.45;
+    }
+    .hero-orb-1 {
+      top: 22%; left: 20%;
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(99,102,241,0.35) 0%, transparent 70%);
+      filter: blur(80px);
+    }
+    .hero-orb-2 {
+      bottom: 20%; right: 18%;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(99,102,241,0.22) 0%, transparent 70%);
+      filter: blur(70px);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 900px;
+      width: 100%;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 9999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--primary);
+      margin-bottom: 2rem;
+      backdrop-filter: blur(8px);
+    }
+    .pulse-dot {
+      position: relative;
+      display: inline-flex;
+      width: 8px; height: 8px;
+    }
+    .pulse-dot span {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    .pulse-dot span:first-child {
+      animation: ping 1.4s cubic-bezier(0,0,0.2,1) infinite;
+      opacity: 0.75;
+    }
+    @keyframes ping {
+      75%, 100% { transform: scale(1.8); opacity: 0; }
+    }
+    .hero-h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 1.4rem;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, var(--primary), var(--indigo4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-divider {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99,102,241,0.45), transparent);
+    }
+
+    /* ─── SECTIONS ─── */
+    section { position: relative; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    .section-h2 {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 4.5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 540px;
+      line-height: 1.65;
+    }
+
+    /* ─── OUR SPECIALTY ─── */
+    #specialty { padding: 8rem 0; }
+    .specialty-header { max-width: 700px; margin-bottom: 3.5rem; }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .cards-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .feature-card {
+      position: relative;
+      padding: 1px;
+      border-radius: 1.5rem;
+      background: linear-gradient(160deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 100%);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-5px); }
+    .feature-card-inner {
+      background: var(--card);
+      border-radius: calc(1.5rem - 1px);
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-icon {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      background: rgba(99,102,241,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      margin-bottom: 1.75rem;
+      transition: transform 0.35s;
+    }
+    .feature-card:hover .card-icon { transform: scale(1.1); }
+    .card-h3 {
+      font-family: var(--font-head);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.9rem;
+    }
+    .card-p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      flex-grow: 1;
+      margin-bottom: 1.75rem;
+    }
+    .check-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.875rem;
+      color: #c4c4cc;
+    }
+    .check-list li svg { flex-shrink: 0; margin-top: 1px; color: var(--primary); }
+
+    /* ─── DONE FOR YOU ─── */
+    #process {
+      padding: 8rem 0;
+      background: var(--card);
+      overflow: hidden;
+    }
+    .process-orb {
+      position: absolute;
+      top: 0; right: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 65%);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+    .process-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 4.5rem;
+    }
+    .steps {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .step {
+      display: flex;
+      gap: 1.75rem;
+      position: relative;
+      padding-bottom: 2.5rem;
+    }
+    .step:last-child { padding-bottom: 0; }
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .step-icon-wrap {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      z-index: 1;
+      transition: background 0.3s, transform 0.3s;
+      flex-shrink: 0;
+      box-shadow: 0 0 15px rgba(99,102,241,0.13);
+    }
+    .step:hover .step-icon-wrap {
+      background: rgba(99,102,241,0.1);
+      transform: scale(1.08);
+    }
+    .step-line {
+      flex: 1;
+      width: 2px;
+      background: var(--border2);
+      margin-top: 4px;
+      transition: background 0.3s;
+    }
+    .step:hover .step-line { background: rgba(99,102,241,0.4); }
+    .step-body { padding-top: 0.9rem; }
+    .step-h3 {
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .step-p { color: var(--muted); font-size: 0.95rem; line-height: 1.65; }
+
+    /* ─── CLIENTS ─── */
+    #clients { padding: 8rem 0; }
+    .clients-header-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+    .clients-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) { .clients-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .clients-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .client-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .client-card:hover {
+      border-color: rgba(99,102,241,0.28);
+      transform: translateY(-3px);
+    }
+    .client-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: rgba(99,102,241,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      border: 2px solid rgba(99,102,241,0.2);
+      overflow: hidden;
+    }
+    .client-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .client-name {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .client-role {
+      font-size: 0.875rem;
+      color: var(--primary);
+      font-weight: 500;
+      margin-top: 0.2rem;
+      margin-bottom: 1.1rem;
+    }
+    .btn-linkedin {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 0.6rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border2);
+      background: rgba(255,255,255,0.025);
+      color: #d4d4d8;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn-linkedin:hover {
+      background: rgba(99,102,241,0.1);
+      border-color: rgba(99,102,241,0.35);
+      color: var(--primary);
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      padding: 5.5rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(9,9,11,0.3);
+      position: relative;
+    }
+    #about::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .about-inner {
+      max-width: 750px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .about-h2 {
+      font-family: var(--font-head);
+      font-size: clamp(1.4rem, 3vw, 1.85rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .about-p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* ─── BOOK / CALENDLY ─── */
+    #book {
+      padding: 8rem 0;
+      background: var(--card);
+    }
+    .book-orb {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+    .book-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      position: relative;
+      z-index: 1;
+    }
+    .calendly-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--bg);
+      border-radius: 1.5rem;
+      border: 1px solid var(--border2);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+      overflow: hidden;
+      padding: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .calendly-inline-widget {
+      min-width: 320px;
+      height: 700px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg);
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    @media (min-width: 768px) {
+      .footer-inner {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    @media (min-width: 768px) { .footer-brand { align-items: flex-start; } }
+    .footer-brand img { height: 44px; object-fit: contain; }
+    .footer-tagline { font-size: 0.85rem; color: var(--muted); }
+    .footer-copy { font-size: 0.85rem; color: var(--muted); text-align: center; }
+    @media (min-width: 768px) { .footer-copy { text-align: right; } }
+
+    /* ─── RESPONSIVE TWEAKS ─── */
+    @media (max-width: 600px) {
+      .hero-orb-1, .hero-orb-2 { width: 280px; height: 280px; }
+      .feature-card-inner { padding: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════ -->
+  <header id="navbar" role="banner">
+    <div class="container inner">
+      <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="InfoFunnels home">
+        <img src="logo.png" alt="InfoFunnels" />
+      </a>
+      <a href="#book" class="btn btn-primary">Book a Call</a>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <section id="hero" aria-labelledby="hero-heading">
+    <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+
+    <div class="container hero-content">
+      <div class="hero-badge" role="status">
+        <span class="pulse-dot" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+        Accepting new clients for Q3
+      </div>
+
+      <h1 class="hero-h1" id="hero-heading">
+        Funnels that turn your audience into<br>
+        <span class="gradient-text">paid clients</span>
+      </h1>
+
+      <p class="hero-sub">
+        We build, launch, and scale done-for-you webinars.<br>
+        So that you and your business can focus on service delivery.
+      </p>
+
+      <a href="#book" class="btn btn-primary-lg">
+        Book Your Strategy Call
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-divider" aria-hidden="true"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       OUR SPECIALTY
+  ═══════════════════════════════════════════ -->
+  <section id="specialty" aria-labelledby="specialty-heading">
+    <div class="container">
+      <div class="specialty-header">
+        <h2 class="section-h2" id="specialty-heading">Our Specialty</h2>
+        <p class="section-sub">We build systemised webinar funnels designed for one thing: getting you more qualified appointments.</p>
+      </div>
+
+      <div class="cards-grid">
+        <!-- Card 1: The Webinar Funnel -->
+        <div class="feature-card">
+          <div class="feature-card-inner">
+            <div class="card-icon" aria-hidden="true">
+              <!-- Play Circle -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            </div>
+            <h3 class="card-h3">The Webinar Funnel</h3>
+            <p class="card-p">Our flagship system. Perfect for selling high-ticket offers ($1k–$10k+). We script, build, and optimize live or automated webinars that educate and convert your audience at scale.</p>
+            <ul class="check-list">
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                High-converting registration, thank-you &amp; replay pages
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Automated email &amp; SMS show-up &amp; follow-up sequences
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Paid ad campaigns scripted, built, edited &amp; managed
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Converting webinar structure &amp; presentation built slide by slide
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 2: Is this for you? -->
+        <div class="feature-card">
+          <div class="feature-card-inner">
+            <div class="card-icon" aria-hidden="true">
+              <!-- Users -->
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3 class="card-h3">Is this for you?</h3>
+            <p class="card-p">You're a coach, service provider, or an expert with a proven offer. But client acquisition still feels random from month to month. And you don't know how to attract more clients.</p>
+            <ul class="check-list">
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                You have a $1k–$10k+ offer ready to scale
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                You want predictable, qualified booked calls
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                You're done piecing together freelancers and tools
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                You want a partner, not another vendor
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       COMPLETELY DONE-FOR-YOU PROCESS
+  ═══════════════════════════════════════════ -->
+  <section id="process" aria-labelledby="process-heading">
+    <div class="process-orb" aria-hidden="true"></div>
+    <div class="container">
+      <div class="process-header">
+        <h2 class="section-h2" id="process-heading">Completely Done-For-You</h2>
+        <p class="section-sub" style="max-width:none">
+          We handle every step so you can stay in your zone of genius.<br>Here's exactly what we build together.
+        </p>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-left">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <!-- CheckCircle2 -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3 class="step-h3">Nailing the offer</h3>
+            <p class="step-p">Before we build anything, we refine your pricing, bonuses and messaging so it resonates instantly with your ideal buyer.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-left">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <!-- LayoutTemplate -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3 class="step-h3">Building the landing pages</h3>
+            <p class="step-p">We design and develop 3 premium, converting landing pages, optimised for conversion and show-up rate.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-left">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <!-- Zap -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3 class="step-h3">Setting up the backend systems</h3>
+            <p class="step-p">Automated email &amp; SMS sequences, calendar integrations, and pixel tracking. We wire it all together flawlessly.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-left">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <!-- Users (ads/targeting) -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3 class="step-h3">Creating and launching the ads</h3>
+            <p class="step-p">We script the creatives, set-up the campaigns, and manage the spend across Meta to drive targeted traffic to the webinar.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-left">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <!-- PlayCircle -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            </div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <h3 class="step-h3">The live webinar</h3>
+            <p class="step-p">We write the entire webinar structure and build out a digital presentation slide by slide so you can show up and present.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-left">
+            <div class="step-icon-wrap" aria-hidden="true">
+              <!-- BarChart3 -->
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            </div>
+            <!-- no line after last step -->
+          </div>
+          <div class="step-body">
+            <h3 class="step-h3">1:1 weekly calls</h3>
+            <p class="step-p">You're never in the dark. We review metrics, iterate on strategy, and optimize performance together every single week.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CLIENTS
+  ═══════════════════════════════════════════ -->
+  <section id="clients" aria-labelledby="clients-heading">
+    <div class="container">
+      <div class="clients-header-row">
+        <div>
+          <h2 class="section-h2" id="clients-heading">Clients we've worked with</h2>
+          <p class="section-sub">A handful of the operators who've trusted us to engineer their growth.</p>
+        </div>
+        <a href="#book" class="btn btn-outline" style="display:none" id="clients-cta">
+          Work with us
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <div class="clients-grid">
+
+        <div class="client-card">
+          <div class="client-avatar" aria-label="Kasey Jones">KJ</div>
+          <div class="client-name">Kasey Jones</div>
+          <div class="client-role">Business coach</div>
+          <a href="https://www.linkedin.com/in/abetterjones/" target="_blank" rel="noopener noreferrer" class="btn-linkedin">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            View on LinkedIn
+          </a>
+        </div>
+
+        <div class="client-card">
+          <div class="client-avatar" aria-label="Tomas Lydahl">TL</div>
+          <div class="client-name">Tomas Lydahl</div>
+          <div class="client-role">Mental coach</div>
+          <a href="https://www.linkedin.com/in/tomaslydahl/" target="_blank" rel="noopener noreferrer" class="btn-linkedin">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            View on LinkedIn
+          </a>
+        </div>
+
+        <div class="client-card">
+          <div class="client-avatar" aria-label="Sibbe Silvén">SS</div>
+          <div class="client-name">Sibbe Silvén</div>
+          <div class="client-role">AI coach</div>
+          <a href="https://www.linkedin.com/in/sibbe/?locale=en" target="_blank" rel="noopener noreferrer" class="btn-linkedin">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            View on LinkedIn
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       ABOUT
+  ═══════════════════════════════════════════ -->
+  <section id="about" aria-labelledby="about-heading">
+    <div class="container">
+      <div class="about-inner">
+        <h2 class="about-h2" id="about-heading">About InfoFunnels</h2>
+        <p class="about-p">InfoFunnels is a done-for-you funnel agency built on hands-on experience running funnels for coaches, consultants, and online experts. We work exclusively with high-ticket coaches and info-businesses across the world, scaling their client acquisition through converting webinars and paid traffic.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       BOOK A STRATEGY CALL
+  ═══════════════════════════════════════════ -->
+  <section id="book" aria-labelledby="book-heading">
+    <div class="book-orb" aria-hidden="true"></div>
+    <div class="container">
+      <div class="book-header">
+        <h2 class="section-h2" id="book-heading">Ready to scale?</h2>
+        <p class="section-sub" style="max-width:none">Find a time below to see if we're a fit. We'll audit your current process and outline exactly what a funnel build-out looks like for your business.</p>
+      </div>
+
+      <div class="calendly-wrap">
+        <!-- Calendly inline widget -->
+        <div
+          class="calendly-inline-widget"
+          data-url="https://calendly.com/vincent-emsmedia/meeting?hide_gdpr_banner=1&background_color=09090b&text_color=ffffff&primary_color=6366f1"
+        ></div>
+        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="logo.png" alt="InfoFunnels" />
+        <span class="footer-tagline">Funnels that turn your audience into clients.</span>
+      </div>
+      <div class="footer-copy">
+        &copy; <span id="year"></span> InfoFunnels. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Dynamic year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Clients CTA visible on desktop
+    const clientsCta = document.getElementById('clients-cta');
+    if (window.innerWidth >= 768) clientsCta.style.display = 'inline-flex';
+
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    function onScroll() {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Smooth scroll for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
