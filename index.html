@@ -218,7 +218,7 @@
     }
 
     /* ─── SECTIONS ─── */
-    section { position: relative; }
+    section { position: relative; z-index: 1; }
     .section-label {
       display: inline-block;
       font-size: 0.75rem;
@@ -324,12 +324,7 @@
     /* ─── DONE FOR YOU ─── */
     #process {
       padding: 8rem 0;
-      background: linear-gradient(to bottom,
-        transparent 0%,
-        rgba(15,15,21,0.7) 6%,
-        rgba(15,15,21,0.7) 94%,
-        transparent 100%
-      );
+      background: transparent;
       overflow: hidden;
     }
     .process-orb {
@@ -644,12 +639,7 @@
     /* ─── BOOK / CALENDLY ─── */
     #book {
       padding: 8rem 0;
-      background: linear-gradient(to bottom,
-        transparent 0%,
-        rgba(15,15,21,0.65) 6%,
-        rgba(15,15,21,0.65) 94%,
-        transparent 100%
-      );
+      background: transparent;
       overflow: hidden;
     }
     .book-orb {
@@ -964,6 +954,22 @@
 </style>
 </head>
 <body>
+
+  <!-- Page-wide flowing gradient orbs -->
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
+    <!-- Top-left orb (hero area) -->
+    <div style="position:absolute;top:5%;left:10%;width:600px;height:600px;background:radial-gradient(circle,rgba(99,102,241,0.13) 0%,transparent 65%);filter:blur(40px);border-radius:50%;"></div>
+    <!-- Top-right orb -->
+    <div style="position:absolute;top:15%;right:5%;width:480px;height:480px;background:radial-gradient(circle,rgba(99,102,241,0.08) 0%,transparent 65%);filter:blur(50px);border-radius:50%;"></div>
+    <!-- Mid-left orb (process area) -->
+    <div style="position:absolute;top:38%;left:-5%;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,0.07) 0%,transparent 65%);filter:blur(60px);border-radius:50%;"></div>
+    <!-- Mid-right orb -->
+    <div style="position:absolute;top:52%;right:0%;width:550px;height:550px;background:radial-gradient(circle,rgba(129,140,248,0.06) 0%,transparent 65%);filter:blur(60px);border-radius:50%;"></div>
+    <!-- Lower-left orb (clients/about area) -->
+    <div style="position:absolute;top:68%;left:15%;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,0.08) 0%,transparent 65%);filter:blur(50px);border-radius:50%;"></div>
+    <!-- Bottom-right orb (book area) -->
+    <div style="position:absolute;top:82%;right:10%;width:600px;height:600px;background:radial-gradient(circle,rgba(99,102,241,0.10) 0%,transparent 65%);filter:blur(45px);border-radius:50%;"></div>
+  </div>
 
   <!-- ══════════════════════════════════════════
        NAVBAR
