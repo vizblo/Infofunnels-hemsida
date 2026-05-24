@@ -561,6 +561,72 @@
       line-height: 1.75;
     }
 
+    /* ─── GUARANTEE ─── */
+    #guarantee {
+      padding: 5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .guarantee-inner {
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .guarantee-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.3);
+      color: var(--primary);
+      margin: 0 auto 1.75rem;
+      box-shadow: 0 0 40px rgba(99,102,241,0.15);
+    }
+    .guarantee-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+    .guarantee-amount {
+      background: linear-gradient(90deg, var(--primary), var(--indigo4));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .guarantee-text {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 580px;
+      margin: 0 auto 2rem;
+    }
+    .guarantee-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .guarantee-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(99,102,241,0.08);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 9999px;
+      padding: 0.45rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #c4c4cc;
+    }
+    .guarantee-pill svg { color: var(--primary); flex-shrink: 0; }
+
     /* ─── BOOK / CALENDLY ─── */
     #book {
       padding: 8rem 0;
@@ -790,6 +856,14 @@
       /* ── About ── */
       .about-h2 { font-size: clamp(1.2rem, 5vw, 1.5rem); margin-bottom: 0.65rem; }
       .about-p  { font-size: 0.91rem; }
+
+      /* ── Guarantee ── */
+      #guarantee { padding: 3rem 0; }
+      .guarantee-badge { width: 58px; height: 58px; margin-bottom: 1.25rem; }
+      .guarantee-title { font-size: clamp(1.5rem, 6.5vw, 2rem); }
+      .guarantee-text { font-size: 0.91rem; }
+      .guarantee-pills { gap: 0.5rem; }
+      .guarantee-pill { font-size: 0.78rem; padding: 0.38rem 0.9rem; }
 
       /* ── Book / Calendly ── */
       .book-header { margin-bottom: 1.25rem; }
@@ -1165,6 +1239,49 @@
       <div class="about-inner reveal">
         <h2 class="about-h2" id="about-heading">About InfoFunnels</h2>
         <p class="about-p">InfoFunnels is a done-for-you funnel agency built on hands-on experience running funnels for coaches, consultants, and online experts. We work exclusively with high-ticket coaches and info-businesses across the world, scaling their client acquisition through converting webinars and paid traffic.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       GUARANTEE
+  ═══════════════════════════════════════════ -->
+  <section id="guarantee">
+    <div class="container">
+      <div class="guarantee-inner reveal">
+
+        <div class="guarantee-badge" aria-hidden="true">
+          <!-- Shield check icon -->
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+        </div>
+
+        <div class="section-label">Our Guarantee</div>
+        <h2 class="guarantee-title">
+          We guarantee a minimum of<br>
+          <span class="guarantee-amount">$10,000 in sales</span>
+        </h2>
+        <p class="guarantee-text">
+          If we don't generate at least $10,000 in sales from your funnel, we keep working — for free — until we do. We only win when you win.
+        </p>
+
+        <div class="guarantee-pills">
+          <span class="guarantee-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            $10,000 minimum in sales
+          </span>
+          <span class="guarantee-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            We keep working until it's hit
+          </span>
+          <span class="guarantee-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Zero risk on your end
+          </span>
+        </div>
+
       </div>
     </div>
   </section>
