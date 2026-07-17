@@ -612,6 +612,48 @@
       line-height: 1.75;
     }
 
+    /* ─── CLIENT INTERVIEWS ─── */
+    .interviews-wrap {
+      margin-top: 4rem;
+    }
+    .interviews-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    .interviews-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+    }
+    .video-embed {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      border: 1px solid rgba(99,102,241,0.22);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.08);
+    }
+    .video-embed::before {
+      content: '';
+      display: block;
+      padding-top: 56.25%; /* 16:9 */
+    }
+    .video-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
     /* ─── GUARANTEE ─── */
     #guarantee {
       padding: 5rem 0;
@@ -1288,6 +1330,20 @@
         </div>
 
       </div>
+
+      <div class="interviews-wrap reveal">
+        <div class="interviews-label">Client Interviews</div>
+        <h3 class="interviews-title">Hear it from our clients</h3>
+        <div class="video-embed">
+          <iframe
+            src="https://www.youtube.com/embed/fVgDOwED4bU"
+            title="Client Interview"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+
     </div>
   </section>
 
