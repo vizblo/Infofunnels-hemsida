@@ -798,6 +798,9 @@
     @media (min-width: 768px) { .footer-brand { align-items: flex-start; } }
     .footer-brand img { height: 44px; object-fit: contain; }
     .footer-tagline { font-size: 0.85rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.85rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--white); }
     .footer-copy { font-size: 0.85rem; color: var(--muted); text-align: center; }
     @media (min-width: 768px) { .footer-copy { text-align: right; } }
 
@@ -1336,7 +1339,7 @@
         <h3 class="interviews-title">Hear it from our clients</h3>
         <div class="video-embed">
           <iframe
-            src="https://www.youtube.com/embed/dpio4_bDxVI"
+            src="https://www.youtube.com/embed/6YJmN7Kf4QY"
             title="Client Interview"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -1377,6 +1380,10 @@
       <div class="footer-brand">
         <img src="wordmark.png" alt="InfoFunnels" />
         <span class="footer-tagline">Funnels that turn your audience into clients.</span>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
       </div>
       <div class="footer-copy">
         &copy; <span id="year"></span> InfoFunnels. All rights reserved.
