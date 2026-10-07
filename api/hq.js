@@ -90,6 +90,30 @@ function slackText(r, user, updated) {
   return L.join("\n");
 }
 
+/* ---------- EOD ---------- */
+async function storeEod(me, r, allowRename) {
+  const date = str(r.date, 10);
+  if (!isDate(date)) return { code: 400, body: { error: "Pick a valid date." } };
+  const age = (Date.now() - Date.parse(date)) / 864e5;
+  if (age > 31 || age < -2) return { code: 400, body: { error: "You can only send reports for the last 30 days." } };
+  const rec = { date, role: me.role || "", done: str(r.done), win: str(r.win), blockers: str(r.blockers), tomorrow: str(r.tomorrow), notes: str(r.notes),
+    hours: r.hours === null || r.hours === "" || r.hours == null ? null : Math.max(0, Math.min(24, num(r.hours))),
+    energy: [1, 2, 3, 4, 5].includes(+r.energy) ? +r.energy : null, submittedAt: new Date().toISOString() };
+  if (!rec.done || !rec.tomorrow) return { code: 400, body: { error: "Fill in what you got done and tomorrow's priorities." } };
+  const key = "hq:eod:" + date;
+  const existed = await redis("HEXISTS", key, me.id);
+  await pipeline([["HSET", key, me.id, JSON.stringify(rec)], ["EXPIRE", key, 60 * 60 * 24 * 400]]);
+  const newName = str(r.name, 80);
+  if (allowRename && newName && newName !== me.name) { me.name = newName; await redis("HSET", "hq:users", me.id, JSON.stringify(me)); }
+  let slack = "off";
+  if (SLACK) {
+    try { const s = await fetch(SLACK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: slackText(rec, me, !!existed) }) }); slack = s.ok ? "sent" : "failed"; }
+    catch { slack = "failed"; }
+  }
+  return { code: 200, body: { ok: true, slack, updated: !!existed, report: { ...rec, uid: me.id } } };
+}
+const normName = s => String(s || "").trim().replace(/\s+/g, " ").toLowerCase();
+
 /* ---------- handler ---------- */
 module.exports = async (req, res) => {
   try {
@@ -111,6 +135,7 @@ module.exports = async (req, res) => {
       const tries = await redis("INCR", rl); if (tries === 1) await redis("EXPIRE", rl, 900);
       if (tries > 10) return send(res, 429, { error: "Too many attempts. Wait 15 minutes and try again." });
       const username = str(body.username, 80).toLowerCase(), password = String(body.password || "");
+      if (!username || !password) return send(res, 401, { error: "Enter your username and password." });
       if (username === ADMIN_USER && safeEq(password, ADMIN_PASS)) {
         setSession(res, { uid: "admin", role: "admin" }); await redis("DEL", rl);
         return send(res, 200, { ok: true });
@@ -124,6 +149,29 @@ module.exports = async (req, res) => {
       return send(res, 401, { error: "Wrong username or password." });
     }
     if (action === "logout") { setSession(res, null); return send(res, 200, { ok: true }); }
+
+    // Standalone team form at /eod: no login, identified by name.
+    if (action === "publicEod") {
+      const r = body.report || {};
+      if (str(body.website, 200)) return send(res, 200, { ok: true, slack: "off" }); // spam trap
+      const ip = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "unknown";
+      const rl = "hq:rlp:" + ip;
+      const n = await redis("INCR", rl); if (n === 1) await redis("EXPIRE", rl, 3600);
+      if (n > 20) return send(res, 429, { error: "Too many reports from this connection. Try again in an hour." });
+      const name = str(r.name, 80).replace(/\s+/g, " ");
+      if (name.length < 2) return send(res, 400, { error: "Add your name." });
+      const users = await getUsers();
+      if (normName(users.admin.name) === normName(name) && users.admin.name !== "Admin") return send(res, 400, { error: "That name belongs to the HQ owner. Submit your own report from HQ." });
+      let me = Object.values(users).find(u => u.id !== "admin" && u.active !== false && normName(u.name) === normName(name));
+      if (!me) {
+        if (Object.values(users).some(u => u.id !== "admin" && u.active === false && normName(u.name) === normName(name))) return send(res, 403, { error: "This name no longer has access. Ask your manager." });
+        if (Object.keys(users).length >= 60) return send(res, 400, { error: "Name not recognised. Ask your manager to add you on the Team page." });
+        me = { id: "u" + crypto.randomBytes(6).toString("hex"), name, role: "", active: true, pv: 1, source: "form", createdAt: new Date().toISOString() };
+        await redis("HSET", "hq:users", me.id, JSON.stringify(me));
+      }
+      const out = await storeEod(me, r, false);
+      return send(res, out.code, out.body);
+    }
 
     const sess = verify(readCookie(req, COOKIE));
     if (!sess) return send(res, 401, { error: "auth" });
@@ -152,26 +200,8 @@ module.exports = async (req, res) => {
         return send(res, 200, data);
       }
       case "submitEod": {
-        const r = body.report || {};
-        const date = str(r.date, 10);
-        if (!isDate(date)) return send(res, 400, { error: "Pick a valid date." });
-        const age = (Date.now() - Date.parse(date)) / 864e5;
-        if (age > 31 || age < -2) return send(res, 400, { error: "You can only send reports for the last 30 days." });
-        const newName = str(r.name, 80);
-        const rec = { date, role: me.role || "", done: str(r.done), win: str(r.win), blockers: str(r.blockers), tomorrow: str(r.tomorrow), notes: str(r.notes),
-          hours: r.hours === null || r.hours === "" || r.hours == null ? null : Math.max(0, Math.min(24, num(r.hours))),
-          energy: [1, 2, 3, 4, 5].includes(+r.energy) ? +r.energy : null, submittedAt: new Date().toISOString() };
-        if (!rec.done || !rec.tomorrow) return send(res, 400, { error: "Fill in what you got done and tomorrow's priorities." });
-        const key = "hq:eod:" + date;
-        const existed = await redis("HEXISTS", key, me.id);
-        await pipeline([["HSET", key, me.id, JSON.stringify(rec)], ["EXPIRE", key, 60 * 60 * 24 * 400]]);
-        if (newName && newName !== me.name) { me.name = newName; await redis("HSET", "hq:users", me.id, JSON.stringify(me)); }
-        let slack = "off";
-        if (SLACK) {
-          try { const s = await fetch(SLACK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: slackText(rec, me, !!existed) }) }); slack = s.ok ? "sent" : "failed"; }
-          catch { slack = "failed"; }
-        }
-        return send(res, 200, { ok: true, slack, report: { ...rec, uid: me.id } });
+        const out = await storeEod(me, body.report || {}, true);
+        return send(res, out.code, out.body);
       }
       case "saveMonth": {
         if (needAdmin()) return;
@@ -201,12 +231,12 @@ module.exports = async (req, res) => {
         if (!name) return send(res, 400, { error: "Add a name." });
         if (id === "admin") { const u = { ...users.admin, name, role }; await redis("HSET", "hq:users", "admin", JSON.stringify(u)); return send(res, 200, { ok: true }); }
         const username = str(body.username, 40).toLowerCase().replace(/[^a-z0-9._-]/g, "");
-        if (!username) return send(res, 400, { error: "Add a username (letters and numbers)." });
-        if (username === ADMIN_USER || Object.values(users).some(u => u.id !== id && (u.username || "").toLowerCase() === username)) return send(res, 400, { error: "That username is taken." });
+        if (username && (username === ADMIN_USER || Object.values(users).some(u => u.id !== id && (u.username || "").toLowerCase() === username))) return send(res, 400, { error: "That username is taken." });
+        if (Object.values(users).some(u => u.id !== id && normName(u.name) === normName(name))) return send(res, 400, { error: "Someone on the team already has that name. Add a last name or initial." });
         const password = String(body.password || "");
         const existing = id ? users[id] : null;
         if (id && !existing) return send(res, 404, { error: "Team member not found." });
-        if (!existing && password.length < 8) return send(res, 400, { error: "Set a password of at least 8 characters." });
+        if (username && !existing?.pw && password.length < 8) return send(res, 400, { error: "Set a password of at least 8 characters, or leave the username empty." });
         if (password && password.length < 8) return send(res, 400, { error: "Passwords need at least 8 characters." });
         const u = existing ? { ...existing, name, role, username } : { id: "u" + crypto.randomBytes(6).toString("hex"), name, role, username, active: true, pv: 1, createdAt: new Date().toISOString() };
         if (body.active === false || body.active === true) u.active = body.active;

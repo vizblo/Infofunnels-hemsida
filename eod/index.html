@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>InfoFunnels EOD Report</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: fixed left rail (brand + nav) beside a scrolling work area; the rail folds into a top tab strip on phones.
+   Single dark look, matching infofunnels.co. */
+:root {
+  --bg: #09090b;
+  --surface: #111114;
+  --surface-2: #17171c;
+  --raise: #1d1d23;
+  --line: rgba(255,255,255,.08);
+  --line-strong: rgba(255,255,255,.14);
+  --fg: #ffffff;
+  --fg-2: #d4d4d8;
+  --muted: #a1a1aa;
+  --dim: #71717a;
+  --gold: #d2af26;
+  --gold-hi: #e6c53f;
+  --gold-soft: rgba(210,175,38,.16);
+  --gold-line: rgba(210,175,38,.28);
+  --gold-2: #8a7420;
+  --good: #4ade80;
+  --good-soft: rgba(74,222,128,.12);
+  --warn: #fbbf24;
+  --warn-soft: rgba(251,191,36,.12);
+  --bad: #f87171;
+  --bad-soft: rgba(248,113,113,.12);
+  --display: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 12px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--fg); }
+body { font-family: var(--body); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: var(--gold); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+
+.app { display: grid; grid-template-columns: 236px minmax(0,1fr); min-height: 100vh; }
+.side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; height: 100vh; display: flex; flex-direction: column; gap: 28px; padding: 26px 18px; border-right: 1px solid var(--line); background: linear-gradient(180deg, #0d0d10 0%, var(--bg) 100%); }
+.brand { display: flex; flex-direction: column; gap: 8px; padding: 0 8px; }
+.brand img { width: 150px; height: auto; filter: invert(1); display: block; }
+.brand .tag { font-family: var(--display); font-weight: 700; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav button { all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--muted); font-weight: 500; }
+.nav button svg { width: 17px; height: 17px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.nav button:hover { color: var(--fg); background: rgba(255,255,255,.04); }
+.nav button[aria-current="page"] { color: var(--fg); background: var(--gold-soft); box-shadow: inset 0 0 0 1px var(--gold-line); }
+.nav button[aria-current="page"] svg { stroke: var(--gold); }
+.nav button:focus-visible { outline: 2px solid var(--gold); }
+.side-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px 8px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; min-width: 0; }
+.side-foot img { width: 28px; height: 28px; border-radius: 50%; flex: none; }
+.side-foot span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.main { padding-inline: clamp(16px, 4vw, 44px); padding-block: 34px 60px; min-width: 0; max-width: 1180px; width: 100%; }
+.page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 24px; margin-bottom: 26px; }
+.eyebrow { font-family: var(--display); font-size: 11.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.page-head h1 { font-size: clamp(26px, 3.2vw, 34px); font-weight: 800; letter-spacing: -.02em; line-height: 1.12; }
+.page-head p { margin: 6px 0 0; color: var(--muted); max-width: 60ch; }
+
+.panel { background: linear-gradient(160deg, #141310 0%, var(--surface) 60%); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; min-width: 0; }
+.panel h2 { font-size: 15.5px; font-weight: 700; letter-spacing: -.005em; }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
+.panel-head .sub { color: var(--dim); font-size: 12.5px; }
+.stack { display: flex; flex-direction: column; gap: 18px; }
+.grid-2 { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(0,1fr); gap: 18px; }
+.grid-2 > * { min-width: 0; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.kpi { background: var(--surface); padding: 18px 20px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.kpi.lead { background: linear-gradient(145deg, rgba(210,175,38,.20) 0%, rgba(210,175,38,.05) 55%, var(--surface) 100%); }
+.kpi .lab { font-size: 12px; color: var(--muted); font-weight: 500; }
+.kpi .val { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 2.4vw, 28px); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.kpi.lead .val { color: var(--gold-hi); }
+.kpi .note { font-size: 12px; color: var(--dim); }
+.delta { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; padding: 1px 7px; border-radius: 99px; width: fit-content; }
+.delta.up { color: var(--good); background: var(--good-soft); }
+.delta.down { color: var(--bad); background: var(--bad-soft); }
+.delta.flat { color: var(--muted); background: rgba(255,255,255,.05); }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--dim); font-family: var(--body); font-size: 11px; }
+.chart .vl { fill: var(--fg-2); font-weight: 600; font-size: 10.5px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+.btn { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 16px; border-radius: 9px; font-weight: 600; font-size: 13.5px; background: var(--gold); color: #0b0b0d; white-space: nowrap; }
+.btn:hover { background: var(--gold-hi); }
+.btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.btn[disabled] { opacity: .5; cursor: default; }
+.btn.ghost { background: transparent; color: var(--fg-2); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.btn.ghost:hover { color: var(--fg); box-shadow: inset 0 0 0 1px var(--gold-line); background: rgba(210,175,38,.06); }
+.btn.sm { padding: 6px 11px; font-size: 12.5px; border-radius: 7px; }
+.btn.danger { background: transparent; color: var(--bad); box-shadow: inset 0 0 0 1px rgba(248,113,113,.35); }
+.btn.danger.armed { background: var(--bad); color: #160606; }
+.icon-btn { all: unset; cursor: pointer; color: var(--dim); padding: 4px 6px; border-radius: 6px; font-size: 18px; line-height: 1; }
+.icon-btn:hover { color: var(--bad); background: var(--bad-soft); }
+.icon-btn:focus-visible { outline: 2px solid var(--gold); }
+
+label.f { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 13px; color: var(--fg-2); min-width: 0; }
+label.f .hint { font-weight: 400; color: var(--dim); font-size: 12px; }
+.inp { width: 100%; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 9px; padding: 9px 12px; color: var(--fg); outline: none; min-width: 0; }
+.inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-soft); }
+textarea.inp { resize: vertical; min-height: 84px; line-height: 1.5; }
+.inp::placeholder { color: var(--dim); }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.row > * { flex: 1 1 160px; }
+
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-weight: 600; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th.r, td.r { text-align: right; }
+tr.click { cursor: pointer; }
+tr.click:hover td { background: rgba(255,255,255,.025); }
+tr.sel td { background: var(--gold-soft); }
+tfoot td { font-weight: 700; border-bottom: 0; color: var(--fg); }
+.ed td { padding: 6px 6px; }
+.ed .inp { padding: 7px 10px; }
+.gold { color: var(--gold-hi); }
+.muted { color: var(--muted); }
+.dim { color: var(--dim); }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.chip.ok { color: var(--good); background: var(--good-soft); }
+.chip.pend { color: var(--warn); background: var(--warn-soft); }
+
+.people { display: flex; flex-direction: column; }
+.person { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.person:last-child { border-bottom: 0; }
+.person img { width: 32px; height: 32px; border-radius: 50%; flex: none; }
+.person .who { flex: 1; min-width: 0; }
+.person .who b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.person .who small { color: var(--dim); font-size: 12px; }
+
+.links { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.link { position: relative; display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); text-decoration: none; color: var(--fg); min-width: 0; transition: border-color .15s, background .15s; }
+.link:hover { border-color: var(--gold-line); background: #1b1a16; }
+.link .ico { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; background: var(--gold-soft); color: var(--gold); flex: none; font-family: var(--display); font-weight: 800; font-size: 14px; }
+.link .txt { min-width: 0; flex: 1; }
+.link b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.link small { display: block; color: var(--dim); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.link-wrap { position: relative; min-width: 0; }
+.link-wrap .rm { position: absolute; top: 6px; right: 6px; }
+
+.empty { border: 1px dashed var(--line-strong); border-radius: 10px; padding: 22px; text-align: center; color: var(--muted); }
+.empty b { display: block; color: var(--fg-2); font-family: var(--display); margin-bottom: 4px; }
+
+/* EOD form */
+.q { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 4px 12px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.q:last-of-type { border-bottom: 0; }
+.q .n { font-family: var(--display); font-weight: 800; color: var(--gold); font-size: 13px; padding-top: 1px; }
+.q .qt { font-weight: 600; color: var(--fg); font-size: 14.5px; }
+.q .qh { color: var(--dim); font-size: 12.5px; margin-bottom: 8px; }
+.q .body { grid-column: 2; min-width: 0; }
+.req { color: var(--gold); }
+.scale { display: flex; gap: 6px; flex-wrap: wrap; }
+.scale input { position: absolute; opacity: 0; pointer-events: none; }
+.scale label { cursor: pointer; display: grid; place-items: center; min-width: 46px; padding: 8px 10px; border-radius: 9px; border: 1px solid var(--line-strong); color: var(--muted); font-weight: 600; text-align: center; font-size: 13px; line-height: 1.2; }
+.scale label small { display: block; font-weight: 400; font-size: 10.5px; color: var(--dim); }
+.scale input:checked + label { border-color: var(--gold); background: var(--gold-soft); color: var(--gold-hi); }
+.scale input:focus-visible + label { outline: 2px solid var(--gold); outline-offset: 2px; }
+.form-foot { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding-top: 18px; border-top: 1px solid var(--line); margin-top: 4px; }
+.success { border: 1px solid var(--gold-line); background: linear-gradient(145deg, rgba(210,175,38,.16), rgba(210,175,38,.03) 60%); border-radius: var(--r); padding: 20px; }
+.success h2 { font-size: 18px; margin-bottom: 4px; }
+pre.slack { white-space: pre-wrap; word-break: break-word; background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 14px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--fg-2); margin: 12px 0; max-height: 320px; overflow: auto; }
+
+/* report feed */
+.day { display: flex; flex-direction: column; gap: 10px; }
+.day-h { display: flex; align-items: baseline; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 14px; color: var(--fg-2); padding-top: 6px; }
+.day-h span { font-family: var(--body); font-weight: 500; font-size: 12px; color: var(--dim); }
+.rep { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; min-width: 0; }
+.rep-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.rep-top img { width: 34px; height: 34px; border-radius: 50%; }
+.rep-top .who { flex: 1; min-width: 0; }
+.rep-top .who b { display: block; }
+.rep-top .who small { color: var(--dim); font-size: 12px; }
+.meter { display: inline-flex; gap: 3px; vertical-align: middle; }
+.meter i { width: 8px; height: 8px; border-radius: 2px; background: rgba(255,255,255,.1); }
+.meter i.on { background: var(--gold); }
+.rep dl { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 8px 16px; margin: 0; }
+.rep dt { color: var(--dim); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+.rep dd { margin: 0; white-space: pre-wrap; word-break: break-word; color: var(--fg-2); }
+.rep dd.block { color: var(--warn); }
+
+.code { display: flex; gap: 8px; align-items: stretch; min-width: 0; }
+.code code { flex: 1; min-width: 0; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; color: var(--fg-2); overflow-x: auto; white-space: nowrap; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.steps { margin: 0; padding-left: 20px; color: var(--fg-2); display: flex; flex-direction: column; gap: 10px; }
+.steps li::marker { color: var(--gold); font-weight: 700; }
+
+.toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--raise); border: 1px solid var(--gold-line); color: var(--fg); padding: 10px 16px; border-radius: 10px; font-weight: 500; transition: .2s; pointer-events: none; z-index: 10; max-width: calc(100% - 32px); }
+.toast.show { opacity: 1; transform: translateX(-50%); }
+.loading { color: var(--muted); padding: 60px 0; }
+.notice { border: 1px solid var(--line-strong); border-radius: 10px; padding: 12px 14px; color: var(--muted); font-size: 13px; background: var(--surface); }
+
+@media (max-width: 1000px) { .grid-2 { grid-template-columns: minmax(0,1fr); } .kpis { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 820px) {
+  .app { grid-template-columns: minmax(0,1fr); }
+  .side { position: sticky; top: env(safe-area-inset-top, 0px); height: auto; z-index: 5; flex-direction: row; align-items: center; gap: 14px; padding: 12px 16px; border-right: 0; border-bottom: 1px solid var(--line); background: rgba(9,9,11,.94); backdrop-filter: blur(8px); overflow-x: auto; }
+  .brand { padding: 0; flex: none; }
+  .brand img { width: 108px; }
+  .brand .tag { display: none; }
+  .nav { flex-direction: row; gap: 2px; }
+  .nav button { white-space: nowrap; padding: 7px 10px; font-size: 13px; }
+  .nav button svg { display: none; }
+  .side-foot { display: none; }
+  .main { padding-block: 22px 48px; }
+}
+@media (max-width: 560px) {
+  .rep dl { grid-template-columns: minmax(0,1fr); gap: 2px; }
+  .rep dd { margin-bottom: 8px; }
+  .q { grid-template-columns: minmax(0,1fr); }
+  .q .n { display: none; }
+  .q .body { grid-column: 1; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+.av { display: inline-grid; place-items: center; border-radius: 50%; flex: none; font-family: var(--display); font-weight: 700; letter-spacing: .02em; }
+.side-foot .so { margin-left: auto; padding: 5px 9px; font-size: 12px; }
+.mob-only { display: none !important; }
+.bad { color: var(--bad); }
+.lc { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.sm-l { font-size: 12px; }
+.ed-n { font-weight: 700; font-size: 16px; }
+.ed-big { font-family: var(--display); font-weight: 800; font-size: 24px; }
+.login { min-height: 100vh; display: grid; place-items: center; padding-inline: 16px; padding-block: 40px; background: radial-gradient(circle at 50% 0%, rgba(210,175,38,.14) 0%, transparent 55%), var(--bg); }
+.login-card { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 14px; background: linear-gradient(160deg, #18140a 0%, #0b0b12 100%); border: 1px solid var(--gold-line); border-radius: 16px; padding: 30px 26px; }
+.login-card .wm { width: 160px; filter: invert(1); }
+.login-card .tag { font-family: var(--display); font-weight: 700; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-top: -6px; }
+.login-card h1 { font-size: 24px; font-weight: 800; margin-top: 8px; }
+.login-card p { margin: -6px 0 4px; }
+.login-card .btn { width: 100%; padding: 11px 16px; }
+.err { color: var(--bad); font-size: 13px; min-height: 1em; }
+@media (max-width: 820px) { .mob-only { display: flex !important; color: var(--dim) !important; } }
+
+html, body { margin: 0; }
+[hidden] { display: none !important; }
+
+/* standalone team form: one centred column, no HQ navigation */
+body { background: radial-gradient(circle at 50% -10%, rgba(210,175,38,.13) 0%, transparent 45%), var(--bg); background-attachment: fixed; }
+.wrap { max-width: 780px; margin: 0 auto; padding-inline: 16px; padding-block: 34px 70px; display: flex; flex-direction: column; gap: 22px; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.top img { width: 150px; filter: invert(1); display: block; }
+.top .tag { font-family: var(--display); font-weight: 700; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+.page-head { margin-bottom: 0; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.bad { color: var(--bad); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><img alt="InfoFunnels" src="/wordmark.png"><span class="tag">Team · End of day</span></header>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const dayLabel = ds => { const [y, m, d] = ds.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString("en-US", { weekday: "long", day: "numeric", month: "short" }); };
+const ls = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }, del(k) { try { localStorage.removeItem(k); } catch {} } };
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2800); }
+
+const QS = [
+  { id: "done", t: "What did you get done today?", h: "List the tasks you finished. Be specific: what, for which client or project.", type: "area", req: true, ph: "• Edited 3 reels for the Acme launch\n• Replied to all client DMs\n• Updated the onboarding SOP" },
+  { id: "win", t: "What was your biggest win today?", h: "One thing you're proud of, big or small.", type: "area", rows: 2 },
+  { id: "blockers", t: "Anything blocking you, or anything you need help with?", h: "Write “None” if you're all clear.", type: "area", rows: 2 },
+  { id: "tomorrow", t: "What are your top priorities for tomorrow?", h: "Your 1–3 most important tasks.", type: "area", req: true, ph: "1. \n2. \n3. " },
+  { id: "hours", t: "How many hours did you work today?", type: "hours" },
+  { id: "energy", t: "How was your day overall?", h: "1 = rough day, 5 = great day.", type: "scale" },
+  { id: "notes", t: "Anything else the team should know?", h: "Optional. Ideas, updates, heads-ups.", type: "area", rows: 2 }
+];
+const SCALE = ["Rough", "Meh", "OK", "Good", "Great"];
+function qInput(q) {
+  if (q.type === "area") return `<textarea class="inp" id="q-${q.id}" rows="${q.rows || 4}" placeholder="${esc(q.ph || "")}" ${q.rows ? 'style="min-height:0"' : ""}></textarea>`;
+  if (q.type === "hours") return `<input class="inp num" id="q-hours" type="number" min="0" max="24" step="0.5" placeholder="8" style="max-width:140px">`;
+  return `<div class="scale" role="radiogroup">${SCALE.map((l, i) => `<input type="radio" name="energy" id="q-energy-${i + 1}" value="${i + 1}"><label for="q-energy-${i + 1}">${i + 1}<small>${l}</small></label>`).join("")}</div>`;
+}
+function formHTML() {
+  return `<div class="page-head" style="margin-bottom:22px"><div><div class="eyebrow">${esc(dayLabel(todayStr()))}</div><h1>End-of-day report</h1><p>Takes about 5 minutes. Fill it in before you log off. It's shared with the team in Slack when you submit.</p></div></div>
+  <form class="panel" id="eod-form" novalidate>
+    <div class="row" style="padding-bottom:6px">
+      <label class="f" for="eod-name" style="flex:2 1 220px"><span>Your name <span class="req" aria-label="required">*</span></span><input class="inp" id="eod-name" autocomplete="name" placeholder="e.g. Alex Smith"></label>
+      <label class="f" for="eod-date">Date<input class="inp" type="date" id="eod-date" value="${todayStr()}" max="${todayStr()}"></label>
+    </div>
+    <div class="hp" aria-hidden="true"><label for="eod-website">Website</label><input id="eod-website" tabindex="-1" autocomplete="off"></div>
+    ${QS.map((q, i) => `<div class="q"><span class="n">${pad(i + 1)}</span><div class="body"><div class="qt">${q.t}${q.req ? ' <span class="req" aria-label="required">*</span>' : ""}</div><div class="qh">${q.h || ""}</div>${qInput(q)}</div></div>`).join("")}
+    <div class="form-foot"><span class="dim" id="eod-msg"><span class="req">*</span> Required</span><button class="btn" id="eod-submit" type="submit">Submit report</button></div>
+  </form>`;
+}
+function readForm() {
+  const v = id => ($("#q-" + id)?.value || "").trim();
+  return { name: $("#eod-name").value.trim(), date: $("#eod-date").value || todayStr(), done: v("done"), win: v("win"), blockers: v("blockers"), tomorrow: v("tomorrow"), notes: v("notes"), hours: $("#q-hours").value === "" ? null : +$("#q-hours").value, energy: +($("input[name=energy]:checked")?.value || 0) || null };
+}
+function writeForm(r) {
+  if (!r) return;
+  ["done", "win", "blockers", "tomorrow", "notes"].forEach(k => { const el = $("#q-" + k); if (el) el.value = r[k] || ""; });
+  $("#q-hours").value = r.hours ?? "";
+  document.querySelectorAll("input[name=energy]").forEach(el => el.checked = +el.value === r.energy);
+  if (r.date) $("#eod-date").value = r.date;
+}
+let last = null;
+function render() {
+  if (last) {
+    const posted = last.slack === "sent";
+    $("#main").innerHTML = `<div class="page-head" style="margin-bottom:22px"><div><div class="eyebrow">${esc(dayLabel(last.report.date))}</div><h1>${last.updated ? "Report updated." : "Report sent."}</h1><p>Thanks${last.name ? ", " + esc(last.name.split(" ")[0]) : ""}. ${posted ? "It's been posted to the team in Slack." : "It's saved for the team."}</p></div></div>
+      <div class="success"><h2>${posted ? "Posted to Slack ✓" : "Saved ✓"}</h2><p class="muted" style="margin:0 0 14px">Spotted a mistake? Edit and submit again. The report for that day is replaced, not duplicated.</p><button class="btn" id="eod-edit">Edit my report</button></div>`;
+    $("#eod-edit").addEventListener("click", () => { const keep = last.form; last = null; render(); writeForm(keep); $("#eod-name").value = keep.name; });
+    return;
+  }
+  $("#main").innerHTML = formHTML();
+  $("#eod-name").value = ls.get("eod.name") || "";
+  const d = ls.get("eod.draft"); if (d && d.date === todayStr()) writeForm(d);
+  const f = $("#eod-form");
+  let t; const save = () => { clearTimeout(t); t = setTimeout(() => ls.set("eod.draft", readForm()), 400); };
+  f.addEventListener("input", save); f.addEventListener("change", save);
+  f.addEventListener("submit", submit);
+  (($("#eod-name").value ? $("#q-done") : $("#eod-name"))).focus({ preventScroll: true });
+}
+let busy = false;
+async function submit(e) {
+  e.preventDefault(); if (busy) return;
+  const r = readForm(), msg = $("#eod-msg"), btn = $("#eod-submit");
+  if (r.name.length < 2) { msg.innerHTML = `<span class="bad">Add your name.</span>`; $("#eod-name").focus(); return; }
+  if (!r.done || !r.tomorrow) { msg.innerHTML = `<span class="bad">Fill in what you got done and tomorrow's priorities.</span>`; (r.done ? $("#q-tomorrow") : $("#q-done")).focus(); return; }
+  busy = true; btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    const res = await fetch("/api/hq", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "publicEod", website: $("#eod-website").value, report: r }) });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(j.error || "Couldn't send your report. Try again.");
+    ls.set("eod.name", r.name); ls.del("eod.draft");
+    last = { ...j, form: r, name: r.name }; render(); window.scrollTo(0, 0);
+  } catch (err) {
+    msg.innerHTML = `<span class="bad">${esc(err.message === "Failed to fetch" ? "Can't reach the server. Check your connection and try again." : err.message)} Your answers are kept as a draft.</span>`;
+    btn.disabled = false; btn.textContent = "Submit report";
+  }
+  busy = false;
+}
+render();
+})();
+</script>
+</body>
+</html>

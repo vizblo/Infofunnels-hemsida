@@ -729,7 +729,7 @@ function slackSetupHTML() {
       <li>${S.slackOn ? "Every submitted report is posted to your EOD reports channel automatically." : "Add <b>SLACK_WEBHOOK_URL</b> in Vercel to post every report to Slack automatically."}</li>
       <li>Daily reminder: paste this into Slack once.
         <div class="code" style="margin-top:8px"><code>${esc(remind)}</code><button class="btn ghost sm" data-copy-text="${esc(remind)}">Copy</button></div></li>
-      <li>Team members sign in at <b>${esc(SITE.replace(/^https?:\/\//, ""))}/eod</b> with the login you create on the Team page.</li>
+      <li>Your team fills in reports at <b>${esc(SITE.replace(/^https?:\/\//, ""))}/eod</b>. No login, and it doesn't give them access to HQ.</li>
     </ol></section>`;
 }
 function viewReports() {
@@ -770,16 +770,16 @@ async function addLink(btn) {
 /* ---------- team ---------- */
 function teamList() {
   const people = Object.values(S.users).filter(u => u.id !== "admin").sort((a, b) => (b.active !== false) - (a.active !== false) || a.name.localeCompare(b.name));
-  if (!people.length) return `<div class="empty"><b>No team members yet</b>Add your content lead and VA below. Each gets their own login for the EOD form.</div>`;
+  if (!people.length) return `<div class="empty"><b>No team members yet</b>Add your content lead and VA below, or share the EOD form and they'll appear when they first submit.</div>`;
   return `<div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Role</th><th>Username</th><th>Status</th><th></th></tr></thead><tbody>${people.map(u => `<tr>
-    <td><div style="display:flex;align-items:center;gap:10px">${avatar(u.id, 28)}<b style="font-weight:600">${esc(u.name)}</b></div></td><td class="muted">${esc(u.role || "—")}</td><td class="num">${esc(u.username)}</td>
+    <td><div style="display:flex;align-items:center;gap:10px">${avatar(u.id, 28)}<b style="font-weight:600">${esc(u.name)}</b></div></td><td class="muted">${esc(u.role || "—")}</td><td class="num ${u.username ? "" : "dim"}">${esc(u.username || "No login")}</td>
     <td><span class="chip ${u.active !== false ? "ok" : "pend"}">${u.active !== false ? "Active" : "Removed"}</span></td>
     <td class="r" style="white-space:nowrap"><button class="btn ghost sm" data-edit-user="${esc(u.id)}">Edit</button></td></tr>`).join("")}</tbody></table></div>`;
 }
 function viewTeam() {
   const a = S.users.admin || {};
-  return head("People", "Team", "Give each team member their own login. They only see the EOD form and the team's reports, never finances or links.") +
-  `<div class="stack"><section class="panel"><div class="panel-head"><h2>Team members</h2><span class="sub">Sign-in page: ${esc(SITE.replace(/^https?:\/\//, ""))}/eod</span></div><div id="team-list">${teamList()}</div></section>
+  return head("People", "Team", "Your team sends reports from the EOD form, with no login and no access to HQ. Add people here so their reports are grouped under the right name. Anyone who types a new name on the form is added automatically.") +
+  `<div class="stack"><section class="panel"><div class="panel-head"><h2>Team members</h2><span class="sub">EOD form: <a href="/eod" target="_blank" rel="noopener">${esc(SITE.replace(/^https?:\/\//, ""))}/eod</a></span></div><div id="team-list">${teamList()}</div></section>
    <div class="grid-2" style="align-items:start">
     <section class="panel" id="user-form-panel">${userForm(null)}</section>
     <section class="panel"><div class="panel-head"><h2>You</h2><span class="sub">Shown on your own EOD reports</span></div>
@@ -793,7 +793,8 @@ function userForm(u) {
   return `<div class="panel-head"><h2>${editing ? "Edit " + esc(u.name) : "Add a team member"}</h2>${editing ? '<button class="btn ghost sm" id="uf-cancel">Cancel</button>' : ""}</div>
     <input type="hidden" id="uf-id" value="${esc(u?.id || "")}">
     <div class="row"><label class="f" for="uf-name">Name<input class="inp" id="uf-name" value="${esc(u?.name || "")}" placeholder="e.g. Alex Smith"></label><label class="f" for="uf-role">Role<input class="inp" id="uf-role" value="${esc(u?.role || "")}" placeholder="e.g. Content"></label></div>
-    <div class="row" style="margin-top:12px"><label class="f" for="uf-user">Username<input class="inp" id="uf-user" value="${esc(u?.username || "")}" placeholder="alex" autocapitalize="none" spellcheck="false"></label><label class="f" for="uf-pass">${editing ? "New password" : "Password"} <span class="hint">${editing ? "Leave empty to keep the current one" : "At least 8 characters. Share it with them privately."}</span><input class="inp" id="uf-pass" type="text" autocomplete="new-password" spellcheck="false"></label></div>
+    <p class="dim" style="font-size:12.5px;margin:14px 0 0">Optional: a username and password let them sign in to HQ to read the team's reports. They never see finances or links. Leave both empty if they only need the EOD form.</p>
+    <div class="row" style="margin-top:10px"><label class="f" for="uf-user">Username <span class="hint">Optional</span><input class="inp" id="uf-user" value="${esc(u?.username || "")}" placeholder="alex" autocapitalize="none" spellcheck="false"></label><label class="f" for="uf-pass">${editing && u.username ? "New password" : "Password"} <span class="hint">${editing && u.username ? "Leave empty to keep the current one" : "Optional. At least 8 characters."}</span><input class="inp" id="uf-pass" type="text" autocomplete="new-password" spellcheck="false"></label></div>
     <div class="row" style="margin-top:14px;gap:8px;align-items:center"><button class="btn" id="uf-save" style="flex:0 0 auto">${editing ? "Save changes" : "Add member"}</button><button class="btn ghost sm" id="uf-gen" style="flex:0 0 auto">Generate password</button>
     ${editing ? (u.active !== false ? `<button class="btn danger sm" id="uf-remove" style="flex:0 0 auto;margin-left:auto">Remove access</button>` : `<button class="btn ghost sm" id="uf-restore" style="flex:0 0 auto;margin-left:auto">Restore access</button>`) : ""}</div>`;
 }
@@ -801,7 +802,7 @@ async function saveUser(extra = {}) {
   const id = $("#uf-id").value, payload = { id: id || undefined, name: $("#uf-name").value.trim(), role: $("#uf-role").value.trim(), username: $("#uf-user").value.trim(), password: $("#uf-pass").value, ...extra };
   try {
     const { user } = await api("saveUser", payload);
-    S.users[user.id] = user; toast(extra.active === false ? `${user.name} can no longer sign in.` : id ? "Saved." : `${user.name} added. Send them the sign-in link, username and password.`);
+    S.users[user.id] = user; toast(extra.active === false ? `${user.name} has been removed.` : id ? "Saved." : `${user.name} added. Send them the EOD form link.`);
     $("#user-form-panel").innerHTML = userForm(null); refresh();
   } catch (e) { toast(e.message); }
 }
@@ -854,8 +855,7 @@ async function start() {
   const ok = await reload(false); if (!ok) return;
   showShell();
   renderWho();
-  const fromPath = location.pathname.replace(/\/$/, "").endsWith("/eod") ? "eod" : null;
-  setView(location.hash.slice(1) || fromPath || ls.get("hq.view") || (S.owner ? "dashboard" : "eod"));
+  setView(location.hash.slice(1) || ls.get("hq.view") || (S.owner ? "dashboard" : "eod"));
 }
 setInterval(() => { if (S.loaded && document.visibilityState === "visible" && !["revenue", "eod", "team"].includes(S.view)) reload(true); }, 60000);
 document.addEventListener("visibilitychange", () => { if (S.loaded && document.visibilityState === "visible" && ["dashboard", "reports"].includes(S.view)) reload(true); });
