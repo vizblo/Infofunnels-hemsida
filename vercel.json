@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/eod", "destination": "/admin-dashboard/index.html" }
+  ],
+  "headers": [
+    { "source": "/admin-dashboard(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }, { "key": "Cache-Control", "value": "no-cache" }] },
+    { "source": "/eod", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }, { "key": "Cache-Control", "value": "no-cache" }] }
+  ]
+}

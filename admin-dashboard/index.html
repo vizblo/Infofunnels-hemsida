@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>InfoFunnels HQ</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: fixed left rail (brand + nav) beside a scrolling work area; the rail folds into a top tab strip on phones.
+   Single dark look, matching infofunnels.co. */
+:root {
+  --bg: #09090b;
+  --surface: #111114;
+  --surface-2: #17171c;
+  --raise: #1d1d23;
+  --line: rgba(255,255,255,.08);
+  --line-strong: rgba(255,255,255,.14);
+  --fg: #ffffff;
+  --fg-2: #d4d4d8;
+  --muted: #a1a1aa;
+  --dim: #71717a;
+  --gold: #d2af26;
+  --gold-hi: #e6c53f;
+  --gold-soft: rgba(210,175,38,.16);
+  --gold-line: rgba(210,175,38,.28);
+  --gold-2: #8a7420;
+  --good: #4ade80;
+  --good-soft: rgba(74,222,128,.12);
+  --warn: #fbbf24;
+  --warn-soft: rgba(251,191,36,.12);
+  --bad: #f87171;
+  --bad-soft: rgba(248,113,113,.12);
+  --display: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r: 12px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--fg); }
+body { font-family: var(--body); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: var(--gold); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+
+.app { display: grid; grid-template-columns: 236px minmax(0,1fr); min-height: 100vh; }
+.side { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; height: 100vh; display: flex; flex-direction: column; gap: 28px; padding: 26px 18px; border-right: 1px solid var(--line); background: linear-gradient(180deg, #0d0d10 0%, var(--bg) 100%); }
+.brand { display: flex; flex-direction: column; gap: 8px; padding: 0 8px; }
+.brand img { width: 150px; height: auto; filter: invert(1); display: block; }
+.brand .tag { font-family: var(--display); font-weight: 700; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav button { all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--muted); font-weight: 500; }
+.nav button svg { width: 17px; height: 17px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.nav button:hover { color: var(--fg); background: rgba(255,255,255,.04); }
+.nav button[aria-current="page"] { color: var(--fg); background: var(--gold-soft); box-shadow: inset 0 0 0 1px var(--gold-line); }
+.nav button[aria-current="page"] svg { stroke: var(--gold); }
+.nav button:focus-visible { outline: 2px solid var(--gold); }
+.side-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px 8px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; min-width: 0; }
+.side-foot img { width: 28px; height: 28px; border-radius: 50%; flex: none; }
+.side-foot span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.main { padding-inline: clamp(16px, 4vw, 44px); padding-block: 34px 60px; min-width: 0; max-width: 1180px; width: 100%; }
+.page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 24px; margin-bottom: 26px; }
+.eyebrow { font-family: var(--display); font-size: 11.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.page-head h1 { font-size: clamp(26px, 3.2vw, 34px); font-weight: 800; letter-spacing: -.02em; line-height: 1.12; }
+.page-head p { margin: 6px 0 0; color: var(--muted); max-width: 60ch; }
+
+.panel { background: linear-gradient(160deg, #141310 0%, var(--surface) 60%); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; min-width: 0; }
+.panel h2 { font-size: 15.5px; font-weight: 700; letter-spacing: -.005em; }
+.panel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
+.panel-head .sub { color: var(--dim); font-size: 12.5px; }
+.stack { display: flex; flex-direction: column; gap: 18px; }
+.grid-2 { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(0,1fr); gap: 18px; }
+.grid-2 > * { min-width: 0; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.kpi { background: var(--surface); padding: 18px 20px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.kpi.lead { background: linear-gradient(145deg, rgba(210,175,38,.20) 0%, rgba(210,175,38,.05) 55%, var(--surface) 100%); }
+.kpi .lab { font-size: 12px; color: var(--muted); font-weight: 500; }
+.kpi .val { font-family: var(--display); font-weight: 800; font-size: clamp(22px, 2.4vw, 28px); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.kpi.lead .val { color: var(--gold-hi); }
+.kpi .note { font-size: 12px; color: var(--dim); }
+.delta { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 12px; padding: 1px 7px; border-radius: 99px; width: fit-content; }
+.delta.up { color: var(--good); background: var(--good-soft); }
+.delta.down { color: var(--bad); background: var(--bad-soft); }
+.delta.flat { color: var(--muted); background: rgba(255,255,255,.05); }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--dim); font-family: var(--body); font-size: 11px; }
+.chart .vl { fill: var(--fg-2); font-weight: 600; font-size: 10.5px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+.btn { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 16px; border-radius: 9px; font-weight: 600; font-size: 13.5px; background: var(--gold); color: #0b0b0d; white-space: nowrap; }
+.btn:hover { background: var(--gold-hi); }
+.btn:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.btn[disabled] { opacity: .5; cursor: default; }
+.btn.ghost { background: transparent; color: var(--fg-2); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.btn.ghost:hover { color: var(--fg); box-shadow: inset 0 0 0 1px var(--gold-line); background: rgba(210,175,38,.06); }
+.btn.sm { padding: 6px 11px; font-size: 12.5px; border-radius: 7px; }
+.btn.danger { background: transparent; color: var(--bad); box-shadow: inset 0 0 0 1px rgba(248,113,113,.35); }
+.btn.danger.armed { background: var(--bad); color: #160606; }
+.icon-btn { all: unset; cursor: pointer; color: var(--dim); padding: 4px 6px; border-radius: 6px; font-size: 18px; line-height: 1; }
+.icon-btn:hover { color: var(--bad); background: var(--bad-soft); }
+.icon-btn:focus-visible { outline: 2px solid var(--gold); }
+
+label.f { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 13px; color: var(--fg-2); min-width: 0; }
+label.f .hint { font-weight: 400; color: var(--dim); font-size: 12px; }
+.inp { width: 100%; background: var(--bg); border: 1px solid var(--line-strong); border-radius: 9px; padding: 9px 12px; color: var(--fg); outline: none; min-width: 0; }
+.inp:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-soft); }
+textarea.inp { resize: vertical; min-height: 84px; line-height: 1.5; }
+.inp::placeholder { color: var(--dim); }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.row > * { flex: 1 1 160px; }
+
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-weight: 600; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th.r, td.r { text-align: right; }
+tr.click { cursor: pointer; }
+tr.click:hover td { background: rgba(255,255,255,.025); }
+tr.sel td { background: var(--gold-soft); }
+tfoot td { font-weight: 700; border-bottom: 0; color: var(--fg); }
+.ed td { padding: 6px 6px; }
+.ed .inp { padding: 7px 10px; }
+.gold { color: var(--gold-hi); }
+.muted { color: var(--muted); }
+.dim { color: var(--dim); }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.chip.ok { color: var(--good); background: var(--good-soft); }
+.chip.pend { color: var(--warn); background: var(--warn-soft); }
+
+.people { display: flex; flex-direction: column; }
+.person { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.person:last-child { border-bottom: 0; }
+.person img { width: 32px; height: 32px; border-radius: 50%; flex: none; }
+.person .who { flex: 1; min-width: 0; }
+.person .who b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.person .who small { color: var(--dim); font-size: 12px; }
+
+.links { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.link { position: relative; display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--line); text-decoration: none; color: var(--fg); min-width: 0; transition: border-color .15s, background .15s; }
+.link:hover { border-color: var(--gold-line); background: #1b1a16; }
+.link .ico { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; background: var(--gold-soft); color: var(--gold); flex: none; font-family: var(--display); font-weight: 800; font-size: 14px; }
+.link .txt { min-width: 0; flex: 1; }
+.link b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.link small { display: block; color: var(--dim); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.link-wrap { position: relative; min-width: 0; }
+.link-wrap .rm { position: absolute; top: 6px; right: 6px; }
+
+.empty { border: 1px dashed var(--line-strong); border-radius: 10px; padding: 22px; text-align: center; color: var(--muted); }
+.empty b { display: block; color: var(--fg-2); font-family: var(--display); margin-bottom: 4px; }
+
+/* EOD form */
+.q { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 4px 12px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.q:last-of-type { border-bottom: 0; }
+.q .n { font-family: var(--display); font-weight: 800; color: var(--gold); font-size: 13px; padding-top: 1px; }
+.q .qt { font-weight: 600; color: var(--fg); font-size: 14.5px; }
+.q .qh { color: var(--dim); font-size: 12.5px; margin-bottom: 8px; }
+.q .body { grid-column: 2; min-width: 0; }
+.req { color: var(--gold); }
+.scale { display: flex; gap: 6px; flex-wrap: wrap; }
+.scale input { position: absolute; opacity: 0; pointer-events: none; }
+.scale label { cursor: pointer; display: grid; place-items: center; min-width: 46px; padding: 8px 10px; border-radius: 9px; border: 1px solid var(--line-strong); color: var(--muted); font-weight: 600; text-align: center; font-size: 13px; line-height: 1.2; }
+.scale label small { display: block; font-weight: 400; font-size: 10.5px; color: var(--dim); }
+.scale input:checked + label { border-color: var(--gold); background: var(--gold-soft); color: var(--gold-hi); }
+.scale input:focus-visible + label { outline: 2px solid var(--gold); outline-offset: 2px; }
+.form-foot { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding-top: 18px; border-top: 1px solid var(--line); margin-top: 4px; }
+.success { border: 1px solid var(--gold-line); background: linear-gradient(145deg, rgba(210,175,38,.16), rgba(210,175,38,.03) 60%); border-radius: var(--r); padding: 20px; }
+.success h2 { font-size: 18px; margin-bottom: 4px; }
+pre.slack { white-space: pre-wrap; word-break: break-word; background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 14px; font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--fg-2); margin: 12px 0; max-height: 320px; overflow: auto; }
+
+/* report feed */
+.day { display: flex; flex-direction: column; gap: 10px; }
+.day-h { display: flex; align-items: baseline; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 14px; color: var(--fg-2); padding-top: 6px; }
+.day-h span { font-family: var(--body); font-weight: 500; font-size: 12px; color: var(--dim); }
+.rep { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; min-width: 0; }
+.rep-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.rep-top img { width: 34px; height: 34px; border-radius: 50%; }
+.rep-top .who { flex: 1; min-width: 0; }
+.rep-top .who b { display: block; }
+.rep-top .who small { color: var(--dim); font-size: 12px; }
+.meter { display: inline-flex; gap: 3px; vertical-align: middle; }
+.meter i { width: 8px; height: 8px; border-radius: 2px; background: rgba(255,255,255,.1); }
+.meter i.on { background: var(--gold); }
+.rep dl { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 8px 16px; margin: 0; }
+.rep dt { color: var(--dim); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+.rep dd { margin: 0; white-space: pre-wrap; word-break: break-word; color: var(--fg-2); }
+.rep dd.block { color: var(--warn); }
+
+.code { display: flex; gap: 8px; align-items: stretch; min-width: 0; }
+.code code { flex: 1; min-width: 0; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; color: var(--fg-2); overflow-x: auto; white-space: nowrap; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.steps { margin: 0; padding-left: 20px; color: var(--fg-2); display: flex; flex-direction: column; gap: 10px; }
+.steps li::marker { color: var(--gold); font-weight: 700; }
+
+.toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--raise); border: 1px solid var(--gold-line); color: var(--fg); padding: 10px 16px; border-radius: 10px; font-weight: 500; transition: .2s; pointer-events: none; z-index: 10; max-width: calc(100% - 32px); }
+.toast.show { opacity: 1; transform: translateX(-50%); }
+.loading { color: var(--muted); padding: 60px 0; }
+.notice { border: 1px solid var(--line-strong); border-radius: 10px; padding: 12px 14px; color: var(--muted); font-size: 13px; background: var(--surface); }
+
+@media (max-width: 1000px) { .grid-2 { grid-template-columns: minmax(0,1fr); } .kpis { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 820px) {
+  .app { grid-template-columns: minmax(0,1fr); }
+  .side { position: sticky; top: env(safe-area-inset-top, 0px); height: auto; z-index: 5; flex-direction: row; align-items: center; gap: 14px; padding: 12px 16px; border-right: 0; border-bottom: 1px solid var(--line); background: rgba(9,9,11,.94); backdrop-filter: blur(8px); overflow-x: auto; }
+  .brand { padding: 0; flex: none; }
+  .brand img { width: 108px; }
+  .brand .tag { display: none; }
+  .nav { flex-direction: row; gap: 2px; }
+  .nav button { white-space: nowrap; padding: 7px 10px; font-size: 13px; }
+  .nav button svg { display: none; }
+  .side-foot { display: none; }
+  .main { padding-block: 22px 48px; }
+}
+@media (max-width: 560px) {
+  .rep dl { grid-template-columns: minmax(0,1fr); gap: 2px; }
+  .rep dd { margin-bottom: 8px; }
+  .q { grid-template-columns: minmax(0,1fr); }
+  .q .n { display: none; }
+  .q .body { grid-column: 1; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+.av { display: inline-grid; place-items: center; border-radius: 50%; flex: none; font-family: var(--display); font-weight: 700; letter-spacing: .02em; }
+.side-foot .so { margin-left: auto; padding: 5px 9px; font-size: 12px; }
+.mob-only { display: none !important; }
+.bad { color: var(--bad); }
+.lc { text-transform: none; letter-spacing: 0; font-weight: 500; }
+.sm-l { font-size: 12px; }
+.ed-n { font-weight: 700; font-size: 16px; }
+.ed-big { font-family: var(--display); font-weight: 800; font-size: 24px; }
+.login { min-height: 100vh; display: grid; place-items: center; padding-inline: 16px; padding-block: 40px; background: radial-gradient(circle at 50% 0%, rgba(210,175,38,.14) 0%, transparent 55%), var(--bg); }
+.login-card { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 14px; background: linear-gradient(160deg, #18140a 0%, #0b0b12 100%); border: 1px solid var(--gold-line); border-radius: 16px; padding: 30px 26px; }
+.login-card .wm { width: 160px; filter: invert(1); }
+.login-card .tag { font-family: var(--display); font-weight: 700; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-top: -6px; }
+.login-card h1 { font-size: 24px; font-weight: 800; margin-top: 8px; }
+.login-card p { margin: -6px 0 4px; }
+.login-card .btn { width: 100%; padding: 11px 16px; }
+.err { color: var(--bad); font-size: 13px; min-height: 1em; }
+@media (max-width: 820px) { .mob-only { display: flex !important; color: var(--dim) !important; } }
+
+html, body { margin: 0; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="login" id="login"><div class="loading">Opening HQ…</div></div>
+<div class="app" id="app" hidden>
+  <aside class="side">
+    <div class="brand">
+      <img alt="InfoFunnels" src="/wordmark.png">
+      <div class="tag">Headquarters</div>
+    </div>
+    <nav class="nav" id="nav" aria-label="Sections"></nav>
+    <div class="side-foot" id="who"></div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+"use strict";
+const ICONS = {
+  dashboard: '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>',
+  revenue: '<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  eod: '<svg viewBox="0 0 24 24"><path d="M9 4h6M9 4a2 2 0 0 0-2 2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-1a2 2 0 0 0-2-2M9 13l2 2 4-4"/></svg>',
+  reports: '<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+  links: '<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+  team: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>'
+};
+const VIEWS_OWNER = [["dashboard","Dashboard"],["revenue","Finances"],["reports","EOD reports"],["eod","Submit EOD"],["links","Quick links"],["team","Team"]];
+const VIEWS_TEAM = [["eod","Submit EOD"],["reports","Team reports"]];
+const SITE = location.origin;
+
+const S = {
+  me: null, uid: null, owner: false, slackOn: false, adminUsername: "admin",
+  view: null, rate: 0.2, months: {}, links: [], users: {}, reports: {},
+  edit: null, selMonth: null, filter: "all", lastSubmitted: null, importRows: null, loaded: false
+};
+const $ = (s, r = document) => r.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const usd = n => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(Math.round(n || 0));
+const usdK = n => n >= 1e6 ? "$" + (n / 1e6).toFixed(1) + "M" : n >= 1e4 ? "$" + Math.round(n / 1e3) + "k" : n >= 1e3 ? "$" + (n / 1e3).toFixed(1) + "k" : "$" + Math.round(n);
+const pad = n => String(n).padStart(2, "0");
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+const ymNow = () => todayStr().slice(0, 7);
+const addM = (ym, k) => { let [y, m] = ym.split("-").map(Number); m += k; while (m < 1) { m += 12; y--; } while (m > 12) { m -= 12; y++; } return `${y}-${pad(m)}`; };
+const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MFULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const ymLabel = (ym, full) => { const [y, m] = ym.split("-").map(Number); return (full ? MFULL : MN)[m - 1] + " " + y; };
+const dayLabel = ds => { const [y, m, d] = ds.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString("en-US", { weekday: "long", day: "numeric", month: "short" }); };
+const money = s => { const t = String(s ?? "").replace(/[^0-9.\-]/g, ""); const n = parseFloat(t); return isFinite(n) ? n : 0; };
+const ls = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }, del(k) { try { localStorage.removeItem(k); } catch {} } };
+
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2800); }
+async function copy(text, btn) {
+  try { await navigator.clipboard.writeText(text); toast("Copied."); }
+  catch { const pre = btn?.closest("[data-copy-scope]")?.querySelector("pre, code"); if (pre) { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } toast("Text selected. Press ⌘C / Ctrl+C to copy."); }
+}
+
+/* ---------- API ---------- */
+class ApiError extends Error { constructor(status, data) { super(data?.error || "Request failed"); this.status = status; this.data = data; } }
+async function api(action, data = {}) {
+  let r;
+  try { r = await fetch("/api/hq", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, ...data }) }); }
+  catch { throw new ApiError(0, { error: "Can't reach the server. Check your connection." }); }
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    if (r.status === 401 && action !== "login") { showLogin(); }
+    throw new ApiError(r.status, j);
+  }
+  return j;
+}
+function ingest(d) {
+  S.me = d.me; S.uid = d.me.id; S.owner = !!d.me.admin; S.slackOn = !!d.slack;
+  S.users = {}; d.users.forEach(u => S.users[u.id] = u);
+  S.reports = {}; d.reports.forEach(r => (S.reports[r.uid] = S.reports[r.uid] || []).push(r));
+  Object.values(S.reports).forEach(l => l.sort((a, b) => b.date.localeCompare(a.date)));
+  if (S.owner) { S.months = d.months || {}; S.rate = d.settings?.rate ?? 0.2; S.links = d.links || []; S.adminUsername = d.adminUsername || "admin"; }
+  S.loaded = true;
+}
+async function reload(soft) {
+  try { ingest(await api("bootstrap")); soft ? refresh() : null; return true; }
+  catch (e) { if (e.status === 503) showSetup(e.data); else if (e.status !== 401 && !soft) toast(e.message); return false; }
+}
+
+/* ---------- revenue math ---------- */
+function monthCalc(doc, rate = S.rate) {
+  const clients = (doc?.clients || []).filter(c => c && (c.name || c.gross));
+  const other = (doc?.other || []).filter(o => o && (o.label || o.amount));
+  const gross = clients.reduce((a, c) => a + (+c.gross || 0), 0);
+  const comm = gross * rate;
+  const oth = other.reduce((a, o) => a + (+o.amount || 0), 0);
+  const costRows = (doc?.costs || []).filter(o => o && (o.label || o.amount));
+  const cost = costRows.reduce((a, o) => a + (+o.amount || 0), 0);
+  const total = comm + oth;
+  return { gross, comm, other: oth, total, cost, profit: total - cost, clients, otherRows: other, costRows };
+}
+const rateOf = ym => (S.months[ym]?.rate ?? S.rate);
+const calcOf = ym => monthCalc(S.months[ym], rateOf(ym));
+const totalOf = ym => calcOf(ym).total;
+const signUsd = n => (n < 0 ? "−" : "") + usd(Math.abs(n));
+
+/* ---------- chart ---------- */
+function niceStep(x) { const p = Math.pow(10, Math.floor(Math.log10(x))); const f = x / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
+function chartSVG(endYm, n = 12) {
+  const ms = []; for (let i = n - 1; i >= 0; i--) { const ym = addM(endYm, -i); ms.push({ ym, ...calcOf(ym) }); }
+  const W = 760, H = 280, pl = 58, pr = 8, pt = 26, pb = 30;
+  const max = Math.max(...ms.map(m => Math.max(m.total, m.cost, m.profit)), 0);
+  const min = Math.min(...ms.map(m => m.profit), 0);
+  const step = (max - min) > 0 ? niceStep((max - min) / 4) : 2500;
+  const top = step * Math.max(1, Math.ceil(max / step)), bot = -step * Math.ceil(-min / step);
+  const iw = W - pl - pr, ih = H - pt - pb, bw = iw / n, barW = Math.min(17, bw * .3);
+  const y = v => pt + ih - ((v - bot) / (top - bot)) * ih;
+  let g = "";
+  for (let v = bot; v <= top + 1e-9; v += step) g += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(255,255,255,${Math.abs(v) < 1e-9 ? .2 : .06})"/><text x="${pl - 10}" y="${y(v) + 4}" text-anchor="end">${v < 0 ? "−" + usdK(-v) : usdK(v)}</text>`;
+  const cur = ymNow(), pts = [];
+  ms.forEach((m, i) => {
+    const cx = pl + bw * i + bw / 2, isCur = m.ym === cur, has = m.total > 0 || m.cost > 0;
+    g += `<g><title>${ymLabel(m.ym, true)}: revenue ${usd(m.total)}, costs ${usd(m.cost)}, profit ${signUsd(m.profit)}</title><rect x="${pl + bw * i}" y="${pt}" width="${bw}" height="${ih}" fill="transparent"/>`;
+    if (m.comm > 0) g += `<rect x="${cx - barW - 1.5}" y="${y(m.comm)}" width="${barW}" height="${Math.max(0, y(0) - y(m.comm))}" rx="2.5" fill="${isCur ? "#e6c53f" : "#d2af26"}"/>`;
+    if (m.other > 0) g += `<rect x="${cx - barW - 1.5}" y="${y(m.total)}" width="${barW}" height="${Math.max(0, y(m.comm) - y(m.total))}" rx="2.5" fill="#8a7420"/>`;
+    if (m.cost > 0) g += `<rect x="${cx + 1.5}" y="${y(m.cost)}" width="${barW}" height="${Math.max(0, y(0) - y(m.cost))}" rx="2.5" fill="#52525b"/>`;
+    if (has) { pts.push([cx, y(m.profit), m]); g += `<text class="vl" x="${cx}" y="${Math.min(y(m.total), y(m.cost), y(m.profit)) - 9}" text-anchor="middle" ${m.profit < 0 ? 'style="fill:#f87171"' : ""}>${m.profit < 0 ? "−" + usdK(-m.profit) : usdK(m.profit)}</text>`; }
+    g += `</g><text x="${cx}" y="${H - 10}" text-anchor="middle" ${isCur ? 'style="fill:#d4d4d8;font-weight:600"' : ""}>${MN[+m.ym.slice(5) - 1]}${m.ym.endsWith("-01") || i === 0 ? " ’" + m.ym.slice(2, 4) : ""}</text>`;
+  });
+  if (pts.length > 1) g += `<polyline points="${pts.map(p => p[0] + "," + p[1]).join(" ")}" fill="none" stroke="#f4f4f5" stroke-width="1.6" stroke-linejoin="round" opacity=".85"/>`;
+  pts.forEach(([x, yy, m]) => g += `<circle cx="${x}" cy="${yy}" r="3.6" fill="${m.profit < 0 ? "#f87171" : "#f4f4f5"}" stroke="#09090b" stroke-width="1.5"/>`);
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Revenue, costs and profit, last ${n} months">${g}</svg>`;
+}
+
+/* ---------- shell ---------- */
+function showShell() { $("#login").hidden = true; $("#app").hidden = false; }
+function showLogin(msg) {
+  $("#app").hidden = true; const L = $("#login"); L.hidden = false;
+  L.innerHTML = `<form class="login-card" id="login-form" novalidate>
+    <img class="wm" alt="InfoFunnels" src="/wordmark.png"><div class="tag">Headquarters</div>
+    <h1>Sign in</h1><p class="muted">Use the username and password you were given.</p>
+    <label class="f" for="li-user">Username<input class="inp" id="li-user" autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+    <label class="f" for="li-pass">Password<input class="inp" id="li-pass" type="password" autocomplete="current-password"></label>
+    <div class="err" id="li-err" role="alert">${esc(msg || "")}</div>
+    <button class="btn" id="li-go" type="submit">Sign in</button>
+  </form>`;
+  $("#li-user").value = ls.get("hq.user") || ""; ($("#li-user").value ? $("#li-pass") : $("#li-user")).focus();
+  $("#login-form").addEventListener("submit", async e => {
+    e.preventDefault(); const b = $("#li-go"), u = $("#li-user").value.trim(), p = $("#li-pass").value;
+    if (!u || !p) { $("#li-err").textContent = "Enter your username and password."; return; }
+    b.disabled = true; b.textContent = "Signing in…";
+    try { await api("login", { username: u, password: p }); ls.set("hq.user", u); await start(); }
+    catch (err) { if (err.status === 503) return showSetup(err.data); $("#li-err").textContent = err.message; b.disabled = false; b.textContent = "Sign in"; }
+  });
+}
+function showSetup(d) {
+  $("#app").hidden = true; const L = $("#login"); L.hidden = false;
+  L.innerHTML = `<div class="login-card"><img class="wm" alt="InfoFunnels" src="/wordmark.png"><div class="tag">Headquarters</div><h1>Almost there</h1><p class="muted">HQ is deployed but still needs these settings in Vercel (Project → Settings → Environment Variables / Storage), then a redeploy:</p><ul class="steps" style="margin:6px 0 0">${(d?.missing || []).map(m => `<li>${esc(m)}</li>`).join("")}</ul></div>`;
+}
+function setView(v) {
+  const list = S.owner ? VIEWS_OWNER : VIEWS_TEAM;
+  if (!list.some(x => x[0] === v)) v = list[0][0];
+  S.view = v; ls.set("hq.view", v);
+  if (location.hash.slice(1) !== v) history.replaceState(null, "", "#" + v);
+  $("#nav").innerHTML = list.map(([k, l]) => `<button type="button" data-view="${k}" ${k === v ? 'aria-current="page"' : ""}>${ICONS[k]}<span>${l}</span></button>`).join("") + `<button type="button" class="mob-only" data-logout>Sign out</button>`;
+  renderView();
+  window.scrollTo(0, 0);
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-view]"); if (b) setView(b.dataset.view); });
+function head(eyebrow, title, sub, right = "") {
+  return `<div class="page-head"><div><div class="eyebrow">${eyebrow}</div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div>${right}</div>`;
+}
+function renderView() {
+  const m = $("#main");
+  if (S.view === "dashboard") m.innerHTML = viewDashboard();
+  else if (S.view === "revenue") { m.innerHTML = viewRevenue(); paintEditor(); }
+  else if (S.view === "eod") { m.innerHTML = viewEod(); fillEodForm(); }
+  else if (S.view === "reports") m.innerHTML = viewReports();
+  else if (S.view === "links") m.innerHTML = viewLinks();
+  else if (S.view === "team") m.innerHTML = viewTeam();
+}
+/* re-render data-bound parts without touching inputs being edited */
+function refresh() {
+  if (S.view === "dashboard") $("#main").innerHTML = viewDashboard();
+  else if (S.view === "revenue") { const a = $("#rev-summary"); if (a) a.innerHTML = revSummary(); const t = $("#rev-table"); if (t) t.innerHTML = revTable(); }
+  else if (S.view === "reports") { const f = $("#feed"); if (f) f.innerHTML = feedHTML(); const st = $("#today-status"); if (st) st.innerHTML = todayStatusHTML(); }
+  else if (S.view === "links") { const l = $("#links-grid"); if (l) l.innerHTML = linksGrid(true); }
+  else if (S.view === "team") { const l = $("#team-list"); if (l) l.innerHTML = teamList(); }
+  else if (S.view === "eod") { const st = $("#eod-existing"); if (st) st.innerHTML = existingNote(); }
+}
+
+/* ---------- people ---------- */
+const nameOf = uid => S.users[uid]?.name || "Former member";
+function avatar(uid, size = 32) {
+  const n = nameOf(uid).trim(), ini = (n.split(/\s+/).map(w => w[0]).join("").slice(0, 2) || "?").toUpperCase();
+  let h = 0; for (const c of uid) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return `<span class="av" style="width:${size}px;height:${size}px;font-size:${Math.round(size * .38)}px;background:hsl(${h} 28% 22%);color:hsl(${h} 60% 80%)" aria-hidden="true">${esc(ini)}</span>`;
+}
+function activeIds() { const ids = Object.values(S.users).filter(u => u.active !== false).map(u => u.id); return [...new Set([...(S.uid ? [S.uid] : []), ...ids])]; }
+function todayStatusHTML() {
+  const ids = activeIds().filter(id => id !== "admin" || S.owner || (S.reports.admin || []).length);
+  if (!ids.length) return `<div class="empty"><b>No team members yet</b>Add your team on the Team page.</div>`;
+  const t = todayStr();
+  return `<div class="people">${ids.map(uid => {
+    const done = (S.reports[uid] || []).some(r => r.date === t);
+    return `<div class="person">${avatar(uid)}<div class="who"><b>${esc(nameOf(uid))}${uid === S.uid ? ' <span class="dim" style="font-weight:400">(you)</span>' : ""}</b><small>${esc(S.users[uid]?.role || "—")}</small></div><span class="chip ${done ? "ok" : "pend"}">${done ? "Submitted" : "Pending"}</span></div>`;
+  }).join("")}</div>`;
+}
+
+/* ---------- dashboard ---------- */
+function kpisHTML() {
+  const cur = ymNow(), prev = addM(cur, -1);
+  const c = calcOf(cur), p = calcOf(prev);
+  let r12 = 0, c12 = 0; for (let i = 0; i < 12; i++) { const m = calcOf(addM(cur, -i)); r12 += m.total; c12 += m.cost; }
+  const margin = c.total > 0 ? Math.round(c.profit / c.total * 100) + "% margin" : "No revenue yet";
+  let d = ""; if (p.profit !== 0) { const ch = (c.profit - p.profit) / Math.abs(p.profit) * 100; const cls = ch > .5 ? "up" : ch < -.5 ? "down" : "flat"; d = `<span class="delta ${cls}">${ch > 0 ? "▲" : ch < 0 ? "▼" : "•"} ${Math.abs(ch).toFixed(0)}% vs ${MN[+prev.slice(5) - 1]}</span>`; }
+  const neg = v => v < 0 ? ' style="color:var(--bad)"' : "";
+  return `<div class="kpis">
+    <div class="kpi lead"><span class="lab">Profit · ${ymLabel(cur, true)}</span><span class="val"${neg(c.profit)}>${signUsd(c.profit)}</span><span class="note">${margin}</span>${d}</div>
+    <div class="kpi"><span class="lab">Revenue · ${MN[+cur.slice(5) - 1]}</span><span class="val">${usd(c.total)}</span><span class="note">${MN[+prev.slice(5) - 1]}: ${usd(p.total)}</span></div>
+    <div class="kpi"><span class="lab">Costs · ${MN[+cur.slice(5) - 1]}</span><span class="val">${usd(c.cost)}</span><span class="note">${MN[+prev.slice(5) - 1]}: ${usd(p.cost)}</span></div>
+    <div class="kpi"><span class="lab">Profit · last 12 months</span><span class="val"${neg(r12 - c12)}>${signUsd(r12 - c12)}</span><span class="note">${usd(r12)} revenue · ${usd(c12)} costs</span></div>
+  </div>`;
+}
+function legend() { return `<div class="legend"><span><i style="background:#d2af26"></i>Revenue</span><span><i style="background:#8a7420"></i>Other revenue</span><span><i style="background:#52525b"></i>Costs</span><span><i style="background:#f4f4f5;height:2px;vertical-align:3px"></i>Profit</span></div>`; }
+function hasRevenue() { return Object.keys(S.months).some(k => { const c = calcOf(k); return c.total > 0 || c.cost > 0; }); }
+function viewDashboard() {
+  const greet = (() => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; })();
+  const first = (S.me?.name && S.me.name !== "Admin" ? S.me.name : "").split(" ")[0];
+  const chart = hasRevenue() ? chartSVG(ymNow()) : `<div class="empty"><b>Nothing logged yet</b>Add this month's revenue and costs, or paste your Google Sheet, on the Finances page.<div style="margin-top:12px"><button class="btn sm" data-view="revenue">Go to Finances</button></div></div>`;
+  return head(new Date().toLocaleDateString("en-US", { weekday: "long", day: "numeric", month: "long", year: "numeric" }), `${greet}${first ? ", " + esc(first) : ""}.`, "Revenue, costs and profit, the team's end-of-day reports and your links, all in one place.") +
+  `<div class="stack">${kpisHTML()}
+    <div class="grid-2">
+      <section class="panel"><div class="panel-head"><h2>Revenue, costs &amp; profit</h2>${legend()}</div>${chart}</section>
+      <section class="panel"><div class="panel-head"><h2>Today's EOD reports</h2><button class="btn ghost sm" data-view="reports">See all</button></div><div id="today-status">${todayStatusHTML()}</div></section>
+    </div>
+    <section class="panel"><div class="panel-head"><h2>Quick links</h2><button class="btn ghost sm" data-view="links">Manage</button></div>${linksGrid(false)}</section>
+  </div>`;
+}
+
+/* ---------- finances ---------- */
+function revSummary() { return `${kpisHTML()}<section class="panel" style="margin-top:18px"><div class="panel-head"><h2>Last 12 months</h2>${legend()}</div>${hasRevenue() ? chartSVG(ymNow()) : '<div class="empty"><b>Nothing to chart yet</b>Log a month below and the chart fills in.</div>'}</section>`; }
+function revTable() {
+  const keys = Object.keys(S.months).filter(k => { const c = calcOf(k); return c.total > 0 || c.cost > 0 || c.clients.length; }).sort().reverse();
+  if (!keys.length) return `<div class="empty"><b>No months logged</b>Pick a month and add revenue and costs.</div>`;
+  let R = 0, C = 0;
+  const rows = keys.map(k => { const c = calcOf(k); R += c.total; C += c.cost; const m = c.total > 0 ? Math.round(c.profit / c.total * 100) + "%" : "—"; return `<tr class="click ${k === S.selMonth ? "sel" : ""}" data-month="${k}"><td>${ymLabel(k, true)}</td><td class="r dim">${usd(c.gross)}</td><td class="r">${usd(c.total)}</td><td class="r">${usd(c.cost)}</td><td class="r ${c.profit < 0 ? "" : "gold"}" ${c.profit < 0 ? 'style="color:var(--bad)"' : ""}><b>${signUsd(c.profit)}</b></td><td class="r dim">${m}</td></tr>`; }).join("");
+  return `<div class="tbl-wrap"><table><thead><tr><th>Month</th><th class="r">Client revenue</th><th class="r">Our revenue</th><th class="r">Costs</th><th class="r">Profit</th><th class="r">Margin</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td>All time</td><td></td><td class="r">${usd(R)}</td><td class="r">${usd(C)}</td><td class="r gold">${signUsd(R - C)}</td><td class="r dim">${R > 0 ? Math.round((R - C) / R * 100) + "%" : "—"}</td></tr></tfoot></table></div>`;
+}
+function viewRevenue() {
+  if (!S.selMonth) S.selMonth = ymNow();
+  return head("Finances", "Revenue, costs &amp; profit", `Log each client's revenue (we take ${Math.round(S.rate * 100)}%), any other income, and the month's costs. Profit is worked out for you.`) +
+  `<div class="stack"><div id="rev-summary">${revSummary()}</div>
+   <div class="grid-2" style="align-items:start">
+     <section class="panel"><div class="panel-head"><h2>Month by month</h2><span class="sub">Click a month to edit it</span></div><div id="rev-table">${revTable()}</div></section>
+     <div class="stack">
+       <section class="panel" id="editor"></section>
+       <section class="panel"><div class="panel-head"><h2>Commission rate</h2></div>
+         <div class="row"><label class="f" for="rate-inp">Our cut of client revenue (%)<span class="hint">Applies to months saved from now on. Each saved month keeps its own rate.</span><input class="inp num" id="rate-inp" type="number" min="0" max="100" step="0.5" value="${+(S.rate * 100).toFixed(2)}"></label></div>
+         <div style="margin-top:12px"><button class="btn ghost sm" id="rate-save">Save rate</button></div>
+       </section>
+       <section class="panel"><div class="panel-head"><h2>Import from Google Sheets</h2></div>
+         <p class="muted" style="margin:0 0 10px">Copy the rows from your sheet and paste them here.<br><b class="dim">2 columns</b> (Month, Revenue): saved as our final revenue for that month.<br><b class="dim">3 columns</b> (Month, Revenue, Costs): both saved for that month.<br><b class="dim">3 columns</b> (Month, Client, Client revenue): ${Math.round(S.rate * 100)}% commission applied.</p>
+         <textarea class="inp" id="imp-text" placeholder="Sep 2026&#9;Acme Coaching&#9;$10,000"></textarea>
+         <div class="row" style="margin-top:10px;align-items:center"><span class="dim" id="imp-preview" style="flex:2 1 200px">Nothing pasted yet.</span><button class="btn sm" id="imp-go" disabled style="flex:0 0 auto">Import</button></div>
+       </section>
+     </div>
+   </div></div>`;
+}
+function loadEdit(ym) {
+  const d = S.months[ym] || {};
+  S.edit = { ym, clients: (d.clients || []).map(c => ({ ...c })), other: (d.other || []).map(o => ({ ...o })), costs: (d.costs || []).map(o => ({ ...o })) };
+  if (!S.edit.clients.length) S.edit.clients.push({ name: "", gross: "" });
+}
+function lineRows(list, pre, key, ph, rmAttr) {
+  return list.map((o, i) => `<div class="row" style="margin-bottom:6px;align-items:center"><input class="inp" id="${pre}-l-${i}" data-${pre}i="${i}" data-k="label" placeholder="${ph}" value="${esc(o.label)}"><input class="inp num" id="${pre}-a-${i}" data-${pre}i="${i}" data-k="amount" inputmode="decimal" placeholder="$0" value="${esc(o.amount)}" style="text-align:right;flex:0 1 130px"><button class="icon-btn" ${rmAttr}="${i}" aria-label="Remove line" style="flex:0 0 auto">×</button></div>`).join("");
+}
+function paintEditor() {
+  const el = $("#editor"); if (!el) return;
+  if (!S.edit || S.edit.ym !== S.selMonth) loadEdit(S.selMonth);
+  const E = S.edit, rate = rateOf(E.ym), prevYm = addM(E.ym, -1);
+  el.innerHTML = `<div class="panel-head"><h2>Edit month</h2><input class="inp num" type="month" id="ed-month" value="${E.ym}" style="width:auto;flex:0 0 auto"></div>
+    <div class="tbl-wrap"><table class="ed"><thead><tr><th>Client</th><th class="r">Client revenue</th><th class="r">Our ${Math.round(rate * 100)}%</th><th></th></tr></thead><tbody>
+    ${E.clients.map((c, i) => `<tr><td><input class="inp" id="cl-n-${i}" data-ci="${i}" data-k="name" placeholder="Client name" value="${esc(c.name)}"></td><td><input class="inp num" id="cl-g-${i}" data-ci="${i}" data-k="gross" inputmode="decimal" placeholder="$0" value="${esc(c.gross)}" style="text-align:right"></td><td class="r gold" id="cl-c-${i}">${usd(money(c.gross) * rate)}</td><td><button class="icon-btn" data-rmc="${i}" aria-label="Remove client">×</button></td></tr>`).join("")}
+    </tbody></table></div>
+    <button class="btn ghost sm" id="add-client" style="margin-top:8px">+ Add client</button>
+    <div style="margin-top:18px"><div class="eyebrow" style="color:var(--muted)">Other revenue <span class="dim lc">(setup fees, one-off projects)</span></div>
+    ${lineRows(E.other, "ot", "other", "Description", "data-rmo")}
+    <button class="btn ghost sm" id="add-other">+ Add other revenue</button></div>
+    <div style="margin-top:18px"><div class="eyebrow" style="color:var(--muted)">Costs <span class="dim lc">(salaries, software, ads, contractors)</span></div>
+    ${lineRows(E.costs, "co", "costs", "e.g. VA salary", "data-rmco")}
+    <div class="row" style="gap:8px"><button class="btn ghost sm" id="add-cost" style="flex:0 0 auto">+ Add cost</button>${(S.months[prevYm]?.costs || []).length ? `<button class="btn ghost sm" id="copy-costs" style="flex:0 0 auto">Copy ${MN[+prevYm.slice(5) - 1]}'s costs</button>` : ""}</div></div>
+    <div class="form-foot" style="margin-top:18px"><div class="num" style="display:flex;gap:22px;flex-wrap:wrap"><div><div class="dim sm-l">Revenue</div><div id="ed-rev" class="ed-n"></div></div><div><div class="dim sm-l">Costs</div><div id="ed-cost" class="ed-n"></div></div><div><div class="dim sm-l">Profit · ${ymLabel(E.ym, true)}</div><div id="ed-total" class="ed-big gold"></div></div></div><button class="btn" id="ed-save">Save ${MN[+E.ym.slice(5) - 1]}</button></div>`;
+  updEdTotal();
+}
+function editDoc() {
+  const E = S.edit;
+  return {
+    rate: rateOf(E.ym),
+    clients: E.clients.filter(c => String(c.name).trim() || money(c.gross)).map(c => ({ name: String(c.name).trim() || "Unnamed client", gross: money(c.gross) })),
+    other: E.other.filter(o => String(o.label).trim() || money(o.amount)).map(o => ({ label: String(o.label).trim() || "Other", amount: money(o.amount) })),
+    costs: E.costs.filter(o => String(o.label).trim() || money(o.amount)).map(o => ({ label: String(o.label).trim() || "Cost", amount: money(o.amount) }))
+  };
+}
+function updEdTotal() {
+  const c = monthCalc(editDoc(), rateOf(S.edit.ym));
+  const t = $("#ed-total"); if (t) { t.textContent = signUsd(c.profit); t.style.color = c.profit < 0 ? "var(--bad)" : ""; }
+  const r = $("#ed-rev"); if (r) r.textContent = usd(c.total); const k = $("#ed-cost"); if (k) k.textContent = usd(c.cost);
+}
+async function saveMonth(btn) {
+  const ym = S.edit.ym; btn.disabled = true;
+  try { const { doc } = await api("saveMonth", { ym, doc: editDoc() }); S.months[ym] = doc; toast(`${ymLabel(ym, true)} saved.`); refresh(); }
+  catch (e) { toast(e.message); }
+  btn.disabled = false;
+}
+async function saveRate() {
+  const v = parseFloat($("#rate-inp").value);
+  if (!(v >= 0 && v <= 100)) return toast("Enter a rate between 0 and 100.");
+  try { await api("saveSettings", { rate: v / 100 }); S.rate = v / 100; toast(`Commission rate set to ${v}%.`); }
+  catch (e) { toast(e.message); }
+}
+
+/* google sheet paste */
+function parseMonth(s) {
+  s = String(s || "").trim(); let m;
+  if ((m = s.match(/^(\d{4})[-\/.](\d{1,2})/))) return `${m[1]}-${pad(m[2])}`;
+  if ((m = s.match(/^(\d{1,2})[-\/.](\d{4})$/))) return `${m[2]}-${pad(m[1])}`;
+  if ((m = s.match(/^(\d{1,2})[-\/.]\d{1,2}[-\/.](\d{4})$/))) return `${m[2]}-${pad(m[1])}`;
+  if ((m = s.match(/^([A-Za-z]{3,})[\s\-'’,.]*(\d{2,4})$/))) { const i = MN.findIndex(x => m[1].toLowerCase().startsWith(x.toLowerCase())); if (i >= 0) { const y = m[2].length === 2 ? "20" + m[2] : m[2]; return `${y}-${pad(i + 1)}`; } }
+  return null;
+}
+function parseImport(text) {
+  const rows = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.trim()) continue;
+    const cols = (line.includes("\t") ? line.split("\t") : line.split(/;|,(?=\s*[^\d\s])/)).map(c => c.trim().replace(/^"|"$/g, ""));
+    const ym = parseMonth(cols[0]); if (!ym) continue;
+    if (cols.length >= 3 && /^[\s$€£\d.,\-]+$/.test(cols[1]) && cols[1].trim()) rows.push({ ym, total: money(cols[1]), cost: money(cols[2]) });
+    else if (cols.length >= 3 && cols[1] && money(cols[2])) rows.push({ ym, client: cols[1], gross: money(cols[2]) });
+    else if (cols.length >= 2 && money(cols[1])) rows.push({ ym, total: money(cols[1]) });
+  }
+  S.importRows = rows;
+  const p = $("#imp-preview"), b = $("#imp-go");
+  if (!rows.length) { p.textContent = text.trim() ? "No rows recognised. The first column needs a month, like Sep 2026 or 2026-09." : "Nothing pasted yet."; b.disabled = true; return; }
+  const ms = [...new Set(rows.map(r => r.ym))].sort();
+  p.textContent = `${rows.length} row${rows.length > 1 ? "s" : ""} across ${ms.length} month${ms.length > 1 ? "s" : ""} (${ymLabel(ms[0])} to ${ymLabel(ms[ms.length - 1])}).`;
+  b.disabled = false;
+}
+async function runImport(btn) {
+  const rows = S.importRows || []; if (!rows.length) return;
+  btn.disabled = true;
+  const by = {}; rows.forEach(r => (by[r.ym] = by[r.ym] || []).push(r));
+  let n = 0;
+  try {
+    for (const ym of Object.keys(by).sort()) {
+      const cur = S.months[ym] || {};
+      const clients = (cur.clients || []).map(c => ({ ...c }));
+      const other = (cur.other || []).filter(o => o.label !== "Google Sheet import").map(o => ({ ...o }));
+      const costs = (cur.costs || []).filter(o => o.label !== "Google Sheet import").map(o => ({ ...o }));
+      let sheetTotal = 0, sheetCost = 0;
+      for (const r of by[ym]) {
+        if (r.client) { const ex = clients.find(c => c.name.toLowerCase() === r.client.toLowerCase()); if (ex) ex.gross = r.gross; else clients.push({ name: r.client, gross: r.gross }); }
+        else { sheetTotal += r.total; sheetCost += r.cost || 0; }
+      }
+      if (sheetTotal) other.push({ label: "Google Sheet import", amount: sheetTotal });
+      if (sheetCost) costs.push({ label: "Google Sheet import", amount: sheetCost });
+      const { doc } = await api("saveMonth", { ym, doc: { rate: cur.rate ?? S.rate, clients, other, costs } });
+      S.months[ym] = doc; n++;
+    }
+    toast(`Imported ${n} month${n > 1 ? "s" : ""}.`);
+    $("#imp-text").value = ""; parseImport("");
+    S.edit = null; paintEditor(); refresh();
+  } catch (e) { toast(`Imported ${n} month${n === 1 ? "" : "s"}, then saving failed: ${e.message}`); }
+  btn.disabled = false;
+}
+
+/* ---------- EOD form ---------- */
+const QS = [
+  { id: "done", t: "What did you get done today?", h: "List the tasks you finished. Be specific: what, for which client or project.", type: "area", req: true, ph: "• Edited 3 reels for the Acme launch\n• Replied to all client DMs\n• Updated the onboarding SOP" },
+  { id: "win", t: "What was your biggest win today?", h: "One thing you're proud of, big or small.", type: "area", rows: 2 },
+  { id: "blockers", t: "Anything blocking you, or anything you need help with?", h: "Write “None” if you're all clear.", type: "area", rows: 2 },
+  { id: "tomorrow", t: "What are your top priorities for tomorrow?", h: "Your 1–3 most important tasks.", type: "area", req: true, ph: "1. \n2. \n3. " },
+  { id: "hours", t: "How many hours did you work today?", type: "hours" },
+  { id: "energy", t: "How was your day overall?", h: "1 = rough day, 5 = great day.", type: "scale" },
+  { id: "notes", t: "Anything else the team should know?", h: "Optional. Ideas, updates, heads-ups.", type: "area", rows: 2 }
+];
+const SCALE = ["Rough", "Meh", "OK", "Good", "Great"];
+function myReport(date) { return (S.reports[S.uid] || []).find(r => r.date === date); }
+function existingNote() { const d = $("#eod-date")?.value || todayStr(); return myReport(d) ? `<div class="notice">You already sent a report for this day. Submitting again updates it${S.slackOn ? " and posts the update to Slack" : ""}.</div>` : ""; }
+function viewEod() {
+  if (S.lastSubmitted) {
+    const { rec, slack } = S.lastSubmitted, txt = slackText(rec, S.uid);
+    const posted = slack === "sent";
+    return head("End of day", "Report sent.", posted ? "Your report is saved and was posted to the team's EOD reports channel in Slack." : "Your report is saved in HQ.") +
+      `<div class="success" data-copy-scope><h2>${posted ? "Posted to Slack ✓" : "Your Slack summary"}</h2><p class="muted" style="margin:0">${posted ? "This is what the team sees:" : slack === "failed" ? "Posting to Slack didn't work this time. Copy the summary and paste it into the EOD reports channel." : "Copy it and paste it into the EOD reports channel."}</p><pre class="slack" id="last-slack">${esc(txt)}</pre><div class="row" style="flex-wrap:wrap">${posted ? "" : '<button class="btn" id="copy-last" style="flex:0 0 auto">Copy for Slack</button>'}<button class="btn ${posted ? "" : "ghost"}" data-view="reports" style="flex:0 0 auto">See team reports</button><button class="btn ghost" id="eod-again" style="flex:0 0 auto">Edit report</button></div></div>`;
+  }
+  const role = S.users[S.uid]?.role || "";
+  return head("End of day", "End-of-day report", `Takes about 5 minutes. Fill it in before you log off${S.slackOn ? ". It's posted to Slack automatically when you submit." : "."}`) +
+  `<form class="panel" id="eod-form" style="max-width:780px" novalidate>
+    <div class="row" style="padding-bottom:6px">
+      <label class="f" for="eod-date">Date<input class="inp" type="date" id="eod-date" value="${todayStr()}" max="${todayStr()}"></label>
+      <label class="f" for="eod-role" style="flex:2 1 220px">Your role<input class="inp" id="eod-role" placeholder="e.g. Content, Virtual assistant, Founder" value="${esc(role)}"></label>
+    </div>
+    <div id="eod-existing" style="margin-top:10px">${existingNote()}</div>
+    ${QS.map((q, i) => `<div class="q"><span class="n">${pad(i + 1)}</span><div class="body"><div class="qt">${q.t}${q.req ? ' <span class="req" aria-label="required">*</span>' : ""}</div><div class="qh">${q.h || ""}</div>${qInput(q)}</div></div>`).join("")}
+    <div class="form-foot"><span class="dim" id="eod-msg"><span class="req">*</span> Required</span><button class="btn" id="eod-submit" type="submit">Submit report</button></div>
+  </form>`;
+}
+function qInput(q) {
+  if (q.type === "area") return `<textarea class="inp" id="q-${q.id}" rows="${q.rows || 4}" placeholder="${esc(q.ph || "")}" ${q.rows ? 'style="min-height:0"' : ""}></textarea>`;
+  if (q.type === "hours") return `<input class="inp num" id="q-hours" type="number" min="0" max="24" step="0.5" placeholder="8" style="max-width:140px">`;
+  if (q.type === "scale") return `<div class="scale" role="radiogroup">${SCALE.map((l, i) => `<input type="radio" name="energy" id="q-energy-${i + 1}" value="${i + 1}"><label for="q-energy-${i + 1}">${i + 1}<small>${l}</small></label>`).join("")}</div>`;
+  return "";
+}
+function readForm() {
+  const v = id => ($("#q-" + id)?.value || "").trim();
+  return { date: $("#eod-date").value || todayStr(), role: $("#eod-role").value.trim(), done: v("done"), win: v("win"), blockers: v("blockers"), tomorrow: v("tomorrow"), notes: v("notes"), hours: $("#q-hours").value === "" ? null : +$("#q-hours").value, energy: +($("input[name=energy]:checked")?.value || 0) || null };
+}
+function writeForm(r) {
+  if (!r) return;
+  ["done", "win", "blockers", "tomorrow", "notes"].forEach(k => { const el = $("#q-" + k); if (el) el.value = r[k] || ""; });
+  if ($("#q-hours")) $("#q-hours").value = r.hours ?? "";
+  document.querySelectorAll("input[name=energy]").forEach(el => el.checked = +el.value === r.energy);
+  if (r.role && $("#eod-role")) $("#eod-role").value = r.role;
+}
+function fillEodForm() {
+  if (!$("#eod-form")) return;
+  const draft = ls.get("hq.draft." + S.uid);
+  if (draft && draft.date === todayStr()) writeForm(draft); else writeForm(myReport(todayStr()));
+  $("#eod-date").addEventListener("change", () => { const ex = myReport($("#eod-date").value); if (ex) writeForm(ex); $("#eod-existing").innerHTML = existingNote(); });
+  $("#eod-form").addEventListener("submit", e => { e.preventDefault(); submitEod($("#eod-submit")); });
+}
+let draftT; function saveDraft() { clearTimeout(draftT); draftT = setTimeout(() => { if ($("#eod-form")) ls.set("hq.draft." + S.uid, readForm()); }, 400); }
+let submitting = false;
+async function submitEod(btn) {
+  if (submitting) return;
+  const r = readForm(), msg = $("#eod-msg");
+  if (!r.done || !r.tomorrow) { msg.innerHTML = `<span class="bad">Fill in what you got done and tomorrow's priorities.</span>`; (r.done ? $("#q-tomorrow") : $("#q-done")).focus(); return; }
+  submitting = true; btn.disabled = true; btn.textContent = S.slackOn ? "Sending to Slack…" : "Sending…";
+  try {
+    const res = await api("submitEod", { report: r });
+    ls.del("hq.draft." + S.uid);
+    const list = (S.reports[S.uid] = (S.reports[S.uid] || []).filter(x => x.date !== r.date));
+    list.unshift(res.report); list.sort((a, b) => b.date.localeCompare(a.date));
+    if (S.users[S.uid] && r.role) S.users[S.uid].role = r.role;
+    S.lastSubmitted = { rec: res.report, slack: res.slack }; renderView(); window.scrollTo(0, 0);
+  } catch (e) {
+    msg.innerHTML = `<span class="bad">${esc(e.message)} Your answers are kept as a draft.</span>`;
+    btn.disabled = false; btn.textContent = "Submit report";
+  }
+  submitting = false;
+}
+function slackText(r, uid) {
+  const L = [`*EOD · ${nameOf(uid)}${r.role ? " (" + r.role + ")" : ""} · ${dayLabel(r.date)}*`];
+  L.push("", "*✅ Done today*", r.done);
+  if (r.win) L.push("", "*🏆 Biggest win*", r.win);
+  L.push("", "*🚧 Blockers*", r.blockers || "None");
+  L.push("", "*🎯 Tomorrow*", r.tomorrow);
+  const meta = []; if (r.hours != null) meta.push(`*Hours:* ${r.hours}`); if (r.energy) meta.push(`*Day:* ${r.energy}/5`);
+  if (meta.length) L.push("", meta.join("  ·  "));
+  if (r.notes) L.push("", "*📝 Notes*", r.notes);
+  return L.join("\n");
+}
+
+/* ---------- reports feed ---------- */
+function allReports() { const out = []; for (const list of Object.values(S.reports)) out.push(...list); return out.sort((a, b) => b.date.localeCompare(a.date) || (b.submittedAt || "").localeCompare(a.submittedAt || "")); }
+function feedHTML() {
+  let rs = allReports(); if (S.filter !== "all") rs = rs.filter(r => r.uid === S.filter);
+  if (!rs.length) return `<div class="empty"><b>No reports yet</b>${S.owner ? "Add your team on the Team page and share the EOD link. Reports land here as people submit them." : "Be the first to send today's report."}<div style="margin-top:12px"><button class="btn sm" data-view="eod">Write a report</button></div></div>`;
+  const days = {}; rs.forEach(r => (days[r.date] = days[r.date] || []).push(r));
+  return Object.entries(days).map(([d, list]) => `<div class="day"><div class="day-h">${dayLabel(d)}<span>${list.length} report${list.length > 1 ? "s" : ""}</span></div>${list.map(repCard).join("")}</div>`).join("") + `<p class="dim" style="font-size:12px;margin:4px 0 0">Showing the last 45 days.</p>`;
+}
+function repCard(r) {
+  const time = r.submittedAt ? new Date(r.submittedAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : "";
+  const meter = r.energy ? `<span class="meter" title="${r.energy}/5">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= r.energy ? "on" : ""}"></i>`).join("")}</span>` : "";
+  const blocked = r.blockers && !/^(none|no|n\/a|nope|-)\.?$/i.test(r.blockers.trim());
+  return `<article class="rep"><div class="rep-top">${avatar(r.uid, 34)}<div class="who"><b>${esc(nameOf(r.uid))}</b><small>${esc(r.role || "")}${r.role && time ? " · " : ""}${time ? "Sent " + time : ""}</small></div>
+    <span class="dim num" style="font-size:12.5px">${r.hours != null ? r.hours + " h" : ""}</span>${meter}</div>
+    <dl><dt>Done</dt><dd>${esc(r.done)}</dd>${r.win ? `<dt>Biggest win</dt><dd>${esc(r.win)}</dd>` : ""}<dt>Blockers</dt><dd class="${blocked ? "block" : ""}">${esc(r.blockers || "None")}</dd><dt>Tomorrow</dt><dd>${esc(r.tomorrow)}</dd>${r.notes ? `<dt>Notes</dt><dd>${esc(r.notes)}</dd>` : ""}</dl></article>`;
+}
+function slackSetupHTML() {
+  const remind = `/remind #eod-reminder "⏰ EOD time! Fill in your end-of-day report: ${SITE}/eod" every weekday at 5:00pm`;
+  return `<section class="panel" data-copy-scope><div class="panel-head"><h2>Slack</h2><span class="chip ${S.slackOn ? "ok" : "pend"}">${S.slackOn ? "Auto-posting on" : "Auto-posting off"}</span></div>
+    <ol class="steps">
+      <li>${S.slackOn ? "Every submitted report is posted to your EOD reports channel automatically." : "Add <b>SLACK_WEBHOOK_URL</b> in Vercel to post every report to Slack automatically."}</li>
+      <li>Daily reminder: paste this into Slack once.
+        <div class="code" style="margin-top:8px"><code>${esc(remind)}</code><button class="btn ghost sm" data-copy-text="${esc(remind)}">Copy</button></div></li>
+      <li>Team members sign in at <b>${esc(SITE.replace(/^https?:\/\//, ""))}/eod</b> with the login you create on the Team page.</li>
+    </ol></section>`;
+}
+function viewReports() {
+  const ids = activeIds();
+  const opts = `<option value="all">Everyone</option>` + ids.map(id => `<option value="${esc(id)}" ${S.filter === id ? "selected" : ""}>${esc(nameOf(id))}</option>`).join("");
+  return head("Accountability", "EOD reports", "Everyone's end-of-day reports, newest first.", `<div class="row" style="flex:0 1 auto;align-items:center"><select class="inp" id="feed-filter" style="width:auto" aria-label="Filter by person">${opts}</select><button class="btn" data-view="eod" style="flex:0 0 auto">Write my report</button></div>`) +
+  `<div class="grid-2" style="align-items:start"><div class="stack" id="feed">${feedHTML()}</div>
+   <div class="stack"><section class="panel"><div class="panel-head"><h2>Today</h2><span class="sub">${dayLabel(todayStr())}</span></div><div id="today-status">${todayStatusHTML()}</div></section>${S.owner ? slackSetupHTML() : ""}</div></div>`;
+}
+
+/* ---------- links ---------- */
+function host(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } }
+function linksGrid(manage) {
+  if (!S.links.length) return `<div class="empty"><b>No links yet</b>Add your shared Drive, SOPs and tools on the Quick links page.</div>`;
+  return `<div class="links">${S.links.map((l, i) => `<div class="link-wrap"><a class="link" href="${esc(l.url)}" target="_blank" rel="noopener"><span class="ico">${esc((l.title || "?").trim()[0]?.toUpperCase() || "?")}</span><span class="txt"><b>${esc(l.title)}</b><small>${esc(l.note || host(l.url))}</small></span></a>${manage ? `<button class="btn danger sm rm" data-rmlink="${i}">Remove</button>` : ""}</div>`).join("")}</div>`;
+}
+function viewLinks() {
+  return head("Resources", "Quick links", "Everything the business runs on, one click away.") +
+  `<div class="stack"><section class="panel"><div id="links-grid">${linksGrid(true)}</div></section>
+  <section class="panel" style="max-width:780px"><div class="panel-head"><h2>Add a link</h2></div>
+    <div class="row"><label class="f" for="ln-title">Name<input class="inp" id="ln-title" placeholder="e.g. Content calendar"></label><label class="f" for="ln-url" style="flex:2 1 240px">URL<input class="inp" id="ln-url" type="url" placeholder="https://"></label></div>
+    <div class="row" style="margin-top:12px"><label class="f" for="ln-note" style="flex:3 1 240px">Short description <span class="hint">Optional</span><input class="inp" id="ln-note" placeholder="What's in it"></label><button class="btn" id="link-add" style="flex:0 0 auto">Add link</button></div>
+  </section></div>`;
+}
+async function saveLinks(next, okMsg) {
+  try { const { links } = await api("saveLinks", { links: next }); S.links = links; toast(okMsg); refresh(); return true; }
+  catch (e) { toast(e.message); return false; }
+}
+async function addLink(btn) {
+  const title = $("#ln-title").value.trim(); let url = $("#ln-url").value.trim(); const note = $("#ln-note").value.trim();
+  if (!title || !url) return toast("Add a name and a URL.");
+  if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+  btn.disabled = true;
+  if (await saveLinks([...S.links, { title, url, note }], "Link added.")) ["#ln-title", "#ln-url", "#ln-note"].forEach(s => $(s).value = "");
+  btn.disabled = false;
+}
+
+/* ---------- team ---------- */
+function teamList() {
+  const people = Object.values(S.users).filter(u => u.id !== "admin").sort((a, b) => (b.active !== false) - (a.active !== false) || a.name.localeCompare(b.name));
+  if (!people.length) return `<div class="empty"><b>No team members yet</b>Add your content lead and VA below. Each gets their own login for the EOD form.</div>`;
+  return `<div class="tbl-wrap"><table><thead><tr><th>Name</th><th>Role</th><th>Username</th><th>Status</th><th></th></tr></thead><tbody>${people.map(u => `<tr>
+    <td><div style="display:flex;align-items:center;gap:10px">${avatar(u.id, 28)}<b style="font-weight:600">${esc(u.name)}</b></div></td><td class="muted">${esc(u.role || "—")}</td><td class="num">${esc(u.username)}</td>
+    <td><span class="chip ${u.active !== false ? "ok" : "pend"}">${u.active !== false ? "Active" : "Removed"}</span></td>
+    <td class="r" style="white-space:nowrap"><button class="btn ghost sm" data-edit-user="${esc(u.id)}">Edit</button></td></tr>`).join("")}</tbody></table></div>`;
+}
+function viewTeam() {
+  const a = S.users.admin || {};
+  return head("People", "Team", "Give each team member their own login. They only see the EOD form and the team's reports, never finances or links.") +
+  `<div class="stack"><section class="panel"><div class="panel-head"><h2>Team members</h2><span class="sub">Sign-in page: ${esc(SITE.replace(/^https?:\/\//, ""))}/eod</span></div><div id="team-list">${teamList()}</div></section>
+   <div class="grid-2" style="align-items:start">
+    <section class="panel" id="user-form-panel">${userForm(null)}</section>
+    <section class="panel"><div class="panel-head"><h2>You</h2><span class="sub">Shown on your own EOD reports</span></div>
+      <div class="row"><label class="f" for="me-name">Your name<input class="inp" id="me-name" value="${esc(a.name === "Admin" ? "" : a.name)}" placeholder="Your name"></label><label class="f" for="me-role">Role<input class="inp" id="me-role" value="${esc(a.role || "")}" placeholder="Founder"></label></div>
+      <p class="dim" style="font-size:12.5px;margin:10px 0 0">You sign in with the username <b>${esc(S.adminUsername)}</b> and the ADMIN_PASSWORD set in Vercel.</p>
+      <div style="margin-top:12px"><button class="btn ghost sm" id="me-save">Save</button></div></section>
+   </div></div>`;
+}
+function userForm(u) {
+  const editing = !!u;
+  return `<div class="panel-head"><h2>${editing ? "Edit " + esc(u.name) : "Add a team member"}</h2>${editing ? '<button class="btn ghost sm" id="uf-cancel">Cancel</button>' : ""}</div>
+    <input type="hidden" id="uf-id" value="${esc(u?.id || "")}">
+    <div class="row"><label class="f" for="uf-name">Name<input class="inp" id="uf-name" value="${esc(u?.name || "")}" placeholder="e.g. Alex Smith"></label><label class="f" for="uf-role">Role<input class="inp" id="uf-role" value="${esc(u?.role || "")}" placeholder="e.g. Content"></label></div>
+    <div class="row" style="margin-top:12px"><label class="f" for="uf-user">Username<input class="inp" id="uf-user" value="${esc(u?.username || "")}" placeholder="alex" autocapitalize="none" spellcheck="false"></label><label class="f" for="uf-pass">${editing ? "New password" : "Password"} <span class="hint">${editing ? "Leave empty to keep the current one" : "At least 8 characters. Share it with them privately."}</span><input class="inp" id="uf-pass" type="text" autocomplete="new-password" spellcheck="false"></label></div>
+    <div class="row" style="margin-top:14px;gap:8px;align-items:center"><button class="btn" id="uf-save" style="flex:0 0 auto">${editing ? "Save changes" : "Add member"}</button><button class="btn ghost sm" id="uf-gen" style="flex:0 0 auto">Generate password</button>
+    ${editing ? (u.active !== false ? `<button class="btn danger sm" id="uf-remove" style="flex:0 0 auto;margin-left:auto">Remove access</button>` : `<button class="btn ghost sm" id="uf-restore" style="flex:0 0 auto;margin-left:auto">Restore access</button>`) : ""}</div>`;
+}
+async function saveUser(extra = {}) {
+  const id = $("#uf-id").value, payload = { id: id || undefined, name: $("#uf-name").value.trim(), role: $("#uf-role").value.trim(), username: $("#uf-user").value.trim(), password: $("#uf-pass").value, ...extra };
+  try {
+    const { user } = await api("saveUser", payload);
+    S.users[user.id] = user; toast(extra.active === false ? `${user.name} can no longer sign in.` : id ? "Saved." : `${user.name} added. Send them the sign-in link, username and password.`);
+    $("#user-form-panel").innerHTML = userForm(null); refresh();
+  } catch (e) { toast(e.message); }
+}
+
+/* ---------- events ---------- */
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.dataset.ci !== undefined && S.edit) { S.edit.clients[+t.dataset.ci][t.dataset.k] = t.value; if (t.dataset.k === "gross") $("#cl-c-" + t.dataset.ci).textContent = usd(money(t.value) * rateOf(S.edit.ym)); updEdTotal(); }
+  if (t.dataset.oti !== undefined && S.edit) { S.edit.other[+t.dataset.oti][t.dataset.k] = t.value; updEdTotal(); }
+  if (t.dataset.coi !== undefined && S.edit) { S.edit.costs[+t.dataset.coi][t.dataset.k] = t.value; updEdTotal(); }
+  if (t.id === "imp-text") parseImport(t.value);
+  if (t.closest("#eod-form")) saveDraft();
+});
+document.addEventListener("change", e => {
+  if (e.target.id === "ed-month" && e.target.value) { S.selMonth = e.target.value; loadEdit(S.selMonth); paintEditor(); const tb = $("#rev-table"); if (tb) tb.innerHTML = revTable(); }
+  if (e.target.id === "feed-filter") { S.filter = e.target.value; $("#feed").innerHTML = feedHTML(); }
+  if (e.target.closest("#eod-form")) saveDraft();
+});
+document.addEventListener("click", async e => {
+  const t = e.target.closest("button, tr[data-month]"); if (!t) return;
+  if (t.dataset.month) { S.selMonth = t.dataset.month; loadEdit(S.selMonth); paintEditor(); $("#rev-table").innerHTML = revTable(); $("#editor").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+  if (t.id === "add-client") { S.edit.clients.push({ name: "", gross: "" }); paintEditor(); $("#cl-n-" + (S.edit.clients.length - 1))?.focus(); }
+  if (t.id === "add-other") { S.edit.other.push({ label: "", amount: "" }); paintEditor(); $("#ot-l-" + (S.edit.other.length - 1))?.focus(); }
+  if (t.id === "add-cost") { S.edit.costs.push({ label: "", amount: "" }); paintEditor(); $("#co-l-" + (S.edit.costs.length - 1))?.focus(); }
+  if (t.dataset.rmc !== undefined) { S.edit.clients.splice(+t.dataset.rmc, 1); paintEditor(); }
+  if (t.dataset.rmo !== undefined) { S.edit.other.splice(+t.dataset.rmo, 1); paintEditor(); }
+  if (t.dataset.rmco !== undefined) { S.edit.costs.splice(+t.dataset.rmco, 1); paintEditor(); }
+  if (t.id === "copy-costs") { const prev = S.months[addM(S.edit.ym, -1)]?.costs || []; const have = new Set(S.edit.costs.map(c => String(c.label).trim().toLowerCase())); prev.forEach(c => { if (!have.has(String(c.label).trim().toLowerCase())) S.edit.costs.push({ ...c }); }); paintEditor(); toast("Costs copied. Adjust anything that changed, then save."); }
+  if (t.id === "ed-save") saveMonth(t);
+  if (t.id === "rate-save") saveRate();
+  if (t.id === "imp-go") runImport(t);
+  if (t.id === "copy-last") copy($("#last-slack").textContent, t);
+  if (t.dataset.copyText) copy(t.dataset.copyText, t);
+  if (t.id === "eod-again") { const d = S.lastSubmitted?.rec?.date; S.lastSubmitted = null; renderView(); if (d) { $("#eod-date").value = d; writeForm(myReport(d)); $("#eod-existing").innerHTML = existingNote(); } }
+  if (t.id === "link-add") addLink(t);
+  if (t.dataset.rmlink !== undefined) { if (t.classList.contains("armed")) { const i = +t.dataset.rmlink; saveLinks(S.links.filter((_, j) => j !== i), "Link removed."); } else { t.classList.add("armed"); t.textContent = "Confirm"; setTimeout(() => { t.classList.remove("armed"); t.textContent = "Remove"; }, 3500); } }
+  if (t.dataset.editUser) { $("#user-form-panel").innerHTML = userForm(S.users[t.dataset.editUser]); $("#user-form-panel").scrollIntoView({ behavior: "smooth", block: "center" }); }
+  if (t.id === "uf-cancel") $("#user-form-panel").innerHTML = userForm(null);
+  if (t.id === "uf-gen") { const a = "abcdefghjkmnpqrstuvwxyz23456789"; const b = new Uint32Array(12); crypto.getRandomValues(b); $("#uf-pass").value = [...b].map(x => a[x % a.length]).join(""); }
+  if (t.id === "uf-save") saveUser();
+  if (t.id === "uf-remove") { if (t.classList.contains("armed")) saveUser({ active: false }); else { t.classList.add("armed"); t.textContent = "Confirm remove"; } }
+  if (t.id === "uf-restore") saveUser({ active: true });
+  if (t.id === "me-save") { try { await api("saveUser", { id: "admin", name: $("#me-name").value.trim() || "Admin", role: $("#me-role").value.trim() }); await reload(true); toast("Saved."); } catch (err) { toast(err.message); } }
+  if (t.dataset.logout !== undefined) { try { await api("logout"); } catch {} S.loaded = false; showLogin(); }
+});
+
+/* ---------- boot ---------- */
+async function start() {
+  const ok = await reload(false); if (!ok) return;
+  showShell();
+  $("#who").innerHTML = `${avatar(S.uid, 28)}<span>${esc(nameOf(S.uid))}${S.owner ? " · Owner" : ""}</span><button class="btn ghost sm so" data-logout>Sign out</button>`;
+  const fromPath = location.pathname.replace(/\/$/, "").endsWith("/eod") ? "eod" : null;
+  setView(location.hash.slice(1) || fromPath || ls.get("hq.view") || (S.owner ? "dashboard" : "eod"));
+}
+setInterval(() => { if (S.loaded && document.visibilityState === "visible" && !["revenue", "eod", "team"].includes(S.view)) reload(true); }, 60000);
+document.addEventListener("visibilitychange", () => { if (S.loaded && document.visibilityState === "visible" && ["dashboard", "reports"].includes(S.view)) reload(true); });
+start();
+})();
+</script>
+</body>
+</html>
