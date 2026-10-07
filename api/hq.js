@@ -157,14 +157,15 @@ module.exports = async (req, res) => {
         if (!isDate(date)) return send(res, 400, { error: "Pick a valid date." });
         const age = (Date.now() - Date.parse(date)) / 864e5;
         if (age > 31 || age < -2) return send(res, 400, { error: "You can only send reports for the last 30 days." });
-        const rec = { date, role: str(r.role, 80), done: str(r.done), win: str(r.win), blockers: str(r.blockers), tomorrow: str(r.tomorrow), notes: str(r.notes),
+        const newName = str(r.name, 80);
+        const rec = { date, role: me.role || "", done: str(r.done), win: str(r.win), blockers: str(r.blockers), tomorrow: str(r.tomorrow), notes: str(r.notes),
           hours: r.hours === null || r.hours === "" || r.hours == null ? null : Math.max(0, Math.min(24, num(r.hours))),
           energy: [1, 2, 3, 4, 5].includes(+r.energy) ? +r.energy : null, submittedAt: new Date().toISOString() };
         if (!rec.done || !rec.tomorrow) return send(res, 400, { error: "Fill in what you got done and tomorrow's priorities." });
         const key = "hq:eod:" + date;
         const existed = await redis("HEXISTS", key, me.id);
         await pipeline([["HSET", key, me.id, JSON.stringify(rec)], ["EXPIRE", key, 60 * 60 * 24 * 400]]);
-        if (rec.role && rec.role !== me.role) { me.role = rec.role; await redis("HSET", "hq:users", me.id, JSON.stringify(me)); }
+        if (newName && newName !== me.name) { me.name = newName; await redis("HSET", "hq:users", me.id, JSON.stringify(me)); }
         let slack = "off";
         if (SLACK) {
           try { const s = await fetch(SLACK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: slackText(rec, me, !!existed) }) }); slack = s.ok ? "sent" : "failed"; }

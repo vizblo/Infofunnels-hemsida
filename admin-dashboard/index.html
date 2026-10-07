@@ -638,12 +638,12 @@ function viewEod() {
     return head("End of day", "Report sent.", posted ? "Your report is saved and was posted to the team's EOD reports channel in Slack." : "Your report is saved in HQ.") +
       `<div class="success" data-copy-scope><h2>${posted ? "Posted to Slack ✓" : "Your Slack summary"}</h2><p class="muted" style="margin:0">${posted ? "This is what the team sees:" : slack === "failed" ? "Posting to Slack didn't work this time. Copy the summary and paste it into the EOD reports channel." : "Copy it and paste it into the EOD reports channel."}</p><pre class="slack" id="last-slack">${esc(txt)}</pre><div class="row" style="flex-wrap:wrap">${posted ? "" : '<button class="btn" id="copy-last" style="flex:0 0 auto">Copy for Slack</button>'}<button class="btn ${posted ? "" : "ghost"}" data-view="reports" style="flex:0 0 auto">See team reports</button><button class="btn ghost" id="eod-again" style="flex:0 0 auto">Edit report</button></div></div>`;
   }
-  const role = S.users[S.uid]?.role || "";
+  const myName = S.users[S.uid]?.name && S.users[S.uid].name !== "Admin" ? S.users[S.uid].name : "";
   return head("End of day", "End-of-day report", `Takes about 5 minutes. Fill it in before you log off${S.slackOn ? ". It's posted to Slack automatically when you submit." : "."}`) +
   `<form class="panel" id="eod-form" style="max-width:780px" novalidate>
     <div class="row" style="padding-bottom:6px">
       <label class="f" for="eod-date">Date<input class="inp" type="date" id="eod-date" value="${todayStr()}" max="${todayStr()}"></label>
-      <label class="f" for="eod-role" style="flex:2 1 220px">Your role<input class="inp" id="eod-role" placeholder="e.g. Content, Virtual assistant, Founder" value="${esc(role)}"></label>
+      <label class="f" for="eod-name" style="flex:2 1 220px">Your name<input class="inp" id="eod-name" autocomplete="name" placeholder="e.g. Alex Smith" value="${esc(myName)}"></label>
     </div>
     <div id="eod-existing" style="margin-top:10px">${existingNote()}</div>
     ${QS.map((q, i) => `<div class="q"><span class="n">${pad(i + 1)}</span><div class="body"><div class="qt">${q.t}${q.req ? ' <span class="req" aria-label="required">*</span>' : ""}</div><div class="qh">${q.h || ""}</div>${qInput(q)}</div></div>`).join("")}
@@ -658,14 +658,13 @@ function qInput(q) {
 }
 function readForm() {
   const v = id => ($("#q-" + id)?.value || "").trim();
-  return { date: $("#eod-date").value || todayStr(), role: $("#eod-role").value.trim(), done: v("done"), win: v("win"), blockers: v("blockers"), tomorrow: v("tomorrow"), notes: v("notes"), hours: $("#q-hours").value === "" ? null : +$("#q-hours").value, energy: +($("input[name=energy]:checked")?.value || 0) || null };
+  return { date: $("#eod-date").value || todayStr(), name: $("#eod-name").value.trim(), done: v("done"), win: v("win"), blockers: v("blockers"), tomorrow: v("tomorrow"), notes: v("notes"), hours: $("#q-hours").value === "" ? null : +$("#q-hours").value, energy: +($("input[name=energy]:checked")?.value || 0) || null };
 }
 function writeForm(r) {
   if (!r) return;
   ["done", "win", "blockers", "tomorrow", "notes"].forEach(k => { const el = $("#q-" + k); if (el) el.value = r[k] || ""; });
   if ($("#q-hours")) $("#q-hours").value = r.hours ?? "";
   document.querySelectorAll("input[name=energy]").forEach(el => el.checked = +el.value === r.energy);
-  if (r.role && $("#eod-role")) $("#eod-role").value = r.role;
 }
 function fillEodForm() {
   if (!$("#eod-form")) return;
@@ -679,6 +678,7 @@ let submitting = false;
 async function submitEod(btn) {
   if (submitting) return;
   const r = readForm(), msg = $("#eod-msg");
+  if (!r.name) { msg.innerHTML = `<span class="bad">Add your name.</span>`; $("#eod-name").focus(); return; }
   if (!r.done || !r.tomorrow) { msg.innerHTML = `<span class="bad">Fill in what you got done and tomorrow's priorities.</span>`; (r.done ? $("#q-tomorrow") : $("#q-done")).focus(); return; }
   submitting = true; btn.disabled = true; btn.textContent = S.slackOn ? "Sending to Slack…" : "Sending…";
   try {
@@ -686,7 +686,7 @@ async function submitEod(btn) {
     ls.del("hq.draft." + S.uid);
     const list = (S.reports[S.uid] = (S.reports[S.uid] || []).filter(x => x.date !== r.date));
     list.unshift(res.report); list.sort((a, b) => b.date.localeCompare(a.date));
-    if (S.users[S.uid] && r.role) S.users[S.uid].role = r.role;
+    if (S.users[S.uid] && r.name) S.users[S.uid].name = r.name; renderWho();
     S.lastSubmitted = { rec: res.report, slack: res.slack }; renderView(); window.scrollTo(0, 0);
   } catch (e) {
     msg.innerHTML = `<span class="bad">${esc(e.message)} Your answers are kept as a draft.</span>`;
@@ -849,10 +849,11 @@ document.addEventListener("click", async e => {
 });
 
 /* ---------- boot ---------- */
+function renderWho() { $("#who").innerHTML = `${avatar(S.uid, 28)}<span>${esc(nameOf(S.uid))}${S.owner ? " · Owner" : ""}</span><button class="btn ghost sm so" data-logout>Sign out</button>`; }
 async function start() {
   const ok = await reload(false); if (!ok) return;
   showShell();
-  $("#who").innerHTML = `${avatar(S.uid, 28)}<span>${esc(nameOf(S.uid))}${S.owner ? " · Owner" : ""}</span><button class="btn ghost sm so" data-logout>Sign out</button>`;
+  renderWho();
   const fromPath = location.pathname.replace(/\/$/, "").endsWith("/eod") ? "eod" : null;
   setView(location.hash.slice(1) || fromPath || ls.get("hq.view") || (S.owner ? "dashboard" : "eod"));
 }
