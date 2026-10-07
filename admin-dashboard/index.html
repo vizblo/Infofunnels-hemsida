@@ -624,7 +624,6 @@ const QS = [
   { id: "win", t: "What was your biggest win today?", h: "One thing you're proud of, big or small.", type: "area", rows: 2 },
   { id: "blockers", t: "Anything blocking you, or anything you need help with?", h: "Write “None” if you're all clear.", type: "area", rows: 2 },
   { id: "tomorrow", t: "What are your top priorities for tomorrow?", h: "Your 1–3 most important tasks.", type: "area", req: true, ph: "1. \n2. \n3. " },
-  { id: "hours", t: "How many hours did you work today?", type: "hours" },
   { id: "energy", t: "How was your day overall?", h: "1 = rough day, 5 = great day.", type: "scale" },
   { id: "notes", t: "Anything else the team should know?", h: "Optional. Ideas, updates, heads-ups.", type: "area", rows: 2 }
 ];
@@ -652,18 +651,16 @@ function viewEod() {
 }
 function qInput(q) {
   if (q.type === "area") return `<textarea class="inp" id="q-${q.id}" rows="${q.rows || 4}" placeholder="${esc(q.ph || "")}" ${q.rows ? 'style="min-height:0"' : ""}></textarea>`;
-  if (q.type === "hours") return `<input class="inp num" id="q-hours" type="number" min="0" max="24" step="0.5" placeholder="8" style="max-width:140px">`;
   if (q.type === "scale") return `<div class="scale" role="radiogroup">${SCALE.map((l, i) => `<input type="radio" name="energy" id="q-energy-${i + 1}" value="${i + 1}"><label for="q-energy-${i + 1}">${i + 1}<small>${l}</small></label>`).join("")}</div>`;
   return "";
 }
 function readForm() {
   const v = id => ($("#q-" + id)?.value || "").trim();
-  return { date: $("#eod-date").value || todayStr(), name: $("#eod-name").value.trim(), done: v("done"), win: v("win"), blockers: v("blockers"), tomorrow: v("tomorrow"), notes: v("notes"), hours: $("#q-hours").value === "" ? null : +$("#q-hours").value, energy: +($("input[name=energy]:checked")?.value || 0) || null };
+  return { date: $("#eod-date").value || todayStr(), name: $("#eod-name").value.trim(), done: v("done"), win: v("win"), blockers: v("blockers"), tomorrow: v("tomorrow"), notes: v("notes"), energy: +($("input[name=energy]:checked")?.value || 0) || null };
 }
 function writeForm(r) {
   if (!r) return;
   ["done", "win", "blockers", "tomorrow", "notes"].forEach(k => { const el = $("#q-" + k); if (el) el.value = r[k] || ""; });
-  if ($("#q-hours")) $("#q-hours").value = r.hours ?? "";
   document.querySelectorAll("input[name=energy]").forEach(el => el.checked = +el.value === r.energy);
 }
 function fillEodForm() {
