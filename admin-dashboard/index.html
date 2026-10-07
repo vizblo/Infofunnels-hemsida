@@ -323,7 +323,7 @@ function ingest(d) {
   S.users = {}; d.users.forEach(u => S.users[u.id] = u);
   S.reports = {}; d.reports.forEach(r => (S.reports[r.uid] = S.reports[r.uid] || []).push(r));
   Object.values(S.reports).forEach(l => l.sort((a, b) => b.date.localeCompare(a.date)));
-  if (S.owner) { S.months = d.months || {}; S.rate = d.settings?.rate ?? 0.2; S.links = d.links || []; S.adminUsername = d.adminUsername || "admin"; }
+  if (S.owner) { S.months = d.months || {}; S.rate = d.settings?.rate ?? 0.2; S.links = d.links || []; S.adminUsername = d.adminUsername || "admin"; S.slackLast = d.slackLast || null; }
   S.loaded = true;
 }
 async function reload(soft) {
@@ -723,7 +723,8 @@ function slackSetupHTML() {
   const remind = `/remind #eod-reminder "⏰ EOD time! Fill in your end-of-day report: ${SITE}/eod" every weekday at 5:00pm`;
   return `<section class="panel" data-copy-scope><div class="panel-head"><h2>Slack</h2><span class="chip ${S.slackOn ? "ok" : "pend"}">${S.slackOn ? "Auto-posting on" : "Auto-posting off"}</span></div>
     <ol class="steps">
-      <li>${S.slackOn ? "Every submitted report is posted to your EOD reports channel automatically." : "Add <b>SLACK_WEBHOOK_URL</b> in Vercel to post every report to Slack automatically."}</li>
+      <li>${S.slackOn ? "Every submitted report is posted to your EOD reports channel automatically." : "Add <b>SLACK_WEBHOOK_URL</b> in Vercel to post every report to Slack automatically."}
+        ${S.slackOn ? `<div class="row" style="margin-top:8px;align-items:center;gap:10px"><button class="btn ghost sm" id="slack-test" style="flex:0 0 auto">Send test message</button><span id="slack-status" class="${S.slackLast?.status === "failed" ? "bad" : "dim"}" style="font-size:12.5px;flex:1 1 200px">${S.slackLast ? (S.slackLast.status === "sent" ? "Last post went through · " : "Last post failed: " + esc(S.slackLast.detail || "") + " · ") + new Date(S.slackLast.at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : ""}</span></div>` : ""}</li>
       <li>Daily reminder: paste this into Slack once.
         <div class="code" style="margin-top:8px"><code>${esc(remind)}</code><button class="btn ghost sm" data-copy-text="${esc(remind)}">Copy</button></div></li>
       <li>Your team fills in reports at <b>${esc(SITE.replace(/^https?:\/\//, ""))}/eod</b>. No login, and it doesn't give them access to HQ.</li>
@@ -835,6 +836,7 @@ document.addEventListener("click", async e => {
   if (t.dataset.copyText) copy(t.dataset.copyText, t);
   if (t.id === "eod-again") { const d = S.lastSubmitted?.rec?.date; S.lastSubmitted = null; renderView(); if (d) { $("#eod-date").value = d; writeForm(myReport(d)); $("#eod-existing").innerHTML = existingNote(); } }
   if (t.id === "link-add") addLink(t);
+  if (t.id === "slack-test") { t.disabled = true; const st = $("#slack-status"); st.className = "dim"; st.textContent = "Sending…"; try { const r = await api("testSlack"); st.className = r.status === "sent" ? "" : "bad"; st.style.color = r.status === "sent" ? "var(--good)" : ""; st.textContent = r.status === "sent" ? "Sent. Check your EOD reports channel." : r.status === "off" ? "Slack isn't set up (SLACK_WEBHOOK_URL is missing)." : r.detail; } catch (err) { st.className = "bad"; st.textContent = err.message; } t.disabled = false; }
   if (t.dataset.rmlink !== undefined) { if (t.classList.contains("armed")) { const i = +t.dataset.rmlink; saveLinks(S.links.filter((_, j) => j !== i), "Link removed."); } else { t.classList.add("armed"); t.textContent = "Confirm"; setTimeout(() => { t.classList.remove("armed"); t.textContent = "Remove"; }, 3500); } }
   if (t.dataset.editUser) { $("#user-form-panel").innerHTML = userForm(S.users[t.dataset.editUser]); $("#user-form-panel").scrollIntoView({ behavior: "smooth", block: "center" }); }
   if (t.id === "uf-cancel") $("#user-form-panel").innerHTML = userForm(null);

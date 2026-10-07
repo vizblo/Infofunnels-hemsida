@@ -9,7 +9,7 @@ const RTOK = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOK
 const SECRET = process.env.SESSION_SECRET || "";
 const ADMIN_USER = (process.env.ADMIN_USERNAME || "admin").trim().toLowerCase();
 const ADMIN_PASS = process.env.ADMIN_PASSWORD || "";
-const SLACK = process.env.SLACK_WEBHOOK_URL || "";
+const SLACK = (process.env.SLACK_WEBHOOK_URL || "").replace(/\s+/g, "").replace(/^["']|["']$/g, "");
 const COOKIE = "hq_s";
 const SESSION_DAYS = 30;
 
@@ -90,6 +90,24 @@ function slackText(r, user, updated) {
   return L.join("\n");
 }
 
+/* ---------- Slack ---------- */
+// Posts to the incoming webhook and remembers the outcome so HQ can show why a post failed.
+async function postSlack(text) {
+  if (!SLACK) return { status: "off" };
+  let out;
+  if (!/^https:\/\/hooks\.slack\.com\//.test(SLACK)) out = { status: "failed", detail: "SLACK_WEBHOOK_URL doesn't look like a Slack webhook link (it should start with https://hooks.slack.com/)." };
+  else {
+    try {
+      const r = await fetch(SLACK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
+      const body = (await r.text()).slice(0, 200);
+      out = r.ok ? { status: "sent" } : { status: "failed", detail: `Slack answered ${r.status}: ${body}` };
+    } catch (e) { out = { status: "failed", detail: "Couldn't reach Slack: " + String(e.message || e).slice(0, 150) }; }
+  }
+  try { await redis("SET", "hq:slack:last", JSON.stringify({ ...out, at: new Date().toISOString() })); } catch {}
+  if (out.status === "failed") console.error("slack", out.detail);
+  return out;
+}
+
 /* ---------- EOD ---------- */
 async function storeEod(me, r, allowRename) {
   const date = str(r.date, 10);
@@ -105,11 +123,7 @@ async function storeEod(me, r, allowRename) {
   await pipeline([["HSET", key, me.id, JSON.stringify(rec)], ["EXPIRE", key, 60 * 60 * 24 * 400]]);
   const newName = str(r.name, 80);
   if (allowRename && newName && newName !== me.name) { me.name = newName; await redis("HSET", "hq:users", me.id, JSON.stringify(me)); }
-  let slack = "off";
-  if (SLACK) {
-    try { const s = await fetch(SLACK, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: slackText(rec, me, !!existed) }) }); slack = s.ok ? "sent" : "failed"; }
-    catch { slack = "failed"; }
-  }
+  const slack = (await postSlack(slackText(rec, me, !!existed))).status;
   return { code: 200, body: { ok: true, slack, updated: !!existed, report: { ...rec, uid: me.id } } };
 }
 const normName = s => String(s || "").trim().replace(/\s+/g, " ").toLowerCase();
@@ -196,6 +210,7 @@ module.exports = async (req, res) => {
           data.settings = parse(out[n + 1]) || { rate: 0.2 };
           data.links = parse(out[n + 2]) || DEFAULT_LINKS;
           data.adminUsername = ADMIN_USER;
+          data.slackLast = parse(await redis("GET", "hq:slack:last"));
         }
         return send(res, 200, data);
       }
@@ -244,6 +259,11 @@ module.exports = async (req, res) => {
         if (u.active === false) u.pv = (u.pv || 0) + 1; // signs them out
         await redis("HSET", "hq:users", u.id, JSON.stringify(u));
         return send(res, 200, { ok: true, user: publicUser(u, true) });
+      }
+      case "testSlack": {
+        if (needAdmin()) return;
+        const out = await postSlack("✅ InfoFunnels HQ is connected. End-of-day reports will be posted in this channel.");
+        return send(res, 200, out);
       }
       default:
         return send(res, 400, { error: "Unknown action." });
