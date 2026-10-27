@@ -641,6 +641,15 @@
       border: 1px solid rgba(196,168,82,0.22);
       box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(196,168,82,0.08);
     }
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .video-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .video-grid .video-embed { max-width: none; }
+    }
     .video-embed::before {
       content: '';
       display: block;
@@ -1337,13 +1346,23 @@
       <div class="interviews-wrap reveal">
         <div class="interviews-label">Client Interviews</div>
         <h3 class="interviews-title">Hear it from our clients</h3>
-        <div class="video-embed">
-          <iframe
-            src="https://www.youtube.com/embed/6YJmN7Kf4QY"
-            title="Client Interview"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
+        <div class="video-grid">
+          <div class="video-embed">
+            <iframe
+              src="https://www.youtube.com/embed/6YJmN7Kf4QY"
+              title="Client Interview"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="video-embed">
+            <iframe
+              src="https://www.youtube.com/embed/U_HgbnRIyt8?start=53"
+              title="Client Interview 2"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
         </div>
       </div>
 
