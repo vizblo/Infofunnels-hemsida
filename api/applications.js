@@ -134,8 +134,11 @@ module.exports = async (req, res) => {
     switch (action) {
       case "listForms": {
         const forms = Object.values(hashToObj(await redis("HGETALL", "app:forms"))).sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
-        const counts = await pipeline(forms.map(f => ["HLEN", subsKey(f.slug)]));
-        return send(res, 200, { forms: forms.map((f, i) => ({ ...f, count: counts[i] })) });
+        const vals = await pipeline(forms.map(f => ["HVALS", subsKey(f.slug)]));
+        return send(res, 200, { forms: forms.map((f, i) => {
+          const subs = (vals[i] || []).map(parse).filter(Boolean);
+          return { ...f, count: subs.length, newCount: subs.filter(x => x.status === "new").length };
+        }) });
       }
       case "saveForm": {
         const f = body.form || {};

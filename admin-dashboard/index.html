@@ -248,6 +248,74 @@ pre.slack { white-space: pre-wrap; word-break: break-word; background: var(--bg)
 
 html, body { margin: 0; }
 [hidden] { display: none !important; }
+
+/* applications */
+.nav .nbadge { margin-left: auto; background: var(--gold); color: #0b0b0d; font-size: 11px; font-weight: 700; border-radius: 99px; padding: 1px 7px; font-variant-numeric: tabular-nums; }
+.chip.new { color: var(--warn); background: var(--warn-soft); }
+.chip.open, .chip.shortlisted { color: var(--good); background: var(--good-soft); }
+.chip.closed, .chip.rejected { color: var(--bad); background: var(--bad-soft); }
+.apps { display: grid; grid-template-columns: 260px minmax(0,1fr); gap: 20px; align-items: start; }
+.apps > * { min-width: 0; }
+@media (max-width: 1000px) { .apps { grid-template-columns: minmax(0,1fr); } }
+.apps-side { display: flex; flex-direction: column; gap: 8px; }
+.fcard { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); min-width: 0; }
+.fcard:hover { border-color: var(--gold-line); }
+.fcard[aria-current="true"] { border-color: var(--gold); background: var(--gold-soft); }
+.fcard:focus-visible { outline: 2px solid var(--gold); }
+.fcard .t { font-weight: 600; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.fcard .u { font-size: 12.5px; color: var(--dim); overflow-wrap: anywhere; }
+.ahead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px 20px; margin-bottom: 14px; }
+.ahead h2 { font-size: 22px; font-weight: 800; letter-spacing: -.01em; }
+.aurl { color: var(--gold); font-size: 13px; overflow-wrap: anywhere; }
+.atabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+.atabs button { all: unset; cursor: pointer; padding: 10px 14px; color: var(--muted); font-weight: 600; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.atabs button:hover { color: var(--fg); }
+.atabs button[aria-selected="true"] { color: var(--fg); border-color: var(--gold); }
+.atabs button:focus-visible { outline: 2px solid var(--gold); }
+.aform { display: flex; flex-direction: column; gap: 14px; }
+.aform .row { margin-bottom: 12px; }
+.psub { color: var(--dim); font-size: 12.5px; margin: 4px 0 14px; }
+.aslug { display: flex; align-items: stretch; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--bg); overflow: hidden; min-width: 0; }
+.aslug:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-soft); }
+.aslug span { padding: 9px 0 9px 12px; color: var(--dim); white-space: nowrap; font-weight: 400; }
+.aslug .inp { border: 0; box-shadow: none; border-radius: 0; padding-left: 2px; }
+.aslug .inp:focus { box-shadow: none; }
+.aslug .inp:disabled { color: var(--muted); }
+@media (max-width: 560px) { .aslug span { display: none; } .aslug .inp { padding-left: 12px; } }
+.drow { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.6fr) auto; gap: 8px; margin-bottom: 8px; align-items: center; }
+.aq { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 10px; background: rgba(255,255,255,.015); }
+.aqh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; color: var(--dim); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.aq .row { margin-bottom: 8px; }
+.icon-btn.mv:hover { color: var(--fg); background: rgba(255,255,255,.06); }
+.icon-btn[disabled] { opacity: .3; pointer-events: none; }
+.chk { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; color: var(--fg-2); cursor: pointer; }
+.chk input { accent-color: var(--gold); width: 16px; height: 16px; }
+.savebar { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; padding: 14px 16px; background: rgba(13,13,16,.94); backdrop-filter: blur(8px); border: 1px solid var(--line-strong); border-radius: var(--r); }
+.afilters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; align-items: center; }
+.pill { all: unset; cursor: pointer; padding: 5px 12px; border-radius: 99px; font-weight: 600; font-size: 12.5px; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.pill:hover { color: var(--fg); }
+.pill[aria-pressed="true"] { background: var(--gold-soft); color: var(--fg); box-shadow: inset 0 0 0 1px var(--gold); }
+.pill:focus-visible { outline: 2px solid var(--gold); }
+details.asub { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin-bottom: 8px; }
+details.asub[open] { border-color: var(--gold-line); }
+details.asub summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px 12px; padding: 12px 14px; flex-wrap: wrap; }
+details.asub summary::-webkit-details-marker { display: none; }
+details.asub summary:focus-visible { outline: 2px solid var(--gold); border-radius: 10px; }
+details.asub summary .who { font-weight: 600; flex: 1 1 200px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+details.asub summary .who small { color: var(--dim); font-weight: 400; margin-left: 8px; }
+details.asub summary .when { color: var(--dim); font-size: 12.5px; white-space: nowrap; }
+.sbody { padding: 4px 16px 16px; border-top: 1px solid var(--line); }
+.sbody .ctl { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 12px 0; }
+.qa { margin: 0; }
+.qa dt { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin-top: 14px; }
+.qa dd { margin: 2px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--fg-2); }
+.arow { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 10px 8px; margin: 0 -8px; border-radius: 8px; border-bottom: 1px solid var(--line); min-width: 0; }
+.arow:last-child { border-bottom: 0; }
+.arow:hover { background: rgba(255,255,255,.03); }
+.arow:focus-visible { outline: 2px solid var(--gold); }
+.arow .who { flex: 1; min-width: 0; }
+.arow .who b { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.arow .who small { color: var(--dim); font-size: 12px; overflow-wrap: anywhere; }
 </style>
 </head>
 <body>
@@ -273,9 +341,10 @@ const ICONS = {
   eod: '<svg viewBox="0 0 24 24"><path d="M9 4h6M9 4a2 2 0 0 0-2 2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-1a2 2 0 0 0-2-2M9 13l2 2 4-4"/></svg>',
   reports: '<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
   links: '<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
+  applications: '<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
   team: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>'
 };
-const VIEWS_OWNER = [["dashboard","Dashboard"],["revenue","Finances"],["reports","EOD reports"],["eod","Submit EOD"],["links","Quick links"],["team","Team"]];
+const VIEWS_OWNER = [["dashboard","Dashboard"],["revenue","Finances"],["applications","Applications"],["reports","EOD reports"],["eod","Submit EOD"],["links","Quick links"],["team","Team"]];
 const VIEWS_TEAM = [["eod","Submit EOD"],["reports","Team reports"]];
 const SITE = location.origin;
 
@@ -407,6 +476,7 @@ function setView(v) {
   S.view = v; ls.set("hq.view", v);
   if (location.hash.slice(1) !== v) history.replaceState(null, "", "#" + v);
   $("#nav").innerHTML = list.map(([k, l]) => `<button type="button" data-view="${k}" ${k === v ? 'aria-current="page"' : ""}>${ICONS[k]}<span>${l}</span></button>`).join("") + `<button type="button" class="mob-only" data-logout>Sign out</button>`;
+  paintNavBadge();
   renderView();
   window.scrollTo(0, 0);
 }
@@ -422,6 +492,7 @@ function renderView() {
   else if (S.view === "reports") m.innerHTML = viewReports();
   else if (S.view === "links") m.innerHTML = viewLinks();
   else if (S.view === "team") m.innerHTML = viewTeam();
+  else if (S.view === "applications") { m.innerHTML = viewApplications(); renderAppsList(); renderAppsMain(); if (!A.forms) loadAppForms(true); }
 }
 /* re-render data-bound parts without touching inputs being edited */
 function refresh() {
@@ -472,13 +543,16 @@ function viewDashboard() {
   const greet = (() => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; })();
   const first = (S.me?.name && S.me.name !== "Admin" ? S.me.name : "").split(" ")[0];
   const chart = hasRevenue() ? chartSVG(ymNow()) : `<div class="empty"><b>Nothing logged yet</b>Add this month's revenue and costs, or paste your Google Sheet, on the Finances page.<div style="margin-top:12px"><button class="btn sm" data-view="revenue">Go to Finances</button></div></div>`;
-  return head(new Date().toLocaleDateString("en-US", { weekday: "long", day: "numeric", month: "long", year: "numeric" }), `${greet}${first ? ", " + esc(first) : ""}.`, "Revenue, costs and profit, the team's end-of-day reports and your links, all in one place.") +
+  return head(new Date().toLocaleDateString("en-US", { weekday: "long", day: "numeric", month: "long", year: "numeric" }), `${greet}${first ? ", " + esc(first) : ""}.`, "Revenue, applications, the team's end-of-day reports and your links, all in one place.") +
   `<div class="stack">${kpisHTML()}
     <div class="grid-2">
       <section class="panel"><div class="panel-head"><h2>Revenue, costs &amp; profit</h2>${legend()}</div>${chart}</section>
       <section class="panel"><div class="panel-head"><h2>Today's EOD reports</h2><button class="btn ghost sm" data-view="reports">See all</button></div><div id="today-status">${todayStatusHTML()}</div></section>
     </div>
-    <section class="panel"><div class="panel-head"><h2>Quick links</h2><button class="btn ghost sm" data-view="links">Manage</button></div>${linksGrid(false)}</section>
+    <div class="grid-2" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+      ${appsPanelHTML()}
+      <section class="panel"><div class="panel-head"><h2>Quick links</h2><button class="btn ghost sm" data-view="links">Manage</button></div>${linksGrid(false)}</section>
+    </div>
   </div>`;
 }
 
@@ -848,6 +922,274 @@ document.addEventListener("click", async e => {
   if (t.dataset.logout !== undefined) { try { await api("logout"); } catch {} S.loaded = false; showLogin(); }
 });
 
+/* ---------- applications (forms at /applications/<slug>, API in api/applications.js) ---------- */
+const APP_PRESETS = ["Role", "Niche", "Ticket Price", "Compensation", "Location", "Availability"];
+const APP_TYPES = { text: "Short answer", textarea: "Long answer", email: "Email", tel: "Phone", select: "Dropdown", yesno: "Yes / No" };
+const APP_STATUS = { new: "New", shortlisted: "Shortlisted", rejected: "Rejected" };
+const AQ = (label, type, help = "", required = true) => ({ id: "", label, type, help, required, optionsText: "" });
+const APP_BASIC = () => [
+  AQ("Full Name", "text", "Your full name."), AQ("Email", "email"), AQ("Phone", "tel", "Include the area code. Must have WhatsApp."),
+  AQ("Instagram Handle", "text"), AQ("Country", "text", "What country are you based in?"),
+  AQ("Previous Roles", "textarea", "What roles have you done previously? Include the offer, price point, compensation and how long."),
+  AQ("Best Month", "text", "What's the best month you've had in a previous role? Revenue or results.")
+];
+const APP_CLOSER = () => [
+  AQ("Full Name", "text", "Applicant's full name."), AQ("Email", "email"), AQ("Phone", "tel", "Phone number (must have WhatsApp, plus area code)."),
+  AQ("Instagram Handle", "text"), AQ("Country", "text", "What country are you based in?"),
+  AQ("Previous Sales Roles", "textarea", "What sales roles have you done previously? (Include offer, price point, commission structure, and length of time)"),
+  AQ("Best Month Revenue", "text", "What's the most revenue you've closed in a single month?"),
+  AQ("Offer Types Sold", "textarea", "What type of offers have you sold before?"),
+  AQ("Average vs Top 1% Closer", "textarea", "What do you believe separates an average closer from a top 1% closer?"),
+  AQ("Biggest Weakness", "textarea", "What's the biggest weakness in your sales game right now?"),
+  AQ("Job Ends On The Call?", "textarea", "Do you believe a closer's job starts and ends on the sales call? Yes or no, then explain why."),
+  AQ("Plan If Bookings Dropped 40%", "textarea", "If your booked calls dropped by 40% next week, what would your plan be?"),
+  AQ("Can Commit 10am-8pm EST, 6 Days", "yesno", "Can you commit to the hours 10AM EST - 8PM EST 6 days a week?"),
+  AQ("Certainty Or Likability", "textarea", "What's more important: certainty or likability? Explain"),
+  AQ("Why You Over Everyone Else", "textarea", "Why should we choose you over every other applicant?"),
+  AQ("Video Introduction", "textarea", "Record a 2-3 minute video answering: who you are, your sales background, why you'd be an asset. Paste the link."),
+  AQ("Call Recording", "textarea", "Paste a link to a recording of your best close. If you don't have one, explain why.")
+];
+const APP_TEMPLATES = { basic: ["Basic (name, email, phone, Instagram, country, previous roles, best month)", APP_BASIC], closer: ["Closer (the full closer question set)", APP_CLOSER], blank: ["Blank (add everything yourself)", () => [AQ("Full Name", "text"), AQ("Email", "email")]] };
+const A = { forms: null, cur: null, loading: false }; // cur: { isNew, slugTouched, tab, template, draft, subs, filter, retention }
+
+async function appApi(action, data = {}) {
+  let r;
+  try { r = await fetch("/api/applications", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, ...data }) }); }
+  catch { throw new ApiError(0, { error: "Can't reach the server. Check your connection." }); }
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { if (r.status === 401) showLogin(); throw new ApiError(r.status, j); }
+  return j;
+}
+async function loadAppForms(rerender) {
+  if (!S.owner || A.loading) return;
+  A.loading = true;
+  try { A.forms = (await appApi("listForms")).forms; }
+  catch (e) { if (e.status !== 401) { A.forms = A.forms || []; A.error = e.message; } }
+  A.loading = false;
+  if (rerender) { if (S.view === "applications") { renderAppsList(); if (!A.cur) renderAppsMain(); } else if (S.view === "dashboard") refresh(); }
+  paintNavBadge();
+}
+const appNew = () => (A.forms || []).reduce((n, f) => n + (f.newCount || 0), 0);
+function paintNavBadge() {
+  const b = document.querySelector('#nav [data-view="applications"]'); if (!b) return;
+  b.querySelector(".nbadge")?.remove();
+  const n = appNew(); if (n) b.insertAdjacentHTML("beforeend", `<span class="nbadge" aria-label="${n} new">${n > 99 ? "99+" : n}</span>`);
+}
+const appUrl = slug => `${SITE}/applications/${slug}`;
+const appShortUrl = slug => `${SITE.replace(/^https?:\/\//, "")}/applications/${slug}`;
+
+/* dashboard panel */
+function appsPanelHTML() {
+  let body;
+  if (!A.forms) body = `<div class="dim">Loading applications…</div>`;
+  else if (!A.forms.length) body = `<div class="empty"><b>No application forms yet</b>Create one for a role (closer, setter, UGC creator...) and get a link to share.<div style="margin-top:12px"><button class="btn sm" data-aact="dash-new">+ New application form</button></div></div>`;
+  else body = `<div class="people">${A.forms.slice(0, 6).map(f => `<button type="button" class="arow" data-aact="dash-open" data-slug="${esc(f.slug)}"><span class="who"><b>${esc(f.title)}</b><small>${esc(appShortUrl(f.slug))}</small></span>
+      <span class="dim num" style="font-size:12.5px">${f.count} total</span>${f.newCount ? `<span class="chip new">${f.newCount} new</span>` : `<span class="chip ${f.status}">${f.status === "open" ? "Open" : "Closed"}</span>`}</button>`).join("")}</div>`;
+  const n = appNew();
+  return `<section class="panel"><div class="panel-head"><h2>Applications${n ? ` <span class="chip new" style="margin-left:6px;vertical-align:2px">${n} to review</span>` : ""}</h2><button class="btn ghost sm" data-view="applications">Open</button></div>${body}</section>`;
+}
+
+/* view */
+function viewApplications() {
+  return head("Hiring", "Applications", "Build application forms for each role, share the link, and review who applied.", `<button class="btn" data-aact="new" style="flex:0 0 auto">+ New application form</button>`) +
+    `<div class="apps" id="apps-root"><aside class="apps-side" id="apps-list" role="list"></aside><div class="apps-main" id="apps-main"></div></div>`;
+}
+function renderAppsList() {
+  const el = $("#apps-list"); if (!el) return;
+  if (!A.forms) { el.innerHTML = `<div class="dim">Loading forms…</div>`; return; }
+  el.innerHTML = A.forms.map(f => `<button type="button" class="fcard" data-aact="open" data-slug="${esc(f.slug)}" aria-current="${!!(A.cur && !A.cur.isNew && A.cur.draft.slug === f.slug)}">
+      <span class="t"><span>${esc(f.title)}</span><span class="chip ${f.status}">${f.status === "open" ? "Open" : "Closed"}</span></span>
+      <span class="u">/applications/${esc(f.slug)}</span>
+      <span class="u">${f.count} ${f.count === 1 ? "application" : "applications"}${f.newCount ? ` · <b class="gold">${f.newCount} new</b>` : ""}</span></button>`).join("") || `<div class="dim" style="font-size:12.5px;padding:4px 2px">Your forms appear here.</div>`;
+}
+const slugify = s => String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+const toDraft = f => ({ slug: f.slug, title: f.title, status: f.status, about: f.about || "", successMessage: f.successMessage || "",
+  details: f.details.map(d => ({ ...d })), questions: f.questions.map(q => ({ ...q, optionsText: (q.options || []).join("\n") })) });
+function appNewForm() {
+  A.cur = { isNew: true, slugTouched: false, tab: "form", template: "basic",
+    draft: { slug: "", title: "", status: "open", about: "", successMessage: "", details: APP_PRESETS.map(label => ({ label, value: "" })), questions: APP_BASIC() } };
+  renderAppsList(); renderAppsMain(); $("#af-title")?.focus();
+}
+function appOpenForm(slug, tab = "form") {
+  const f = (A.forms || []).find(x => x.slug === slug); if (!f) return;
+  A.cur = { isNew: false, slugTouched: true, tab, draft: toDraft(f), subs: null, filter: "all" };
+  renderAppsList(); renderAppsMain();
+}
+const appPayload = d => ({ ...d, questions: d.questions.map(q => ({ id: q.id, label: q.label, help: q.help, type: q.type, required: q.required,
+  ...(q.type === "select" ? { options: q.optionsText.split("\n").map(s => s.trim()).filter(Boolean) } : {}) })) });
+
+function renderAppsMain() {
+  const m = $("#apps-main"); if (!m) return;
+  const C = A.cur;
+  if (!C) {
+    m.innerHTML = !A.forms ? `<div class="dim">Loading…</div>` : A.forms.length
+      ? `<div class="empty"><b>Pick a form</b>Choose one on the left to edit it or review who applied.</div>`
+      : `<div class="empty"><b>No application forms yet</b>Create one for a role (closer, setter, UGC creator...) and you get its own link to share.<div style="margin-top:12px"><button class="btn sm" data-aact="new">+ Create your first form</button></div></div>`;
+    return;
+  }
+  const d = C.draft, f = (A.forms || []).find(x => x.slug === d.slug);
+  const top = `<div class="ahead"><div style="min-width:0"><div class="eyebrow">${C.isNew ? "New form" : "Application form"}</div>
+    <h2 id="ah-title">${esc(d.title || "Untitled form")}</h2>${C.isNew ? "" : `<div class="aurl">${esc(appUrl(d.slug))}</div>`}</div>
+    ${C.isNew ? "" : `<div class="row" style="flex:0 1 auto;gap:8px"><button class="btn ghost sm" data-aact="copy" style="flex:0 0 auto">Copy link</button><a class="btn ghost sm" href="/applications/${esc(d.slug)}" target="_blank" rel="noopener" style="flex:0 0 auto">Open form ↗</a></div>`}</div>`;
+  const tabs = C.isNew ? "" : `<div class="atabs" role="tablist"><button role="tab" data-aact="tab" data-tab="apps" aria-selected="${C.tab === "apps"}">Applications${f ? ` (${C.subs ? C.subs.length : f.count})` : ""}</button><button role="tab" data-aact="tab" data-tab="form" aria-selected="${C.tab === "form"}">Edit form</button></div>`;
+  m.innerHTML = top + tabs + (C.tab === "apps" ? appSubsHTML() : appFormHTML());
+  if (C.tab === "apps" && !C.subs) appLoadSubs();
+}
+function appFormHTML() {
+  const C = A.cur, d = C.draft;
+  const have = new Set(d.details.map(x => x.label.trim().toLowerCase()));
+  const missing = APP_PRESETS.filter(p => !have.has(p.toLowerCase()));
+  return `<div class="aform">
+  <section class="panel"><h2>Basics</h2><p class="psub">The title shows at the top of the page. The link is what you send to applicants.</p>
+    <div class="row"><label class="f" for="af-title">Title<input class="inp" id="af-title" data-af="title" value="${esc(d.title)}" placeholder="Closer Applications" maxlength="100"></label>
+      <label class="f" for="af-status">Status<select class="inp" id="af-status" data-af="status"><option value="open" ${d.status === "open" ? "selected" : ""}>Open · accepting applications</option><option value="closed" ${d.status === "closed" ? "selected" : ""}>Closed · shows "application is closed"</option></select></label></div>
+    <label class="f" for="af-slug">Link<span class="aslug"><span>${esc(SITE.replace(/^https?:\/\//, ""))}/applications/</span><input class="inp" id="af-slug" data-af="slug" value="${esc(d.slug)}" maxlength="40" ${C.isNew ? "" : "disabled"} placeholder="closer" autocapitalize="none" spellcheck="false"></span>
+      <span class="hint">${C.isNew ? "Lowercase letters, numbers and dashes. This can't be changed after you save." : "The link can't be changed once it's shared."}</span></label>
+    ${C.isNew ? `<label class="f" for="af-tpl" style="margin-top:12px">Start from<select class="inp" id="af-tpl">${Object.entries(APP_TEMPLATES).map(([k, v]) => `<option value="${k}" ${C.template === k ? "selected" : ""}>${esc(v[0])}</option>`).join("")}</select><span class="hint">Fills in the questions below. You can still edit, add and remove everything.</span></label>` : ""}
+  </section>
+  <section class="panel"><h2>Job details</h2><p class="psub">Shown in a box above the form. Rows with an empty value are hidden.</p>
+    ${d.details.map((x, i) => `<div class="drow"><input class="inp" list="app-presets" data-ad="${i}" data-ak="label" value="${esc(x.label)}" placeholder="Label" aria-label="Label" maxlength="40"><input class="inp" data-ad="${i}" data-ak="value" value="${esc(x.value)}" placeholder="Value" aria-label="Value for ${esc(x.label)}" maxlength="200"><button class="icon-btn" data-aact="rmd" data-i="${i}" aria-label="Remove ${esc(x.label)}">×</button></div>`).join("")}
+    <datalist id="app-presets">${APP_PRESETS.map(p => `<option value="${p}">`).join("")}</datalist>
+    <div class="row" style="gap:6px;margin:10px 0 0">${[`<button class="btn ghost sm" data-aact="addd" style="flex:0 0 auto">+ Add detail</button>`, ...missing.map(p => `<button class="btn ghost sm" data-aact="preset" data-p="${esc(p)}" style="flex:0 0 auto">+ ${esc(p)}</button>`)].join("")}</div>
+  </section>
+  <section class="panel"><h2>About the role</h2><p class="psub">Free text under the details box: your results, what you're looking for, anything applicants should know.</p>
+    <textarea class="inp" id="af-about" data-af="about" rows="5" maxlength="4000" placeholder="We're looking for experienced closers who can operate at a high level immediately.">${esc(d.about)}</textarea></section>
+  <section class="panel"><h2>Questions</h2><p class="psub">Applicants answer these in order. Changing a question later doesn't change answers already received.</p>
+    ${d.questions.map(appQHTML).join("")}
+    <button class="btn ghost sm" data-aact="addq">+ Add question</button></section>
+  <section class="panel"><h2>After they submit</h2>
+    <label class="f" for="af-success" style="margin-top:10px">Confirmation message<textarea class="inp" id="af-success" data-af="successMessage" rows="2" maxlength="500" placeholder="Thanks, your application is in. If it's a fit, we'll reach out.">${esc(d.successMessage)}</textarea></label></section>
+  <div class="savebar"><span class="muted">${C.isNew ? "Not saved yet." : "Changes are saved when you press Save."}</span>
+    <div class="row" style="flex:0 1 auto;gap:8px;margin:0">${C.isNew ? "" : `<button class="btn danger" data-aact="del" style="flex:0 0 auto">Delete form</button>`}<button class="btn" data-aact="save" style="flex:0 0 auto">${C.isNew ? "Create form" : "Save changes"}</button></div></div></div>`;
+}
+function appQHTML(q, i, all) {
+  return `<div class="aq"><div class="aqh"><span>Question ${i + 1}</span><span><button class="icon-btn mv" data-aact="upq" data-i="${i}" aria-label="Move up" ${i === 0 ? "disabled" : ""}>↑</button><button class="icon-btn mv" data-aact="downq" data-i="${i}" aria-label="Move down" ${i === all.length - 1 ? "disabled" : ""}>↓</button><button class="icon-btn" data-aact="rmq" data-i="${i}" aria-label="Remove question ${i + 1}">×</button></span></div>
+    <div class="row"><label class="f" style="flex:2 1 240px">Question<input class="inp" data-aqi="${i}" data-aqf="label" value="${esc(q.label)}" maxlength="200" placeholder="e.g. Best Month Revenue"></label>
+      <label class="f">Answer type<select class="inp" data-aqi="${i}" data-aqf="type">${Object.entries(APP_TYPES).map(([k, v]) => `<option value="${k}" ${q.type === k ? "selected" : ""}>${v}</option>`).join("")}</select></label></div>
+    <label class="f" style="margin-bottom:8px">Help text <span class="hint">Optional, shown under the question</span><input class="inp" data-aqi="${i}" data-aqf="help" value="${esc(q.help)}" maxlength="300"></label>
+    ${q.type === "select" ? `<label class="f" style="margin-bottom:8px">Options <span class="hint">One per line, at least two</span><textarea class="inp" data-aqi="${i}" data-aqf="optionsText" rows="3">${esc(q.optionsText)}</textarea></label>` : ""}
+    <label class="chk"><input type="checkbox" data-aqi="${i}" data-aqf="required" ${q.required ? "checked" : ""}> Required</label></div>`;
+}
+
+/* applications tab */
+async function appLoadSubs() {
+  const slug = A.cur.draft.slug;
+  try {
+    const j = await appApi("listSubmissions", { slug });
+    if (!A.cur || A.cur.draft.slug !== slug) return;
+    A.cur.subs = j.submissions; A.cur.retention = j.retentionDays;
+    appSyncCounts(slug); renderAppsList(); renderAppsMain();
+  } catch (err) { if (err.status !== 401) $("#apps-main")?.insertAdjacentHTML("beforeend", `<p class="bad">${esc(err.message)}</p>`); }
+}
+function appSyncCounts(slug) {
+  const f = (A.forms || []).find(x => x.slug === slug); if (!f || !A.cur?.subs) return;
+  f.count = A.cur.subs.length; f.newCount = A.cur.subs.filter(s => s.status === "new").length; paintNavBadge();
+}
+const appName = s => (s.answers.find(a => /name/i.test(a.label) && a.value) || s.answers.find(a => a.value) || {}).value || "Unnamed";
+const appEmail = s => (s.answers.find(a => /@/.test(a.value) && !/\s/.test(a.value)) || {}).value || "";
+const appWhen = iso => new Date(iso).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+const linkify = s => esc(s).replace(/https?:\/\/[^\s<]*[^\s<.,;:!?)]/g, u => `<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`);
+function appSubsHTML() {
+  const C = A.cur;
+  if (!C.subs) return `<p class="muted">Loading applications…</p>`;
+  const all = C.subs, n = k => all.filter(s => s.status === k).length;
+  if (!all.length) return `<div class="empty"><b>No applications yet</b>Share <span class="gold">${esc(appUrl(C.draft.slug))}</span> and they'll show up here.</div>`;
+  const list = C.filter === "all" ? all : all.filter(s => s.status === C.filter);
+  return `<div class="afilters">${[["all", "All", all.length], ...Object.entries(APP_STATUS).map(([k, v]) => [k, v, n(k)])].map(([k, v, c]) => `<button class="pill" data-aact="filter" data-f="${k}" aria-pressed="${C.filter === k}">${v} ${c}</button>`).join("")}
+      <span style="flex:1"></span><button class="btn ghost sm" data-aact="csv">Export CSV</button></div>
+    ${list.map(s => `<details class="asub"${C.openId === s.id ? " open" : ""} data-sid="${esc(s.id)}"><summary><span class="who">${esc(appName(s))}<small>${esc(appEmail(s))}</small></span><span class="chip ${s.status}">${APP_STATUS[s.status]}</span><span class="when">${esc(appWhen(s.submittedAt))}</span></summary>
+      <div class="sbody"><div class="ctl"><span class="muted" style="font-size:12.5px">Move to</span>${Object.entries(APP_STATUS).filter(([k]) => k !== s.status).map(([k, v]) => `<button class="btn ghost sm" data-aact="status" data-id="${esc(s.id)}" data-st="${k}">${v}</button>`).join("")}
+        <span style="flex:1"></span><button class="btn danger sm" data-aact="delsub" data-id="${esc(s.id)}">Delete</button></div>
+      <dl class="qa">${s.answers.map(a => `<dt>${esc(a.label)}</dt><dd>${a.value ? linkify(a.value) : '<span class="dim">No answer</span>'}</dd>`).join("")}</dl></div></details>`).join("") || `<p class="muted">Nothing here with that status.</p>`}
+    <p class="dim" style="margin-top:14px;font-size:12.5px">Applications are deleted automatically after ${C.retention || 365} days. Export the ones you want to keep.</p>`;
+}
+function appCsv() {
+  const subs = A.cur.subs, cols = [];
+  subs.forEach(s => s.answers.forEach(a => { if (!cols.includes(a.label)) cols.push(a.label); }));
+  const cell = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const rows = [["Submitted", "Status", ...cols].map(cell).join(",")];
+  subs.forEach(s => rows.push([s.submittedAt, APP_STATUS[s.status], ...cols.map(c => (s.answers.find(a => a.label === c) || {}).value || "")].map(cell).join(",")));
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + rows.join("\r\n")], { type: "text/csv;charset=utf-8" }));
+  a.download = `${A.cur.draft.slug}-applications.csv`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function appSave(btn) {
+  const C = A.cur, d = C.draft;
+  if (!d.title.trim()) { toast("Give the form a title."); return $("#af-title").focus(); }
+  d.slug = d.slug.replace(/-+$/, ""); if ($("#af-slug")) $("#af-slug").value = d.slug;
+  if (!d.slug) { toast("Add a link ending, for example \"closer\"."); return $("#af-slug").focus(); }
+  btn.disabled = true; btn.textContent = "Saving…";
+  try {
+    const { form } = await appApi("saveForm", { form: appPayload(d), isNew: C.isNew });
+    A.forms = (await appApi("listForms")).forms;
+    A.cur = { isNew: false, slugTouched: true, tab: "form", draft: toDraft(form), subs: null, filter: "all" };
+    renderAppsList(); renderAppsMain(); paintNavBadge(); window.scrollTo({ top: 0, behavior: "smooth" });
+    toast(C.isNew ? "Form created. Its link is live." : "Saved.");
+  } catch (err) { btn.disabled = false; btn.textContent = C.isNew ? "Create form" : "Save changes"; if (err.status !== 401) toast(err.message); }
+}
+
+/* events (scoped to the Applications view and the dashboard panel) */
+document.addEventListener("input", e => {
+  const C = A.cur, t = e.target; if (S.view !== "applications" || !C || !t.closest("#apps-main")) return;
+  const d = C.draft;
+  if (t.dataset.af) {
+    if (t.dataset.af === "slug") { t.value = t.value.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+/, "").slice(0, 40); C.slugTouched = true; }
+    d[t.dataset.af] = t.value;
+    if (t.dataset.af === "title") { const h = $("#ah-title"); if (h) h.textContent = d.title || "Untitled form"; if (C.isNew && !C.slugTouched) { d.slug = slugify(d.title); $("#af-slug").value = d.slug; } }
+  } else if (t.dataset.ad !== undefined) d.details[+t.dataset.ad][t.dataset.ak] = t.value;
+  else if (t.dataset.aqi !== undefined && t.dataset.aqf !== "type") { d.questions[+t.dataset.aqi][t.dataset.aqf] = t.type === "checkbox" ? t.checked : t.value; C.qTouched = true; }
+});
+document.addEventListener("change", e => {
+  const C = A.cur, t = e.target; if (S.view !== "applications" || !C || !t.closest("#apps-main")) return;
+  const d = C.draft;
+  if (t.id === "af-tpl") {
+    if (C.qTouched && !confirm("Replace the questions below with this starting set?")) { t.value = C.template; return; }
+    C.template = t.value; C.qTouched = false; d.questions = APP_TEMPLATES[t.value][1]();
+    const role = d.details.find(x => x.label === "Role"); if (role && !role.value && t.value === "closer") role.value = "Closer";
+    renderAppsMain();
+  } else if (t.dataset.aqf === "type") { d.questions[+t.dataset.aqi].type = t.value; C.qTouched = true; renderAppsMain(); }
+  else if (t.dataset.af === "status") d.status = t.value;
+});
+document.addEventListener("toggle", e => { const el = e.target; if (el.matches?.("details.asub") && A.cur) { if (el.open) A.cur.openId = el.dataset.sid; else if (A.cur.openId === el.dataset.sid) A.cur.openId = null; } }, true);
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-aact]"); if (!b) return;
+  const act = b.dataset.aact, i = +b.dataset.i;
+  if (act === "dash-new") { setView("applications"); return appNewForm(); }
+  if (act === "dash-open") { setView("applications"); return appOpenForm(b.dataset.slug, "apps"); }
+  if (act === "new") return appNewForm();
+  if (act === "open") return appOpenForm(b.dataset.slug, (A.forms.find(f => f.slug === b.dataset.slug)?.newCount ? "apps" : "form"));
+  const C = A.cur; if (!C) return;
+  const d = C.draft;
+  if (act === "tab") { C.tab = b.dataset.tab; return renderAppsMain(); }
+  if (act === "addd") { d.details.push({ label: "", value: "" }); renderAppsMain(); return $(`[data-ad="${d.details.length - 1}"][data-ak="label"]`)?.focus(); }
+  if (act === "preset") { const empty = d.details.find(x => !x.label && !x.value); if (empty) empty.label = b.dataset.p; else d.details.push({ label: b.dataset.p, value: "" }); renderAppsMain(); return $(`[data-ad="${d.details.findIndex(x => x.label === b.dataset.p)}"][data-ak="value"]`)?.focus(); }
+  if (act === "rmd") { d.details.splice(i, 1); return renderAppsMain(); }
+  if (["addq", "rmq", "upq", "downq"].includes(act)) C.qTouched = true;
+  if (act === "addq") { d.questions.push(AQ("", "text", "", false)); renderAppsMain(); return $(`[data-aqi="${d.questions.length - 1}"][data-aqf="label"]`)?.focus(); }
+  if (act === "rmq") { d.questions.splice(i, 1); return renderAppsMain(); }
+  if (act === "upq" || act === "downq") { const j = act === "upq" ? i - 1 : i + 1; [d.questions[i], d.questions[j]] = [d.questions[j], d.questions[i]]; return renderAppsMain(); }
+  if (act === "copy") { try { await navigator.clipboard.writeText(appUrl(d.slug)); toast("Link copied."); } catch { prompt("Copy this link:", appUrl(d.slug)); } return; }
+  if (act === "save") return appSave(b);
+  if (act === "del") {
+    const f = A.forms.find(x => x.slug === d.slug);
+    if (!confirm(`Delete "${d.title}" and its ${f ? f.count : 0} applications? This can't be undone.`)) return;
+    try { await appApi("deleteForm", { slug: d.slug }); A.forms = A.forms.filter(x => x.slug !== d.slug); A.cur = null; renderAppsList(); renderAppsMain(); paintNavBadge(); toast("Form deleted."); }
+    catch (err) { if (err.status !== 401) toast(err.message); }
+    return;
+  }
+  if (act === "filter") { C.filter = b.dataset.f; return renderAppsMain(); }
+  if (act === "csv") return appCsv();
+  if (act === "status") {
+    try { await appApi("setStatus", { slug: d.slug, id: b.dataset.id, status: b.dataset.st }); C.subs.find(s => s.id === b.dataset.id).status = b.dataset.st; C.openId = b.dataset.id; appSyncCounts(d.slug); renderAppsList(); renderAppsMain(); toast(`Moved to ${APP_STATUS[b.dataset.st]}.`); }
+    catch (err) { if (err.status !== 401) toast(err.message); }
+    return;
+  }
+  if (act === "delsub") {
+    if (!confirm("Delete this application for good?")) return;
+    try { await appApi("deleteSubmission", { slug: d.slug, id: b.dataset.id }); C.subs = C.subs.filter(s => s.id !== b.dataset.id); appSyncCounts(d.slug); renderAppsList(); renderAppsMain(); toast("Application deleted."); }
+    catch (err) { if (err.status !== 401) toast(err.message); }
+  }
+});
+
 /* ---------- boot ---------- */
 function renderWho() { $("#who").innerHTML = `${avatar(S.uid, 28)}<span>${esc(nameOf(S.uid))}${S.owner ? " · Owner" : ""}</span><button class="btn ghost sm so" data-logout>Sign out</button>`; }
 async function start() {
@@ -855,8 +1197,9 @@ async function start() {
   showShell();
   renderWho();
   setView(location.hash.slice(1) || ls.get("hq.view") || (S.owner ? "dashboard" : "eod"));
+  if (S.owner && !A.forms) loadAppForms(true);
 }
-setInterval(() => { if (S.loaded && document.visibilityState === "visible" && !["revenue", "eod", "team"].includes(S.view)) reload(true); }, 60000);
+setInterval(() => { if (S.loaded && document.visibilityState === "visible" && !["revenue", "eod", "team", "applications"].includes(S.view)) { reload(true); if (S.owner) loadAppForms(true); } }, 60000);
 document.addEventListener("visibilitychange", () => { if (S.loaded && document.visibilityState === "visible" && ["dashboard", "reports"].includes(S.view)) reload(true); });
 start();
 })();

@@ -5,10 +5,6 @@
       "destination": "/eod/index.html"
     },
     {
-      "source": "/applications",
-      "destination": "/applications/index.html"
-    },
-    {
       "source": "/applications/:slug",
       "destination": "/apply/index.html"
     }
@@ -65,6 +61,13 @@
           "value": "no-cache"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/applications",
+      "destination": "/admin-dashboard#applications",
+      "permanent": false
     }
   ]
 }
