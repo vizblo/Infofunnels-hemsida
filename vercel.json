@@ -3,6 +3,14 @@
     {
       "source": "/eod",
       "destination": "/eod/index.html"
+    },
+    {
+      "source": "/applications",
+      "destination": "/applications/index.html"
+    },
+    {
+      "source": "/applications/:slug",
+      "destination": "/apply/index.html"
     }
   ],
   "headers": [
@@ -21,6 +29,32 @@
     },
     {
       "source": "/eod(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/applications(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/apply(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",

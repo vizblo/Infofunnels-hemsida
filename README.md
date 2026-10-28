@@ -28,3 +28,10 @@ The booking section uses Calendly's official inline embed widget pointing to:
 `https://calendly.com/vincent-emsmedia/meeting`
 
 To change the Calendly URL, edit the `data-url` attribute on the `.calendly-inline-widget` div in `index.html`.
+
+## Application forms (`/applications`)
+
+- `/applications` is the owner's builder (same login as HQ, `applications/index.html`). Create a form per role (closer, setter, UGC...) and each one gets its own link, `/applications/<name>`.
+- `/applications/<name>` is the public form applicants fill in (`apply/index.html`, rewritten in `vercel.json`).
+- Both talk to `api/applications.js`, which stores forms and applications in the same Upstash Redis as HQ. No extra environment variables are needed.
+- Applications older than 365 days are deleted when the owner opens a form's Applications tab (`RETENTION_DAYS` in `api/applications.js`). `privacy.html` says "normally no longer than 12 months", so keep the two in sync.
