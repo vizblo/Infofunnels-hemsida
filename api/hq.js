@@ -222,10 +222,15 @@ module.exports = async (req, res) => {
         if (needAdmin()) return;
         const ym = str(body.ym, 7); if (!isYm(ym)) return send(res, 400, { error: "Invalid month." });
         const d = body.doc || {};
-        const rows = (a, k1, k2, max) => (Array.isArray(a) ? a : []).slice(0, max).map(x => ({ [k1]: str(x[k1], 120), [k2]: num(x[k2]) })).filter(x => x[k1] || x[k2]);
-        const doc = { month: ym, rate: Math.max(0, Math.min(1, num(d.rate ?? 0.2))), clients: rows(d.clients, "name", "gross", 200), other: rows(d.other, "label", "amount", 100), costs: rows(d.costs, "label", "amount", 200), updatedAt: new Date().toISOString() };
+        const doc = { month: ym, revenue: num(d.revenue), costs: num(d.costs), note: str(d.note, 200), updatedAt: new Date().toISOString() };
         await redis("HSET", "hq:months", ym, JSON.stringify(doc));
         return send(res, 200, { ok: true, doc });
+      }
+      case "deleteMonth": {
+        if (needAdmin()) return;
+        const ym = str(body.ym, 7); if (!isYm(ym)) return send(res, 400, { error: "Invalid month." });
+        await redis("HDEL", "hq:months", ym);
+        return send(res, 200, { ok: true });
       }
       case "saveSettings": {
         if (needAdmin()) return;

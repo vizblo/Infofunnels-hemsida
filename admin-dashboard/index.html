@@ -355,8 +355,8 @@ const S = {
 };
 const $ = (s, r = document) => r.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const usd = n => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(Math.round(n || 0));
-const usdK = n => n >= 1e6 ? "$" + (n / 1e6).toFixed(1) + "M" : n >= 1e4 ? "$" + Math.round(n / 1e3) + "k" : n >= 1e3 ? "$" + (n / 1e3).toFixed(1) + "k" : "$" + Math.round(n);
+const usd = n => new Intl.NumberFormat("sv-SE", { style: "currency", currency: "SEK", maximumFractionDigits: 0 }).format(Math.round(n || 0)); // amounts are kronor
+const usdK = n => n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e4 ? Math.round(n / 1e3) + "k" : n >= 1e3 ? (n / 1e3).toFixed(1) + "k" : String(Math.round(n));
 const pad = n => String(n).padStart(2, "0");
 const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
 const ymNow = () => todayStr().slice(0, 7);
@@ -365,7 +365,13 @@ const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","D
 const MFULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const ymLabel = (ym, full) => { const [y, m] = ym.split("-").map(Number); return (full ? MFULL : MN)[m - 1] + " " + y; };
 const dayLabel = ds => { const [y, m, d] = ds.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString("en-US", { weekday: "long", day: "numeric", month: "short" }); };
-const money = s => { const t = String(s ?? "").replace(/[^0-9.\-]/g, ""); const n = parseFloat(t); return isFinite(n) ? n : 0; };
+const money = s => {
+  let t = String(s ?? "").replace(/[\s\u00a0]|kr|sek|\$/gi, "");
+  if (/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(t)) t = t.replace(/\./g, "").replace(",", ".");
+  else if (/,\d{1,2}$/.test(t) && !t.includes(".")) t = t.replace(",", ".");
+  else t = t.replace(/,/g, "");
+  const n = parseFloat(t); return isFinite(n) ? n : 0;
+};
 const ls = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }, del(k) { try { localStorage.removeItem(k); } catch {} } };
 
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2800); }
@@ -402,6 +408,10 @@ async function reload(soft) {
 
 /* ---------- revenue math ---------- */
 function monthCalc(doc, rate = S.rate) {
+  if (doc && (typeof doc.revenue === "number" || typeof doc.costs === "number")) {
+    const total = +doc.revenue || 0, cost = typeof doc.costs === "number" ? doc.costs : 0;
+    return { gross: 0, comm: total, other: 0, total, cost, profit: total - cost, clients: [], otherRows: [], costRows: [] };
+  }
   const clients = (doc?.clients || []).filter(c => c && (c.name || c.gross));
   const other = (doc?.other || []).filter(o => o && (o.label || o.amount));
   const gross = clients.reduce((a, c) => a + (+c.gross || 0), 0);
@@ -537,7 +547,7 @@ function kpisHTML() {
     <div class="kpi"><span class="lab">Profit · last 12 months</span><span class="val"${neg(r12 - c12)}>${signUsd(r12 - c12)}</span><span class="note">${usd(r12)} revenue · ${usd(c12)} costs</span></div>
   </div>`;
 }
-function legend() { return `<div class="legend"><span><i style="background:#c4a852"></i>Revenue</span><span><i style="background:#8a7739"></i>Other revenue</span><span><i style="background:#52525b"></i>Costs</span><span><i style="background:#f4f4f5;height:2px;vertical-align:3px"></i>Profit</span></div>`; }
+function legend() { return `<div class="legend"><span><i style="background:#c4a852"></i>Revenue</span><span><i style="background:#52525b"></i>Costs</span><span><i style="background:#f4f4f5;height:2px;vertical-align:3px"></i>Profit</span></div>`; }
 function hasRevenue() { return Object.keys(S.months).some(k => { const c = calcOf(k); return c.total > 0 || c.cost > 0; }); }
 function viewDashboard() {
   const greet = (() => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; })();
@@ -557,138 +567,112 @@ function viewDashboard() {
 }
 
 /* ---------- finances ---------- */
-function revSummary() { return `${kpisHTML()}<section class="panel" style="margin-top:18px"><div class="panel-head"><h2>Last 12 months</h2>${legend()}</div>${hasRevenue() ? chartSVG(ymNow()) : '<div class="empty"><b>Nothing to chart yet</b>Log a month below and the chart fills in.</div>'}</section>`; }
+// Each month is just revenue and costs (kr, excl. VAT). Older months saved with client/cost lines still display through monthCalc.
+const r2 = n => Math.round((+n || 0) * 100) / 100;
+function revSummary() { return `${kpisHTML()}<section class="panel" style="margin-top:18px"><div class="panel-head"><h2>Last 12 months</h2>${legend()}</div>${hasRevenue() ? chartSVG(ymNow()) : '<div class="empty"><b>Nothing to chart yet</b>Log a month and the chart fills in.</div>'}</section>`; }
 function revTable() {
-  const keys = Object.keys(S.months).filter(k => { const c = calcOf(k); return c.total > 0 || c.cost > 0 || c.clients.length; }).sort().reverse();
-  if (!keys.length) return `<div class="empty"><b>No months logged</b>Pick a month and add revenue and costs.</div>`;
+  const keys = Object.keys(S.months).filter(k => { const c = calcOf(k); return c.total || c.cost; }).sort().reverse();
+  if (!keys.length) return `<div class="empty"><b>No months logged</b>Pick a month on the right and enter its revenue and costs, or paste your sheet below.</div>`;
   let R = 0, C = 0;
-  const rows = keys.map(k => { const c = calcOf(k); R += c.total; C += c.cost; const m = c.total > 0 ? Math.round(c.profit / c.total * 100) + "%" : "—"; return `<tr class="click ${k === S.selMonth ? "sel" : ""}" data-month="${k}"><td>${ymLabel(k, true)}</td><td class="r dim">${usd(c.gross)}</td><td class="r">${usd(c.total)}</td><td class="r">${usd(c.cost)}</td><td class="r ${c.profit < 0 ? "" : "gold"}" ${c.profit < 0 ? 'style="color:var(--bad)"' : ""}><b>${signUsd(c.profit)}</b></td><td class="r dim">${m}</td></tr>`; }).join("");
-  return `<div class="tbl-wrap"><table><thead><tr><th>Month</th><th class="r">Client revenue</th><th class="r">Our revenue</th><th class="r">Costs</th><th class="r">Profit</th><th class="r">Margin</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td>All time</td><td></td><td class="r">${usd(R)}</td><td class="r">${usd(C)}</td><td class="r gold">${signUsd(R - C)}</td><td class="r dim">${R > 0 ? Math.round((R - C) / R * 100) + "%" : "—"}</td></tr></tfoot></table></div>`;
+  const rows = keys.map(k => { const c = calcOf(k); R += c.total; C += c.cost; const m = c.total > 0 ? Math.round(c.profit / c.total * 100) + "%" : "—"; return `<tr class="click ${k === S.selMonth ? "sel" : ""}" data-month="${k}"><td>${ymLabel(k, true)}${S.months[k]?.note ? ` <span class="dim" title="${esc(S.months[k].note)}">·</span>` : ""}</td><td class="r">${usd(c.total)}</td><td class="r">${usd(c.cost)}</td><td class="r ${c.profit < 0 ? "" : "gold"}" ${c.profit < 0 ? 'style="color:var(--bad)"' : ""}><b>${signUsd(c.profit)}</b></td><td class="r dim">${m}</td></tr>`; }).join("");
+  return `<div class="tbl-wrap"><table><thead><tr><th>Month</th><th class="r">Revenue</th><th class="r">Costs</th><th class="r">Profit</th><th class="r">Margin</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td>All time</td><td class="r">${usd(R)}</td><td class="r">${usd(C)}</td><td class="r gold">${signUsd(R - C)}</td><td class="r dim">${R > 0 ? Math.round((R - C) / R * 100) + "%" : "—"}</td></tr></tfoot></table></div>`;
 }
 function viewRevenue() {
   if (!S.selMonth) S.selMonth = ymNow();
-  return head("Finances", "Revenue, costs &amp; profit", `Log each client's revenue (we take ${Math.round(S.rate * 100)}%), any other income, and the month's costs. Profit is worked out for you.`) +
+  return head("Finances", "Revenue, costs &amp; profit", "Once a month, enter what came in and what went out (excl. VAT). Profit and margin are worked out for you.") +
   `<div class="stack"><div id="rev-summary">${revSummary()}</div>
    <div class="grid-2" style="align-items:start">
      <section class="panel"><div class="panel-head"><h2>Month by month</h2><span class="sub">Click a month to edit it</span></div><div id="rev-table">${revTable()}</div></section>
      <div class="stack">
        <section class="panel" id="editor"></section>
-       <section class="panel"><div class="panel-head"><h2>Commission rate</h2></div>
-         <div class="row"><label class="f" for="rate-inp">Our cut of client revenue (%)<span class="hint">Applies to months saved from now on. Each saved month keeps its own rate.</span><input class="inp num" id="rate-inp" type="number" min="0" max="100" step="0.5" value="${+(S.rate * 100).toFixed(2)}"></label></div>
-         <div style="margin-top:12px"><button class="btn ghost sm" id="rate-save">Save rate</button></div>
-       </section>
-       <section class="panel"><div class="panel-head"><h2>Import from Google Sheets</h2></div>
-         <p class="muted" style="margin:0 0 10px">Copy the rows from your sheet and paste them here.<br><b class="dim">2 columns</b> (Month, Revenue): saved as our final revenue for that month.<br><b class="dim">3 columns</b> (Month, Revenue, Costs): both saved for that month.<br><b class="dim">3 columns</b> (Month, Client, Client revenue): ${Math.round(S.rate * 100)}% commission applied.</p>
-         <textarea class="inp" id="imp-text" placeholder="Sep 2026&#9;Acme Coaching&#9;$10,000"></textarea>
+       <section class="panel"><div class="panel-head"><h2>Paste several months</h2></div>
+         <p class="muted" style="margin:0 0 10px">One month per line: month, revenue, costs. For example <span class="num" style="color:var(--fg-2)">2026-09&nbsp;&nbsp;63439&nbsp;&nbsp;112271</span>. Copying rows from Google Sheets works too. Months you paste replace what's saved for them.</p>
+         <textarea class="inp" id="imp-text" placeholder="2026-09\t63439\t112271"></textarea>
          <div class="row" style="margin-top:10px;align-items:center"><span class="dim" id="imp-preview" style="flex:2 1 200px">Nothing pasted yet.</span><button class="btn sm" id="imp-go" disabled style="flex:0 0 auto">Import</button></div>
        </section>
      </div>
    </div></div>`;
 }
 function loadEdit(ym) {
-  const d = S.months[ym] || {};
-  S.edit = { ym, clients: (d.clients || []).map(c => ({ ...c })), other: (d.other || []).map(o => ({ ...o })), costs: (d.costs || []).map(o => ({ ...o })) };
-  if (!S.edit.clients.length) S.edit.clients.push({ name: "", gross: "" });
-}
-function lineRows(list, pre, key, ph, rmAttr) {
-  return list.map((o, i) => `<div class="row" style="margin-bottom:6px;align-items:center"><input class="inp" id="${pre}-l-${i}" data-${pre}i="${i}" data-k="label" placeholder="${ph}" value="${esc(o.label)}"><input class="inp num" id="${pre}-a-${i}" data-${pre}i="${i}" data-k="amount" inputmode="decimal" placeholder="$0" value="${esc(o.amount)}" style="text-align:right;flex:0 1 130px"><button class="icon-btn" ${rmAttr}="${i}" aria-label="Remove line" style="flex:0 0 auto">×</button></div>`).join("");
+  const d = S.months[ym], c = calcOf(ym);
+  S.edit = { ym, revenue: d ? String(r2(c.total)) : "", costs: d ? String(r2(c.cost)) : "", note: d?.note || "" };
 }
 function paintEditor() {
   const el = $("#editor"); if (!el) return;
   if (!S.edit || S.edit.ym !== S.selMonth) loadEdit(S.selMonth);
-  const E = S.edit, rate = rateOf(E.ym), prevYm = addM(E.ym, -1);
-  el.innerHTML = `<div class="panel-head"><h2>Edit month</h2><input class="inp num" type="month" id="ed-month" value="${E.ym}" style="width:auto;flex:0 0 auto"></div>
-    <div class="tbl-wrap"><table class="ed"><thead><tr><th>Client</th><th class="r">Client revenue</th><th class="r">Our ${Math.round(rate * 100)}%</th><th></th></tr></thead><tbody>
-    ${E.clients.map((c, i) => `<tr><td><input class="inp" id="cl-n-${i}" data-ci="${i}" data-k="name" placeholder="Client name" value="${esc(c.name)}"></td><td><input class="inp num" id="cl-g-${i}" data-ci="${i}" data-k="gross" inputmode="decimal" placeholder="$0" value="${esc(c.gross)}" style="text-align:right"></td><td class="r gold" id="cl-c-${i}">${usd(money(c.gross) * rate)}</td><td><button class="icon-btn" data-rmc="${i}" aria-label="Remove client">×</button></td></tr>`).join("")}
-    </tbody></table></div>
-    <button class="btn ghost sm" id="add-client" style="margin-top:8px">+ Add client</button>
-    <div style="margin-top:18px"><div class="eyebrow" style="color:var(--muted)">Other revenue <span class="dim lc">(setup fees, one-off projects)</span></div>
-    ${lineRows(E.other, "ot", "other", "Description", "data-rmo")}
-    <button class="btn ghost sm" id="add-other">+ Add other revenue</button></div>
-    <div style="margin-top:18px"><div class="eyebrow" style="color:var(--muted)">Costs <span class="dim lc">(salaries, software, ads, contractors)</span></div>
-    ${lineRows(E.costs, "co", "costs", "e.g. VA salary", "data-rmco")}
-    <div class="row" style="gap:8px"><button class="btn ghost sm" id="add-cost" style="flex:0 0 auto">+ Add cost</button>${(S.months[prevYm]?.costs || []).length ? `<button class="btn ghost sm" id="copy-costs" style="flex:0 0 auto">Copy ${MN[+prevYm.slice(5) - 1]}'s costs</button>` : ""}</div></div>
-    <div class="form-foot" style="margin-top:18px"><div class="num" style="display:flex;gap:22px;flex-wrap:wrap"><div><div class="dim sm-l">Revenue</div><div id="ed-rev" class="ed-n"></div></div><div><div class="dim sm-l">Costs</div><div id="ed-cost" class="ed-n"></div></div><div><div class="dim sm-l">Profit · ${ymLabel(E.ym, true)}</div><div id="ed-total" class="ed-big gold"></div></div></div><button class="btn" id="ed-save">Save ${MN[+E.ym.slice(5) - 1]}</button></div>`;
+  const E = S.edit, saved = !!S.months[E.ym];
+  el.innerHTML = `<div class="panel-head"><h2>${saved ? "Edit" : "Add"} ${ymLabel(E.ym, true)}</h2><input class="inp num" type="month" id="ed-month" value="${E.ym}" style="width:auto;flex:0 0 auto" aria-label="Month"></div>
+    <div class="row">
+      <label class="f" for="ed-rev-in">Revenue <span class="hint">kr, excl. VAT</span><input class="inp num" id="ed-rev-in" inputmode="decimal" placeholder="0" value="${esc(E.revenue)}" style="text-align:right"></label>
+      <label class="f" for="ed-cost-in">Costs <span class="hint">kr, excl. VAT</span><input class="inp num" id="ed-cost-in" inputmode="decimal" placeholder="0" value="${esc(E.costs)}" style="text-align:right"></label>
+    </div>
+    <label class="f" for="ed-note" style="margin-top:12px">Note <span class="hint">Optional, e.g. "invoices not sent yet" or "one-off: program 80k"</span><input class="inp" id="ed-note" maxlength="200" value="${esc(E.note)}"></label>
+    <div class="form-foot" style="margin-top:18px"><div><div class="dim sm-l">Profit · ${ymLabel(E.ym, true)}</div><div id="ed-total" class="ed-big gold num"></div><div id="ed-margin" class="dim sm-l"></div></div>
+      <div class="row" style="flex:0 1 auto;gap:8px">${saved ? `<button class="btn danger sm" id="ed-del" style="flex:0 0 auto">Clear month</button>` : ""}<button class="btn" id="ed-save" style="flex:0 0 auto">Save ${MN[+E.ym.slice(5) - 1]}</button></div></div>`;
   updEdTotal();
 }
-function editDoc() {
-  const E = S.edit;
-  return {
-    rate: rateOf(E.ym),
-    clients: E.clients.filter(c => String(c.name).trim() || money(c.gross)).map(c => ({ name: String(c.name).trim() || "Unnamed client", gross: money(c.gross) })),
-    other: E.other.filter(o => String(o.label).trim() || money(o.amount)).map(o => ({ label: String(o.label).trim() || "Other", amount: money(o.amount) })),
-    costs: E.costs.filter(o => String(o.label).trim() || money(o.amount)).map(o => ({ label: String(o.label).trim() || "Cost", amount: money(o.amount) }))
-  };
-}
 function updEdTotal() {
-  const c = monthCalc(editDoc(), rateOf(S.edit.ym));
-  const t = $("#ed-total"); if (t) { t.textContent = signUsd(c.profit); t.style.color = c.profit < 0 ? "var(--bad)" : ""; }
-  const r = $("#ed-rev"); if (r) r.textContent = usd(c.total); const k = $("#ed-cost"); if (k) k.textContent = usd(c.cost);
+  const rev = money($("#ed-rev-in")?.value), cost = money($("#ed-cost-in")?.value), p = rev - cost;
+  const t = $("#ed-total"); if (t) { t.textContent = signUsd(p); t.style.color = p < 0 ? "var(--bad)" : ""; }
+  const m = $("#ed-margin"); if (m) m.textContent = rev > 0 ? Math.round(p / rev * 100) + "% margin" : "";
 }
 async function saveMonth(btn) {
-  const ym = S.edit.ym; btn.disabled = true;
-  try { const { doc } = await api("saveMonth", { ym, doc: editDoc() }); S.months[ym] = doc; toast(`${ymLabel(ym, true)} saved.`); refresh(); }
+  const ym = S.edit.ym;
+  const doc = { revenue: money($("#ed-rev-in").value), costs: money($("#ed-cost-in").value), note: $("#ed-note").value.trim() };
+  btn.disabled = true;
+  try { const r = await api("saveMonth", { ym, doc }); S.months[ym] = r.doc; S.edit = null; toast(`${ymLabel(ym, true)} saved.`); refresh(); paintEditor(); }
   catch (e) { toast(e.message); }
   btn.disabled = false;
 }
-async function saveRate() {
-  const v = parseFloat($("#rate-inp").value);
-  if (!(v >= 0 && v <= 100)) return toast("Enter a rate between 0 and 100.");
-  try { await api("saveSettings", { rate: v / 100 }); S.rate = v / 100; toast(`Commission rate set to ${v}%.`); }
+async function clearMonth(btn) {
+  if (!btn.classList.contains("armed")) { btn.classList.add("armed"); btn.textContent = "Confirm clear"; setTimeout(() => { btn.classList.remove("armed"); btn.textContent = "Clear month"; }, 3500); return; }
+  const ym = S.edit.ym;
+  try { await api("deleteMonth", { ym }); delete S.months[ym]; S.edit = null; toast(`${ymLabel(ym, true)} cleared.`); refresh(); paintEditor(); }
   catch (e) { toast(e.message); }
 }
 
-/* google sheet paste */
+/* paste import: "month revenue costs" per line */
+const MONTH_PREFIX = [["jan"], ["feb"], ["mar"], ["apr"], ["may", "maj"], ["jun"], ["jul"], ["aug"], ["sep"], ["oct", "okt"], ["nov"], ["dec"]];
 function parseMonth(s) {
   s = String(s || "").trim(); let m;
-  if ((m = s.match(/^(\d{4})[-\/.](\d{1,2})/))) return `${m[1]}-${pad(m[2])}`;
+  if ((m = s.match(/^(\d{4})[-\/.](\d{1,2})$/))) return `${m[1]}-${pad(m[2])}`;
   if ((m = s.match(/^(\d{1,2})[-\/.](\d{4})$/))) return `${m[2]}-${pad(m[1])}`;
-  if ((m = s.match(/^(\d{1,2})[-\/.]\d{1,2}[-\/.](\d{4})$/))) return `${m[2]}-${pad(m[1])}`;
-  if ((m = s.match(/^([A-Za-z]{3,})[\s\-'’,.]*(\d{2,4})$/))) { const i = MN.findIndex(x => m[1].toLowerCase().startsWith(x.toLowerCase())); if (i >= 0) { const y = m[2].length === 2 ? "20" + m[2] : m[2]; return `${y}-${pad(i + 1)}`; } }
+  if ((m = s.match(/^([A-Za-zåäöÅÄÖ]{3,})[\s\-'’,.]*(\d{2}|\d{4})$/))) {
+    const w = m[1].toLowerCase(), i = MONTH_PREFIX.findIndex(ps => ps.some(p => w.startsWith(p)));
+    if (i >= 0) return `${m[2].length === 2 ? "20" + m[2] : m[2]}-${pad(i + 1)}`;
+  }
   return null;
 }
 function parseImport(text) {
   const rows = [];
   for (const line of text.split(/\r?\n/)) {
     if (!line.trim()) continue;
-    const cols = (line.includes("\t") ? line.split("\t") : line.split(/;|,(?=\s*[^\d\s])/)).map(c => c.trim().replace(/^"|"$/g, ""));
+    let cols = /[\t;]/.test(line) ? line.split(/[\t;]/).map(c => c.trim()) : null;
+    if (!cols) { const m = line.trim().match(/^(.*?[A-Za-zåäö]{3,}[\s\-'’,.]*\d{2,4}|\d{4}[-\/.]\d{1,2}|\d{1,2}[-\/.]\d{4})\s+(.*)$/i); if (!m) continue; cols = [m[1], ...m[2].trim().split(/\s+/)]; }
     const ym = parseMonth(cols[0]); if (!ym) continue;
-    if (cols.length >= 3 && /^[\s$€£\d.,\-]+$/.test(cols[1]) && cols[1].trim()) rows.push({ ym, total: money(cols[1]), cost: money(cols[2]) });
-    else if (cols.length >= 3 && cols[1] && money(cols[2])) rows.push({ ym, client: cols[1], gross: money(cols[2]) });
-    else if (cols.length >= 2 && money(cols[1])) rows.push({ ym, total: money(cols[1]) });
+    const nums = cols.slice(1).filter(c => c !== "");
+    if (!nums.length) continue;
+    rows.push({ ym, revenue: money(nums[0]), costs: nums.length > 1 ? money(nums[1]) : null });
   }
   S.importRows = rows;
   const p = $("#imp-preview"), b = $("#imp-go");
-  if (!rows.length) { p.textContent = text.trim() ? "No rows recognised. The first column needs a month, like Sep 2026 or 2026-09." : "Nothing pasted yet."; b.disabled = true; return; }
-  const ms = [...new Set(rows.map(r => r.ym))].sort();
-  p.textContent = `${rows.length} row${rows.length > 1 ? "s" : ""} across ${ms.length} month${ms.length > 1 ? "s" : ""} (${ymLabel(ms[0])} to ${ymLabel(ms[ms.length - 1])}).`;
+  if (!rows.length) { p.textContent = text.trim() ? "No rows recognised. Each line needs a month (like 2026-09 or Sep 2026), then revenue, then costs." : "Nothing pasted yet."; b.disabled = true; return; }
+  const ms = rows.map(r => r.ym).sort();
+  p.textContent = `${rows.length} month${rows.length > 1 ? "s" : ""}, ${ymLabel(ms[0])} to ${ymLabel(ms[ms.length - 1])}. Revenue ${usd(rows.reduce((a, r) => a + r.revenue, 0))}, costs ${usd(rows.reduce((a, r) => a + (r.costs || 0), 0))}.`;
   b.disabled = false;
 }
 async function runImport(btn) {
   const rows = S.importRows || []; if (!rows.length) return;
-  btn.disabled = true;
-  const by = {}; rows.forEach(r => (by[r.ym] = by[r.ym] || []).push(r));
-  let n = 0;
+  btn.disabled = true; let n = 0;
   try {
-    for (const ym of Object.keys(by).sort()) {
-      const cur = S.months[ym] || {};
-      const clients = (cur.clients || []).map(c => ({ ...c }));
-      const other = (cur.other || []).filter(o => o.label !== "Google Sheet import").map(o => ({ ...o }));
-      const costs = (cur.costs || []).filter(o => o.label !== "Google Sheet import").map(o => ({ ...o }));
-      let sheetTotal = 0, sheetCost = 0;
-      for (const r of by[ym]) {
-        if (r.client) { const ex = clients.find(c => c.name.toLowerCase() === r.client.toLowerCase()); if (ex) ex.gross = r.gross; else clients.push({ name: r.client, gross: r.gross }); }
-        else { sheetTotal += r.total; sheetCost += r.cost || 0; }
-      }
-      if (sheetTotal) other.push({ label: "Google Sheet import", amount: sheetTotal });
-      if (sheetCost) costs.push({ label: "Google Sheet import", amount: sheetCost });
-      const { doc } = await api("saveMonth", { ym, doc: { rate: cur.rate ?? S.rate, clients, other, costs } });
-      S.months[ym] = doc; n++;
+    for (const r of rows) {
+      const prev = S.months[r.ym];
+      const doc = { revenue: r.revenue, costs: r.costs ?? (prev ? calcOf(r.ym).cost : 0), note: prev?.note || "" };
+      const res = await api("saveMonth", { ym: r.ym, doc }); S.months[r.ym] = res.doc; n++;
     }
     toast(`Imported ${n} month${n > 1 ? "s" : ""}.`);
-    $("#imp-text").value = ""; parseImport("");
-    S.edit = null; paintEditor(); refresh();
-  } catch (e) { toast(`Imported ${n} month${n === 1 ? "" : "s"}, then saving failed: ${e.message}`); }
+    $("#imp-text").value = ""; parseImport(""); S.edit = null; refresh(); paintEditor();
+  } catch (e) { toast(`Imported ${n} month${n === 1 ? "" : "s"}, then saving failed: ${e.message}`); refresh(); }
   btn.disabled = false;
 }
 
@@ -882,10 +866,8 @@ async function saveUser(extra = {}) {
 /* ---------- events ---------- */
 document.addEventListener("input", e => {
   const t = e.target;
-  if (t.dataset.ci !== undefined && S.edit) { S.edit.clients[+t.dataset.ci][t.dataset.k] = t.value; if (t.dataset.k === "gross") $("#cl-c-" + t.dataset.ci).textContent = usd(money(t.value) * rateOf(S.edit.ym)); updEdTotal(); }
-  if (t.dataset.oti !== undefined && S.edit) { S.edit.other[+t.dataset.oti][t.dataset.k] = t.value; updEdTotal(); }
-  if (t.dataset.coi !== undefined && S.edit) { S.edit.costs[+t.dataset.coi][t.dataset.k] = t.value; updEdTotal(); }
   if (t.id === "imp-text") parseImport(t.value);
+  if (t.id === "ed-rev-in" || t.id === "ed-cost-in") updEdTotal();
   if (t.closest("#eod-form")) saveDraft();
 });
 document.addEventListener("change", e => {
@@ -896,15 +878,8 @@ document.addEventListener("change", e => {
 document.addEventListener("click", async e => {
   const t = e.target.closest("button, tr[data-month]"); if (!t) return;
   if (t.dataset.month) { S.selMonth = t.dataset.month; loadEdit(S.selMonth); paintEditor(); $("#rev-table").innerHTML = revTable(); $("#editor").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
-  if (t.id === "add-client") { S.edit.clients.push({ name: "", gross: "" }); paintEditor(); $("#cl-n-" + (S.edit.clients.length - 1))?.focus(); }
-  if (t.id === "add-other") { S.edit.other.push({ label: "", amount: "" }); paintEditor(); $("#ot-l-" + (S.edit.other.length - 1))?.focus(); }
-  if (t.id === "add-cost") { S.edit.costs.push({ label: "", amount: "" }); paintEditor(); $("#co-l-" + (S.edit.costs.length - 1))?.focus(); }
-  if (t.dataset.rmc !== undefined) { S.edit.clients.splice(+t.dataset.rmc, 1); paintEditor(); }
-  if (t.dataset.rmo !== undefined) { S.edit.other.splice(+t.dataset.rmo, 1); paintEditor(); }
-  if (t.dataset.rmco !== undefined) { S.edit.costs.splice(+t.dataset.rmco, 1); paintEditor(); }
-  if (t.id === "copy-costs") { const prev = S.months[addM(S.edit.ym, -1)]?.costs || []; const have = new Set(S.edit.costs.map(c => String(c.label).trim().toLowerCase())); prev.forEach(c => { if (!have.has(String(c.label).trim().toLowerCase())) S.edit.costs.push({ ...c }); }); paintEditor(); toast("Costs copied. Adjust anything that changed, then save."); }
   if (t.id === "ed-save") saveMonth(t);
-  if (t.id === "rate-save") saveRate();
+  if (t.id === "ed-del") clearMonth(t);
   if (t.id === "imp-go") runImport(t);
   if (t.id === "copy-last") copy($("#last-slack").textContent, t);
   if (t.dataset.copyText) copy(t.dataset.copyText, t);
